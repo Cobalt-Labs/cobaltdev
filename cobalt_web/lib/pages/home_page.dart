@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/animated_section.dart';
 import '../widgets/glass_card.dart';
@@ -20,21 +21,27 @@ class _HomePageState extends State<HomePage> {
 
     _controller =
         VideoPlayerController.network(
-            'https://www.w3schools.com/html/mov_bbb.mp4',
-          )
-          ..initialize().then((_) {
-            _controller
-              ..setLooping(true)
-              ..setVolume(0)
-              ..play();
-            setState(() {});
-          });
+          'https://www.pexels.com/download/video/35623364/',
+        )..initialize().then((_) {
+          _controller
+            ..setLooping(true)
+            ..setVolume(0)
+            ..play();
+          setState(() {});
+        });
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _openLink(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -48,17 +55,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Column(
         children: [
-          /// ✅ SCROLLABLE CONTENT
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  /// 🔥 HERO SECTION
+                  /// 🔥 HERO
                   SizedBox(
                     height: height,
                     child: Stack(
                       children: [
-                        /// 🎥 VIDEO
                         if (_controller.value.isInitialized)
                           SizedBox.expand(
                             child: FittedBox(
@@ -73,10 +78,8 @@ class _HomePageState extends State<HomePage> {
                         else
                           Container(color: Colors.black),
 
-                        /// 🌑 OVERLAY
                         Container(color: Colors.black.withOpacity(0.6)),
 
-                        /// 💎 CONTENT
                         Center(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 1200),
@@ -84,7 +87,6 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  /// TITLE
                                   Text(
                                     "CobaltDev",
                                     style: TextStyle(
@@ -96,10 +98,15 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  const SizedBox(height: 20),
+
+                                  const Text(
+                                    "I build fast, scalable apps with Flutter & Rust",
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
 
                                   const SizedBox(height: 20),
 
-                                  /// GLASS CARD
                                   GlassCard(
                                     child: Column(
                                       children: [
@@ -111,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         const SizedBox(height: 10),
                                         const Text(
-                                          "Building scalable apps, systems & backend infrastructure",
+                                          "Production-grade apps & backend systems",
                                           textAlign: TextAlign.center,
                                         ),
                                       ],
@@ -120,15 +127,10 @@ class _HomePageState extends State<HomePage> {
 
                                   const SizedBox(height: 30),
 
-                                  /// CTA
                                   ElevatedButton(
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 30,
-                                        vertical: 15,
-                                      ),
-                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, "/services");
+                                    },
                                     child: const Text("Get Started"),
                                   ),
                                 ],
@@ -140,60 +142,22 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  /// 🚀 SERVICES
-                  AnimatedSection(
-                    child: Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: Wrap(
-                        spacing: 20,
-                        runSpacing: 20,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          _serviceCard(
-                            "📱",
-                            "Mobile Apps",
-                            "Flutter apps for iOS & Android",
-                          ),
-                          _serviceCard(
-                            "🌐",
-                            "Web Apps",
-                            "Modern responsive web apps",
-                          ),
-                          _serviceCard(
-                            "🦀",
-                            "Rust Backend",
-                            "High-performance APIs with Axum",
-                          ),
-                          _serviceCard(
-                            "⚡",
-                            "Systems",
-                            "Scalable backend infrastructure",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  ///Projects
+                  /// 🔥 TRUST
                   AnimatedSection(
                     child: Padding(
                       padding: const EdgeInsets.all(40),
                       child: Column(
-                        children: [
-                          Text("Projects", style: TextStyle(fontSize: 32)),
+                        children: const [
+                          Text("Trusted By", style: TextStyle(fontSize: 28)),
                           SizedBox(height: 20),
                           Wrap(
-                            spacing: 20,
-                            runSpacing: 20,
+                            spacing: 30,
+                            alignment: WrapAlignment.center,
                             children: [
-                              _projectCard(
-                                "Auth System",
-                                "Flutter + Rust auth system",
-                              ),
-                              _projectCard(
-                                "Portfolio Site",
-                                "Animated Flutter web UI",
-                              ),
+                              Text("🚀 10+ Projects Built"),
+                              Text("⚡ High Performance Systems"),
+                              Text("🦀 Rust Backend Specialist"),
+                              Text("📱 Cross Platform Apps"),
                             ],
                           ),
                         ],
@@ -201,46 +165,116 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  ///About me
+                  /// 🔥 FEATURED
                   AnimatedSection(
                     child: Padding(
                       padding: const EdgeInsets.all(40),
                       child: Column(
                         children: [
-                          Text("About Me", style: TextStyle(fontSize: 32)),
-                          SizedBox(height: 20),
-                          Text(
-                            "I'm a Flutter & Rust developer focused on building scalable apps and backend systems...",
-                            textAlign: TextAlign.center,
+                          const Text("Featured Work",
+                              style: TextStyle(fontSize: 32)),
+                          const SizedBox(height: 20),
+
+                          Wrap(
+                            spacing: 20,
+                            children: [
+                              _featuredCard(
+                                "Encrypted Notepad",
+                                "Secure Flutter + Rust backend",
+                                "https://github.com/ibrahim-3595/Encrypt-Notepad",
+                                _openLink,
+                              ),
+                              _featuredCard(
+                                "Secure Journal",
+                                "Rust backend + Dioxus frontend + Axum framework + SQliteDb",
+                                "https://github.com/ibrahim-3595/Secure-Journal",
+                                _openLink,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/portfolio");
+                            },
+                            child: const Text("View All Projects →"),
                           ),
                         ],
                       ),
                     ),
                   ),
 
-                  /// 💼 CTA
+                  /// 🔥 WHY ME (WITH HOVER SCALE)
                   AnimatedSection(
-                    child: Container(
-                      padding: EdgeInsets.all(40),
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
                       child: Column(
                         children: [
-                          Text(
-                            "Let’s Build Something Serious",
-                            style: TextStyle(fontSize: 28),
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: Text("Contact Me"),
+                          const Text("Why Work With Me?",
+                              style: TextStyle(fontSize: 32)),
+                          const SizedBox(height: 20),
+
+                          Wrap(
+                            spacing: 20,
+                            children: [
+                              _hoverPoint("⚡ Speed", "Fast delivery"),
+                              _hoverPoint("🧠 Deep Tech", "Rust expertise"),
+                              _hoverPoint("🎯 Clean UI", "Modern design"),
+                              _hoverPoint("📈 Scalable", "Production ready"),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
+
+                  /// 🔥 CTA
+                  AnimatedSection(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Have an idea? Let’s build it.",
+                            style: TextStyle(fontSize: 28),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/contact");
+                            },
+                            child: const Text("Contact Me"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  /// 🔥 TECH STACK
+                  AnimatedSection(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Wrap(
+                        spacing: 20,
+                        alignment: WrapAlignment.center,
+                        children: const [
+                          Chip(label: Text("Rust")),
+                          Chip(label: Text("Flutter")),
+                          Chip(label: Text("Axum")),
+                          Chip(label: Text("SQLx")),
+                          Chip(label: Text("Docker")),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  /// FOOTER
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     color: Colors.black,
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text("© 2026 CobaltDev"),
                         SizedBox(height: 10),
@@ -258,67 +292,86 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget _serviceCard(String icon, String title, String desc) {
+/// 🔥 FEATURE CARD
+Widget _featuredCard(
+  String title,
+  String desc,
+  String url,
+  Function(String) openLink,
+) {
   return SizedBox(
-    width: 250,
-    child: MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        transform: Matrix4.identity()..scale(1.05),
-        child: GlassCard(
-          child: Column(
-            children: [
-              Text(icon, style: TextStyle(fontSize: 40)),
-              SizedBox(height: 10),
-              Text(title, style: TextStyle(fontSize: 18)),
-              SizedBox(height: 10),
-              Text(desc, textAlign: TextAlign.center),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _projectCard(String title, String desc) {
-  return SizedBox(
-    width: 280,
+    width: 300,
     child: GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 🖼️ Placeholder image
           Container(
-            height: 150,
-            width: double.infinity,
+            height: 160,
             decoration: BoxDecoration(
               color: Colors.grey[800],
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(child: Text("Preview")),
           ),
-
-          const SizedBox(height: 10),
-
-          /// 📌 Title
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-
+          const SizedBox(height: 12),
+          Text(title,
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 6),
-
-          /// 📝 Description
           Text(desc),
-
           const SizedBox(height: 10),
-
-          /// 🔗 Optional button
-          TextButton(onPressed: () {}, child: const Text("View Project")),
+          TextButton(
+            onPressed: () => openLink(url),
+            child: const Text("View Details →"),
+          ),
         ],
       ),
     ),
   );
+}
+
+/// 🔥 HOVER POINT
+Widget _hoverPoint(String title, String desc) {
+  return _HoverCard(title: title, desc: desc);
+}
+
+class _HoverCard extends StatefulWidget {
+  final String title;
+  final String desc;
+
+  const _HoverCard({required this.title, required this.desc});
+
+  @override
+  State<_HoverCard> createState() => _HoverCardState();
+}
+
+class _HoverCardState extends State<_HoverCard> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: Matrix4.identity()
+          ..scale(isHovered ? 1.08 : 1.0),
+        child: SizedBox(
+          width: 220,
+          child: GlassCard(
+            child: Column(
+              children: [
+                Text(widget.title,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Text(widget.desc, textAlign: TextAlign.center),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

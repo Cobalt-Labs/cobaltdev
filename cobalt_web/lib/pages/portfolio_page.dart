@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/animated_section.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+Future<void> _openGithub() async {
+  final url = Uri.parse("https://github.com/ibrahim-3595");
+
+  if (await canLaunchUrl(url)) {
+    await launchUrl(
+      url,
+      mode: LaunchMode.platformDefault, // ✅ better for web
+    );
+  } else {
+    throw "Could not launch $url";
+  }
+}
 
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
@@ -20,7 +34,6 @@ class PortfolioPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /// 🔥 HEADER
                   AnimatedSection(
                     child: Column(
@@ -73,10 +86,7 @@ class PortfolioPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -103,7 +113,6 @@ class PortfolioPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 /// 🖼️ IMAGE
                 Container(
                   height: 160,
@@ -138,19 +147,17 @@ class PortfolioPage extends StatelessWidget {
                 /// 🛠️ TECH
                 Text(
                   project["tech"]!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
 
                 const SizedBox(height: 10),
 
                 /// 🔗 ACTION
-                TextButton(
-                  onPressed: () {},
-                  child: const Text("View Project →"),
-                )
+                TextButton.icon(
+                  onPressed: _openGithub,
+                  icon: const Icon(Icons.open_in_new),
+                  label: const Text("View on GitHub"),
+                ),
               ],
             ),
           ),

@@ -8,6 +8,7 @@ import 'pages/contact_page.dart';
 import 'widgets/navbar.dart';
 
 void main() {
+  // setUrlStrategy(PathUrlStrategy()); // 👈 IMPORTANT
   runApp(const CobaltDevApp());
 }
 

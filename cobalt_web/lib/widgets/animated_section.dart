@@ -11,22 +11,36 @@ class AnimatedSection extends StatefulWidget {
 
 class _AnimatedSectionState extends State<AnimatedSection>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<double> opacity;
+  late AnimationController _controller;
+  late Animation<double> _fade;
 
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-    opacity = Tween(begin: 0.0, end: 1.0).animate(controller);
-    controller.forward();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _fade = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // ✅ THIS FIXES YOUR ERROR
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: opacity,
+      opacity: _fade,
       child: widget.child,
     );
   }

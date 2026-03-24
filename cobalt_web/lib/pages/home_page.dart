@@ -20,15 +20,21 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _controller =
-        VideoPlayerController.network(
-          'https://www.pexels.com/download/video/35623364/',
-        )..initialize().then((_) {
-          _controller
-            ..setLooping(true)
-            ..setVolume(0)
-            ..play();
-          setState(() {});
-        });
+        // VideoPlayerController.networkUrl(
+        //     Uri.parse(
+        //       'https://videos.pexels.com/video-files/35623364/35623364-hd_1920_1080_30fps.mp4',
+        //     ),
+        //   )
+        VideoPlayerController.asset(
+          'assets/videos/bg.mp4',
+        )
+          ..initialize().then((_) {
+            _controller
+              ..setLooping(true)
+              ..setVolume(0)
+              ..play();
+            setState(() {});
+          });
   }
 
   @override
@@ -171,8 +177,10 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(40),
                       child: Column(
                         children: [
-                          const Text("Featured Work",
-                              style: TextStyle(fontSize: 32)),
+                          const Text(
+                            "Featured Work",
+                            style: TextStyle(fontSize: 32),
+                          ),
                           const SizedBox(height: 20),
 
                           Wrap(
@@ -212,8 +220,10 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(40),
                       child: Column(
                         children: [
-                          const Text("Why Work With Me?",
-                              style: TextStyle(fontSize: 32)),
+                          const Text(
+                            "Why Work With Me?",
+                            style: TextStyle(fontSize: 32),
+                          ),
                           const SizedBox(height: 20),
 
                           Wrap(
@@ -314,9 +324,10 @@ Widget _featuredCard(
             child: const Center(child: Text("Preview")),
           ),
           const SizedBox(height: 12),
-          Text(title,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 6),
           Text(desc),
           const SizedBox(height: 10),
@@ -355,16 +366,19 @@ class _HoverCardState extends State<_HoverCard> {
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()
-          ..scale(isHovered ? 1.08 : 1.0),
+        transform: Matrix4.identity()..scale(isHovered ? 1.08 : 1.0),
         child: SizedBox(
           width: 220,
           child: GlassCard(
             child: Column(
               children: [
-                Text(widget.title,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Text(widget.desc, textAlign: TextAlign.center),
               ],

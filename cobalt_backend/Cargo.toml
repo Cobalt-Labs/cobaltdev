@@ -13,10 +13,12 @@ tower = "0.5.3"
 tower-http = { version = "0.6.8", features = ["cors"] }
 tracing-subscriber = "0.3"
 dotenvy = "0.15"
-argon2 = "0.5"
+argon2 = { version = "0.5", features = ["std"] }
+# rand_core = { version = "0.10.0", features = ["std"] }
+rand = "0.10.0"
 uuid = { version = "1", features = ["v4"] }
 lettre = { 
-  version = "3.0.0", 
+  version = "0.11", 
   default-features = false, 
   features = [
     "tokio1",

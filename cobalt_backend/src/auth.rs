@@ -1,7 +1,8 @@
 use argon2::{
-    password_hash::{SaltString, PasswordHash, PasswordHasher, PasswordVerifier, rand_core::OsRng},
+    password_hash::{SaltString, PasswordHash, PasswordHasher, PasswordVerifier},
     Argon2,
 };
+use argon2::password_hash::rand_core::OsRng;
 use uuid::Uuid;
 
 pub fn hash_password(password: &str) -> String {
@@ -17,6 +18,7 @@ pub fn hash_password(password: &str) -> String {
 
 pub fn verify_password(hash: &str, password: &str) -> bool {
     let parsed_hash = PasswordHash::new(hash).unwrap();
+
     Argon2::default()
         .verify_password(password.as_bytes(), &parsed_hash)
         .is_ok()

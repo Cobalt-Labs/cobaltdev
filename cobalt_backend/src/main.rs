@@ -6,7 +6,7 @@ use axum::{
     http::StatusCode,
 };
 use serde::{Deserialize, Serialize};
-use sqlx::SqlitePool;
+use sqlx::{SqlitePool, Row};
 use std::net::SocketAddr;
 use tower_http::cors::CorsLayer;
 

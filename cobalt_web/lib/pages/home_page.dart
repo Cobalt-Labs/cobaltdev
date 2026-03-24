@@ -25,15 +25,15 @@ class _HomePageState extends State<HomePage> {
         //       'https://videos.pexels.com/video-files/35623364/35623364-hd_1920_1080_30fps.mp4',
         //     ),
         //   )
-        VideoPlayerController.asset(
-          'assets/videos/bg.mp4',
-        )
+        VideoPlayerController.asset('assets/videos/bg.mp4')
           ..initialize().then((_) {
-            _controller
-              ..setLooping(true)
-              ..setVolume(0)
-              ..play();
             setState(() {});
+            Future.delayed(Duration(milliseconds: 500), () {
+              _controller
+                ..setLooping(true)
+                ..setVolume(0)
+                ..play();
+            });
           });
   }
 

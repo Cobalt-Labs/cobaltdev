@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 import '../widgets/animated_section.dart';
 import '../widgets/glass_card.dart';
 
@@ -16,143 +17,238 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-      'https://www.w3schools.com/html/mov_bbb.mp4',
-    )..initialize().then((_) {
-        _controller.setLooping(true);
-        _controller.setVolume(0.0); // 🔇 MUTE
-        _controller.play();
-        setState(() {});
-      });
+
+    _controller =
+        VideoPlayerController.network(
+            'https://www.w3schools.com/html/mov_bbb.mp4',
+          )
+          ..initialize().then((_) {
+            _controller
+              ..setLooping(true)
+              ..setVolume(0)
+              ..play();
+            setState(() {});
+          });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // ✅ IMPORTANT (prevents memory leak)
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final isDesktop = width > 1000;
+    final isTablet = width > 600 && width <= 1000;
+
+    return Scaffold(
+      body: Column(
         children: [
-
-          /// 🔥 HERO SECTION (VIDEO BG)
-          Stack(
-            children: [
-              SizedBox(
-                height: 600,
-                width: double.infinity,
-                child: _controller.value.isInitialized
-                    ? FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: _controller.value.size.width,
-                          height: _controller.value.size.height,
-                          child: VideoPlayer(_controller),
-                        ),
-                      )
-                    : Container(color: Colors.black),
-              ),
-
-              /// 🔥 DARK OVERLAY
-              Container(
-                height: 600,
-                color: Colors.black.withOpacity(0.6),
-              ),
-
-              /// 🔥 CONTENT
-              SizedBox(
-                height: 600,
-                child: Center(
-                  child: AnimatedSection(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+          /// ✅ SCROLLABLE CONTENT
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  /// 🔥 HERO SECTION
+                  SizedBox(
+                    height: height,
+                    child: Stack(
                       children: [
-
-                        /// LOGO / TITLE
-                        const Text(
-                          "CobaltDev",
-                          style: TextStyle(
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        /// 💎 GLASS CARD
-                        GlassCard(
-                          child: Column(
-                            children: const [
-                              Text(
-                                "Flutter + Rust Developer",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        /// 🎥 VIDEO
+                        if (_controller.value.isInitialized)
+                          SizedBox.expand(
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: _controller.value.size.width,
+                                height: _controller.value.size.height,
+                                child: VideoPlayer(_controller),
                               ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Building scalable apps, systems & backend infrastructure",
-                                textAlign: TextAlign.center,
+                            ),
+                          )
+                        else
+                          Container(color: Colors.black),
+
+                        /// 🌑 OVERLAY
+                        Container(color: Colors.black.withOpacity(0.6)),
+
+                        /// 💎 CONTENT
+                        Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 1200),
+                            child: AnimatedSection(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  /// TITLE
+                                  Text(
+                                    "CobaltDev",
+                                    style: TextStyle(
+                                      fontSize: isDesktop
+                                          ? 60
+                                          : isTablet
+                                          ? 42
+                                          : 32,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 20),
+
+                                  /// GLASS CARD
+                                  GlassCard(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Flutter + Rust Developer",
+                                          style: TextStyle(
+                                            fontSize: isDesktop ? 24 : 18,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          "Building scalable apps, systems & backend infrastructure",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 30),
+
+                                  /// CTA
+                                  ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 30,
+                                        vertical: 15,
+                                      ),
+                                    ),
+                                    child: const Text("Get Started"),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        /// 🚀 CTA BUTTON
-                        ElevatedButton(
-                          onPressed: () {
-                            // TODO: Navigate to contact page or scroll
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 15,
                             ),
                           ),
-                          child: const Text("Get Started"),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
 
-          /// 🚀 SERVICES PREVIEW
-          AnimatedSection(
-            child: Padding(
-              padding: const EdgeInsets.all(40),
-              child: Column(
-                children: const [
-                  Text(
-                    "What I Build",
-                    style: TextStyle(fontSize: 32),
+                  /// 🚀 SERVICES
+                  AnimatedSection(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Wrap(
+                        spacing: 20,
+                        runSpacing: 20,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          _serviceCard(
+                            "📱",
+                            "Mobile Apps",
+                            "Flutter apps for iOS & Android",
+                          ),
+                          _serviceCard(
+                            "🌐",
+                            "Web Apps",
+                            "Modern responsive web apps",
+                          ),
+                          _serviceCard(
+                            "🦀",
+                            "Rust Backend",
+                            "High-performance APIs with Axum",
+                          ),
+                          _serviceCard(
+                            "⚡",
+                            "Systems",
+                            "Scalable backend infrastructure",
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Web Apps • Mobile Apps • Backend Systems • Rust Systems • AI Foundations",
-                    textAlign: TextAlign.center,
+
+                  ///Projects
+                  AnimatedSection(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          Text("Projects", style: TextStyle(fontSize: 32)),
+                          SizedBox(height: 20),
+                          Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            children: [
+                              _projectCard(
+                                "Auth System",
+                                "Flutter + Rust auth system",
+                              ),
+                              _projectCard(
+                                "Portfolio Site",
+                                "Animated Flutter web UI",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  ///About me
+                  AnimatedSection(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          Text("About Me", style: TextStyle(fontSize: 32)),
+                          SizedBox(height: 20),
+                          Text(
+                            "I'm a Flutter & Rust developer focused on building scalable apps and backend systems...",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  /// 💼 CTA
+                  AnimatedSection(
+                    child: Container(
+                      padding: EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Let’s Build Something Serious",
+                            style: TextStyle(fontSize: 28),
+                          ),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Text("Contact Me"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    color: Colors.black,
+                    child: Column(
+                      children: [
+                        Text("© 2026 CobaltDev"),
+                        SizedBox(height: 10),
+                        Text("Built with Flutter & Rust"),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            ),
-          ),
-
-          /// 💼 CTA SECTION
-          AnimatedSection(
-            child: Padding(
-              padding: const EdgeInsets.all(40),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text("Work With Me"),
               ),
             ),
           ),
@@ -160,4 +256,69 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+Widget _serviceCard(String icon, String title, String desc) {
+  return SizedBox(
+    width: 250,
+    child: GlassCard(
+      child: Column(
+        children: [
+          Text(icon, style: TextStyle(fontSize: 40)),
+          SizedBox(height: 10),
+          Text(title, style: TextStyle(fontSize: 18)),
+          SizedBox(height: 10),
+          Text(desc, textAlign: TextAlign.center),
+        ],
+      ),
+    ),
+  );
+}
+Widget _projectCard(String title, String desc) {
+  return SizedBox(
+    width: 280,
+    child: GlassCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// 🖼️ Placeholder image
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: Text("Preview"),
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          /// 📌 Title
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 6),
+
+          /// 📝 Description
+          Text(desc),
+
+          const SizedBox(height: 10),
+
+          /// 🔗 Optional button
+          TextButton(
+            onPressed: () {},
+            child: const Text("View Project"),
+          )
+        ],
+      ),
+    ),
+  );
 }

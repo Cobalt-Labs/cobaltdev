@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/animated_section.dart';
+import '../widgets/glass_card.dart';
 
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
@@ -25,29 +25,27 @@ class PortfolioPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSection(
-      child: GridView.builder(
+    return SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(40),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+        child: Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          children: projects.map((project) {
+            return SizedBox(
+              width: 300,
+              child: GlassCard(
+                child: Column(
+                  children: [
+                    Text(project["title"]!, style: TextStyle(fontSize: 18)),
+                    SizedBox(height: 10),
+                    Text(project["desc"]!),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
         ),
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          final project = projects[index];
-          return Container(
-            padding: const EdgeInsets.all(20),
-            color: Colors.grey[900],
-            child: Column(
-              children: [
-                Text(project["title"]!, style: const TextStyle(fontSize: 18)),
-                const SizedBox(height: 10),
-                Text(project["desc"]!),
-              ],
-            ),
-          );
-        },
       ),
     );
   }

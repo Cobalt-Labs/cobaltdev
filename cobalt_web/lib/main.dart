@@ -23,10 +23,10 @@ class CobaltDevApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MainLayout(child: HomePage()),
+        '/about': (context) => const MainLayout(child: AboutPage()),
         '/services': (context) => const MainLayout(child: ServicesPage()),
         '/products': (context) => const MainLayout(child: ProductsPage()),
         '/portfolio': (context) => const MainLayout(child: PortfolioPage()),
-        '/about': (context) => const MainLayout(child: AboutPage()),
         '/contact': (context) => const MainLayout(child: ContactPage()),
       },
     );

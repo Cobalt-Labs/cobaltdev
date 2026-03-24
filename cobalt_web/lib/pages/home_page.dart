@@ -261,19 +261,27 @@ class _HomePageState extends State<HomePage> {
 Widget _serviceCard(String icon, String title, String desc) {
   return SizedBox(
     width: 250,
-    child: GlassCard(
-      child: Column(
-        children: [
-          Text(icon, style: TextStyle(fontSize: 40)),
-          SizedBox(height: 10),
-          Text(title, style: TextStyle(fontSize: 18)),
-          SizedBox(height: 10),
-          Text(desc, textAlign: TextAlign.center),
-        ],
+    child: MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        transform: Matrix4.identity()..scale(1.05),
+        child: GlassCard(
+          child: Column(
+            children: [
+              Text(icon, style: TextStyle(fontSize: 40)),
+              SizedBox(height: 10),
+              Text(title, style: TextStyle(fontSize: 18)),
+              SizedBox(height: 10),
+              Text(desc, textAlign: TextAlign.center),
+            ],
+          ),
+        ),
       ),
     ),
   );
 }
+
 Widget _projectCard(String title, String desc) {
   return SizedBox(
     width: 280,
@@ -289,9 +297,7 @@ Widget _projectCard(String title, String desc) {
               color: Colors.grey[800],
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Center(
-              child: Text("Preview"),
-            ),
+            child: const Center(child: Text("Preview")),
           ),
 
           const SizedBox(height: 10),
@@ -299,10 +305,7 @@ Widget _projectCard(String title, String desc) {
           /// 📌 Title
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 6),
@@ -313,10 +316,7 @@ Widget _projectCard(String title, String desc) {
           const SizedBox(height: 10),
 
           /// 🔗 Optional button
-          TextButton(
-            onPressed: () {},
-            child: const Text("View Project"),
-          )
+          TextButton(onPressed: () {}, child: const Text("View Project")),
         ],
       ),
     ),

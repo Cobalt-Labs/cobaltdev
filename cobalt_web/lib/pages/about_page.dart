@@ -6,11 +6,26 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AnimatedSection(
-      child: Center(
-        child: Text(
-          "Services Page",
-          style: TextStyle(fontSize: 30),
+    return AnimatedSection(
+      child: Padding(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text("About Me", style: TextStyle(fontSize: 36)),
+            SizedBox(height: 20),
+            Text(
+              "I started my journey 7 years ago with HTML and CSS, explored JavaScript, Java, Python, and eventually found my core stack in Flutter and Rust.",
+            ),
+            SizedBox(height: 10),
+            Text(
+              "I build full-stack applications, from frontend UI to backend systems, and even low-level systems using Rust.",
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Currently working with Flutter, Rust (Axum, SQLx), and exploring Dioxus, AI systems, and distributed architectures.",
+            ),
+          ],
         ),
       ),
     );

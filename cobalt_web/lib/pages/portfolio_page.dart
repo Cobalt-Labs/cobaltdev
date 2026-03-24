@@ -6,17 +6,21 @@ class PortfolioPage extends StatelessWidget {
 
   final List<Map<String, String>> projects = const [
     {
-      "title": "E-Commerce App",
-      "desc": "Flutter + Firebase full stack app"
-    },
-    {
-      "title": "Business Website",
-      "desc": "Responsive web built with Flutter Web"
-    },
-    {
-      "title": "Admin Dashboard",
-      "desc": "Analytics dashboard with charts"
-    },
+        "title": "Rust Journal CLI",
+        "desc": "CLI app using Rust + SQLx + SQLite"
+      },
+      {
+        "title": "Flutter + Rust FFI App",
+        "desc": "High-performance hybrid mobile app"
+      },
+      {
+        "title": "Microservices with Axum",
+        "desc": "Rust backend architecture"
+      },
+      {
+        "title": "Algorithms in Rust",
+        "desc": "DSA practice repo in Rust"
+      },
   ];
 
   @override

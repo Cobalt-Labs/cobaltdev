@@ -10,6 +10,7 @@ import 'widgets/navbar.dart';
 void main() {
   runApp(const CobaltDevApp());
 }
+
 //
 class CobaltDevApp extends StatelessWidget {
   const CobaltDevApp({super.key});
@@ -48,10 +49,7 @@ class MainLayout extends StatelessWidget {
           child: ListView(
             children: [
               const DrawerHeader(
-                child: Text(
-                  "CobaltDev",
-                  style: TextStyle(fontSize: 24),
-                ),
+                child: Text("CobaltDev", style: TextStyle(fontSize: 24)),
               ),
               _drawerItem(context, "Home", "/"),
               _drawerItem(context, "Services", "/services"),
@@ -73,8 +71,7 @@ class MainLayout extends StatelessWidget {
     );
   }
 
-  Widget _drawerItem(
-      BuildContext context, String title, String route) {
+  Widget _drawerItem(BuildContext context, String title, String route) {
     return ListTile(
       title: Text(title),
       onTap: () {

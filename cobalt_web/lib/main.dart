@@ -8,7 +8,6 @@ import 'pages/contact_page.dart';
 import 'widgets/navbar.dart';
 
 void main() {
-  // setUrlStrategy(PathUrlStrategy());
   runApp(const CobaltDevApp());
 }
 
@@ -42,12 +41,46 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// 🔥 MOBILE DRAWER
+      drawer: Drawer(
+        child: Container(
+          color: Colors.black,
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                child: Text(
+                  "CobaltDev",
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+              _drawerItem(context, "Home", "/"),
+              _drawerItem(context, "Services", "/services"),
+              _drawerItem(context, "Products", "/products"),
+              _drawerItem(context, "Portfolio", "/portfolio"),
+              _drawerItem(context, "About", "/about"),
+              _drawerItem(context, "Contact", "/contact"),
+            ],
+          ),
+        ),
+      ),
+
       body: Column(
         children: [
           const Navbar(),
           Expanded(child: child),
         ],
       ),
+    );
+  }
+
+  Widget _drawerItem(
+      BuildContext context, String title, String route) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        Navigator.pop(context); // close drawer
+        Navigator.pushReplacementNamed(context, route);
+      },
     );
   }
 }

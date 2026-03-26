@@ -6,11 +6,10 @@ class Navbar extends StatelessWidget {
 
   Widget navItem(BuildContext context, String title, String route) {
     final currentRoute = ModalRoute.of(context)?.settings.name;
-  
     final isActive = currentRoute == route;
-  
+
     return TextButton(
-      onPressed: () => Navigator.pushNamed(context, route),
+      onPressed: () => Navigator.pushReplacementNamed(context, route),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -19,14 +18,15 @@ class Navbar extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               color: isActive ? Colors.blue : Colors.white,
-              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              fontWeight:
+                  isActive ? FontWeight.bold : FontWeight.normal,
             ),
           ),
-  
-          /// 🔥 UNDERLINE INDICATOR
+
+          /// 🔥 UNDERLINE
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            margin: EdgeInsets.only(top: 4),
+            duration: const Duration(milliseconds: 300),
+            margin: const EdgeInsets.only(top: 4),
             height: 2,
             width: isActive ? 20 : 0,
             color: Colors.blue,
@@ -38,45 +38,99 @@ class Navbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 800;
+
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 40,
+            vertical: 20,
+          ),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.5),
-            border: Border(bottom: BorderSide(color: Colors.white12)),
+            border: const Border(
+              bottom: BorderSide(color: Colors.white12),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/',
-                    (route) => false,
-                  );
-                },
-                child: const Text(
-                  "CobaltDev",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Row(
-                children: [
-                  navItem(context, "Home", "/"),
-                  navItem(context, "Services", "/services"),
-                  navItem(context, "Products", "/products"),
-                  navItem(context, "Portfolio", "/portfolio"),
-                  navItem(context, "About", "/about"),
-                  navItem(context, "Contact", "/contact"),
-                ],
-              ),
-            ],
-          ),
+
+          /// 🔥 MOBILE vs DESKTOP SWITCH
+          child: isMobile
+              ? _mobileNav(context)
+              : _desktopNav(context),
         ),
       ),
+    );
+  }
+
+  /// 📱 MOBILE NAVBAR
+  Widget _mobileNav(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/',
+              (route) => false,
+            );
+          },
+          child: const Text(
+            "CobaltDev",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        /// 🔥 MENU BUTTON (FIXED)
+        Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 💻 DESKTOP NAVBAR (YOUR ORIGINAL STYLE)
+  Widget _desktopNav(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/',
+              (route) => false,
+            );
+          },
+          child: const Text(
+            "CobaltDev",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        Row(
+          children: [
+            navItem(context, "Home", "/"),
+            navItem(context, "Services", "/services"),
+            navItem(context, "Products", "/products"),
+            navItem(context, "Portfolio", "/portfolio"),
+            navItem(context, "About", "/about"),
+            navItem(context, "Contact", "/contact"),
+          ],
+        ),
+      ],
     );
   }
 }

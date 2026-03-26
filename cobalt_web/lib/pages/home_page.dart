@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
 
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pushNamed(context, "/services");
+                                      Navigator.pushReplacementNamed(context, "/services");
                                     },
                                     child: const Text("Get Started"),
                                   ),
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
 
                           TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/portfolio");
+                              Navigator.pushReplacementNamed(context, "/portfolio");
                             },
                             child: const Text("View All Projects →"),
                           ),
@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/contact");
+                              Navigator.pushReplacementNamed(context, "/contact");
                             },
                             child: const Text("Contact Me"),
                           ),

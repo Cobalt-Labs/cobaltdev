@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/animated_section.dart';
@@ -13,33 +13,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late VideoPlayerController _controller;
+  // late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-
-    _controller =
-        // VideoPlayerController.networkUrl(
-        //     Uri.parse(
-        //       'https://videos.pexels.com/video-files/35623364/35623364-hd_1920_1080_30fps.mp4',
-        //     ),
-        //   )
-        VideoPlayerController.asset('assets/videos/bg.mp4')
-          ..initialize().then((_) {
-            setState(() {});
-            Future.delayed(Duration(milliseconds: 500), () {
-              _controller
-                ..setLooping(true)
-                ..setVolume(0)
-                ..play();
-            });
-          });
+    ///video player
+    // _controller =
+    //     // VideoPlayerController.networkUrl(
+    //     //     Uri.parse(
+    //     //       'https://videos.pexels.com/video-files/35623364/35623364-hd_1920_1080_30fps.mp4',
+    //     //     ),
+    //     //   )
+    //     VideoPlayerController.asset('assets/videos/bg.mp4')
+    //       ..initialize().then((_) {
+    //         setState(() {});
+    //         Future.delayed(Duration(milliseconds: 500), () {
+    //           _controller
+    //             ..setLooping(true)
+    //             ..setVolume(0)
+    //             ..play();
+    //         });
+    //       });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -70,19 +70,19 @@ class _HomePageState extends State<HomePage> {
                     height: height,
                     child: Stack(
                       children: [
-                        if (_controller.value.isInitialized)
-                          SizedBox.expand(
-                            child: FittedBox(
-                              fit: BoxFit.cover,
-                              child: SizedBox(
-                                width: _controller.value.size.width,
-                                height: _controller.value.size.height,
-                                child: VideoPlayer(_controller),
-                              ),
-                            ),
-                          )
-                        else
-                          Container(color: Colors.black),
+                        // if (_controller.value.isInitialized)
+                        //   SizedBox.expand(
+                        //     child: FittedBox(
+                        //       fit: BoxFit.cover,
+                        //       child: SizedBox(
+                        //         width: _controller.value.size.width,
+                        //         height: _controller.value.size.height,
+                        //         child: VideoPlayer(_controller),
+                        //       ),
+                        //     ),
+                        //   )
+                        // else
+                        //   Container(color: Colors.black),
 
                         Container(color: Colors.black.withOpacity(0.6)),
 

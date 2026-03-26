@@ -186,12 +186,12 @@ class PortfolioPage extends StatelessWidget {
   List<Map<String, String>> _backendProjects() {
     return [
       {
-        "title": "Auth System",
-        "desc": "JWT auth with Axum + SQLx",
+        "title": "Stackmate Core",
+        "desc": "Core for a Bitcoin App",
         "tech": "Rust • Axum • SQLite",
       },
       {
-        "title": "Microservices API",
+        "title": "Microservices API / Web Server",
         "desc": "Scalable backend architecture",
         "tech": "Rust • Docker • APIs",
       },

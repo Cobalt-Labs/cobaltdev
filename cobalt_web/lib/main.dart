@@ -10,7 +10,7 @@ import 'widgets/navbar.dart';
 void main() {
   runApp(const CobaltDevApp());
 }
-
+//
 class CobaltDevApp extends StatelessWidget {
   const CobaltDevApp({super.key});
 

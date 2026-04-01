@@ -1,0 +1,17 @@
+# Rust
+target/
+cobalt_backend/target
+
+# Storage
+
+
+# Flutter
+cobalt_web/build/
+cobalt_web/.dart_tool/
+
+# Env / DB
+.env
+*.db
+
+# Random junk
+*.log

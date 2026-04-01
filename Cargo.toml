@@ -1,0 +1,12 @@
+[workspace]
+members = [
+    "cobalt_backend",
+    "cobalt_cloud",
+]
+resolver = "2"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.7", features = ["multipart", "tracing"] }
+sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "macros", "migrate"] }
+# ... we'll add more later

@@ -4,28 +4,37 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = "0.8.8"
-tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8.8", workspace = true }
+tokio = { version = "1", features = ["full"], workspace = true }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-sqlx = { version = "0.8.6", features = ["sqlite", "runtime-tokio", "macros"] }
+serde_json = "1.0"
+sqlx = { version = "0.8.6", features = [
+  "sqlite",
+  "runtime-tokio",
+  "macros",
+], workspace = true }
 tower = "0.5.3"
-tower-http = { version = "0.6.8", features = ["cors"] }
-tracing-subscriber = "0.3"
 dotenvy = "0.15"
 argon2 = { version = "0.5", features = ["std"] }
 # rand_core = { version = "0.10.0", features = ["std"] }
+lettre = { version = "0.11", default-features = false, features = [
+  "tokio1",
+  "tokio1-rustls",
+  "smtp-transport",
+  "builder",
+  "ring",
+  "webpki-roots",
+] }
 rand = "0.10.0"
-uuid = { version = "1", features = ["v4"] }
-lettre = { 
-  version = "0.11", 
-  default-features = false, 
-  features = [
-    "tokio1",
-    "tokio1-rustls",
-    "smtp-transport",
-    "builder",
-    "ring",
-    "webpki-roots"
-  ] 
-}
+uuid = { version = "1", features = ["v4", "serde"] }
+tower-http = { version = "0.6.8", features = ["cors", "trace", "limit"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap = { version = "4.5", features = ["derive"] } # for CLI feature
+object_store = { version = "0.13.2", features = [
+  "fs",
+] } # ← the star for HDD storage
+bytes = "1.0"
+anyhow = "1.0"
+blake3 = "1.8.4"

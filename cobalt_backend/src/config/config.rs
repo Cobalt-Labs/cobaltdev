@@ -16,7 +16,7 @@ impl Config {
         dotenv().ok();
 
         let storage_base_path = env::var("STORAGE_BASE_PATH")
-            .unwrap_or_else(|_| "/mnt/cobalt_storage".to_string());
+            .unwrap_or_else(|_| "/run/media/ibrahim/2a0cf554-dd07-41d5-8e30-cfd22565dfb0/home/ibrahim/cloud_storage".to_string()); //mnt/cobalt_storage
 
         // Auto-create base dir (safe for both internal & external after manual mount)
         if !Path::new(&storage_base_path).exists() {

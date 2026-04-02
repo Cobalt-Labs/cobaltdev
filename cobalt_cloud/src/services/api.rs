@@ -4,18 +4,21 @@ use anyhow::Result;
 
 const BACKEND_URL: &str = "http://127.0.0.1:8080";
 
-pub async fn list_files() -> Result<Vec<FileMetadata>> {
+pub async fn list_files(token: Option<String>) -> Result<Vec<FileMetadata>> {
     let client = Client::new();
-    let resp = client.get(format!("{}/api/files", BACKEND_URL))
-        .send()
-        .await?
-        .json()
-        .await?;
+    let mut req = client.get(format!("{}/api/files", BACKEND_URL));
+
+    if let Some(t) = token {
+        req = req.bearer_auth(t);
+    }
+
+    let resp = req.send().await?.json().await?;
     Ok(resp)
 }
 
-// We'll add upload later with progress
-pub async fn upload_file(_file_path: String) -> Result<()> {
-    // TODO: multipart upload to /api/upload
+// Placeholder - we'll make real multipart upload with progress later
+pub async fn upload_file(_file_bytes: Vec<u8>, _filename: String, _token: Option<String>) -> Result<()> {
+    // TODO: Implement real multipart with progress
+    tokio::time::sleep(tokio::time::Duration::from_secs(2)).await; // simulate
     Ok(())
 }

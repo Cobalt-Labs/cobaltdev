@@ -1,24 +1,27 @@
 use dioxus::prelude::*;
 // use dioxus_router::prelude::*;
-use dioxus_router::{Routable, Router};
-use pages::home::HomePage;
 
 mod models;
 mod services;
 mod hooks;
+mod components;
 mod pages;
 
-fn main() {
-    dioxus::launch(app);
-}
+use pages::{home::HomePage, login::LoginPage};
 
-#[derive(Routable, Clone, PartialEq, Debug)]
+#[derive(Routable, Clone, PartialEq)]
 enum Route {
     #[route("/")]
     HomePage,
+    #[route("/login")]
+    LoginPage,
 }
 
-fn app() -> Element {
+fn main() {
+    dioxus::launch(App);
+}
+
+fn App() -> Element {
     rsx! {
         Router::<Route> {}
     }

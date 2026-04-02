@@ -1,0 +1,7 @@
+[application]
+name = "cobalt-cloud"
+default_platform = "desktop"
+out_dir = "dist"
+
+[web]
+app = { title = "Cobalt Cloud - Your Room HDD Cloud" }

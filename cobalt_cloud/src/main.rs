@@ -18,10 +18,10 @@ enum Route {
 }
 
 fn main() {
-    dioxus::launch(App);
+    dioxus::launch(app);
 }
 
-fn App() -> Element {
+fn app() -> Element {
     rsx! {
         Router::<Route> {}
     }

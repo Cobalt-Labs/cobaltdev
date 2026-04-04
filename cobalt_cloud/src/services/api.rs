@@ -1,6 +1,6 @@
 use anyhow::Result;
 use reqwest::multipart::{Form, Part};
-use reqwest::{Client, Response}; // Explicitly import Response
+use reqwest::{Client, Response};
 
 const BACKEND_URL: &str = "http://127.0.0.1:8080";
 

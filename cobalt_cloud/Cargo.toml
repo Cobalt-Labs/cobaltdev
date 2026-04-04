@@ -42,16 +42,15 @@ serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.0", features = ["serde"] }
 futures-timer = "3.0.3"
 
-# Common reqwest base (no TLS here)
+# Base reqwest - MUST match the version in target blocks
 reqwest = { version = "0.12", default-features = false, features = ["json", "multipart"] }
 
-# Multi-thread only for non-wasm
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tokio = { version = "1", features = ["rt-multi-thread", "full"] }
-reqwest = { version = "0.13.2", features = ["native-tls"] }
+# FIXED: Changed 0.13.2 back to 0.12 to match
+reqwest = { version = "0.12", features = ["native-tls"] }
 dioxus = { version = "0.7", features = ["desktop"] }
 
-# WASM specific
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 tokio = { version = "1", features = ["rt"] }
 reqwest = { version = "0.12", features = ["rustls-tls"] }

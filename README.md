@@ -167,9 +167,3 @@ For questions or collaboration ideas — just reach out.
 
 **Made in Rust • Powered by Grind • Running on Real Hardware**
 ```
-
-Just copy the entire block above and save it as `README.md` in your `cobaltdev/` folder.
-
-Want me to add screenshots section, contribution guidelines, or license part? Or shall we now improve the web drag & drop + auto file list refresh?  
-
-Tell me what's next yaar — we're building something special. 🚀

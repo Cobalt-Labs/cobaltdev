@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand};
-use anyhow::Result;
 
 #[derive(Parser)]
 #[command(author, version, about)]

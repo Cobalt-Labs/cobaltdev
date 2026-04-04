@@ -1,6 +1,6 @@
 use anyhow::Result;
 use object_store::ObjectStoreExt;
-use object_store::{local::LocalFileSystem, ObjectStore, path::Path as ObjectPath, PutPayload};
+use object_store::{local::LocalFileSystem, path::Path as ObjectPath, PutPayload};
 use std::sync::Arc;
 use blake3::Hasher;
 use tokio::fs::File;

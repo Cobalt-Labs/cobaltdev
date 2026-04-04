@@ -1,21 +1,22 @@
+use anyhow::Result;
+use axum::extract::Multipart;
 use axum::{
     Json, Router,
     extract::State,
     http::StatusCode,
     routing::{get, post},
 };
+use clap::Parser;
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 use std::net::SocketAddr;
 use tower_http::cors::CorsLayer;
-use clap::Parser;
-use anyhow::Result;
 use tracing_subscriber;
 
-mod config;           
-mod services;
-mod cli;              
+mod cli;
+mod config;
 mod models;
+mod services;
 
 mod email;
 
@@ -73,22 +74,22 @@ async fn main() -> Result<()> {
 
     match cli.command {
         Commands::Server => {
-            println!("🚀 Starting Cobalt Backend server on http://127.0.0.1:{}", config.server_port);
+            println!(
+                "🚀 Starting Cobalt Backend server on http://127.0.0.1:{}",
+                config.server_port
+            );
 
             let app = Router::new()
                 .route("/", get(root))
                 .route("/contact", post(create_contact))
-                // Future cloud routes will go here:
-                // .route("/api/upload", post(upload_file_handler))
-                // .route("/api/files", get(list_files_handler))
+                .route("/api/upload", post(upload_file_handler)) // ← UNCOMMENT & ADD THIS
                 .layer(CorsLayer::permissive())
                 .with_state(db_pool);
 
             let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
             println!("Server running on {}", addr);
 
-            axum::serve(tokio::net::TcpListener::bind(addr).await?, app)
-                .await?;
+            axum::serve(tokio::net::TcpListener::bind(addr).await?, app).await?;
         }
 
         Commands::Upload { file_path, user } => {
@@ -149,4 +150,50 @@ async fn create_contact(
     Ok(Json(ResponseMsg {
         status: "Message saved".into(),
     }))
+}
+
+async fn upload_file_handler(
+    mut multipart: Multipart,
+) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
+    let config = config::config::Config::load()
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+    let storage = services::storage::StorageService::new(config.storage_base_path.clone());
+
+    while let Some(field) = multipart.next_field().await
+        .map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()))?
+    {
+        let filename = field.file_name()
+            .map(|s| s.to_string())
+            .unwrap_or_else(|| "unknown_file".to_string());
+
+        let username = "ibrahim3595";
+
+        // Get the bytes directly (simpler and more reliable)
+        let data = field.bytes().await
+            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+        if data.is_empty() {
+            continue;
+        }
+
+        // Create a temp file so StorageService can use it
+        let temp_path = format!("/tmp/cobalt_temp_{}", filename);
+        tokio::fs::write(&temp_path, &data).await
+            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+        let file = tokio::fs::File::open(&temp_path).await
+            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+        let (storage_path, checksum) = storage.upload_file(username, &filename, file).await
+            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+        // Clean up temp file
+        let _ = tokio::fs::remove_file(&temp_path).await;
+
+        println!("✅ GUI Upload Success → {}", storage_path);
+        println!("Checksum: {}", checksum);
+    }
+
+    Ok(Json(serde_json::json!({"status": "success", "message": "File saved to HDD"})))
 }

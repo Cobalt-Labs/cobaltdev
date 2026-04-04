@@ -17,12 +17,17 @@ enum Route {
     LoginPage,
 }
 
+const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+
 fn main() {
     dioxus::launch(app);
 }
 
 fn app() -> Element {
     rsx! {
+        document::Stylesheet {
+            href: TAILWIND_CSS
+        }
         Router::<Route> {}
     }
 }

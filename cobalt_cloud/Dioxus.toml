@@ -5,6 +5,7 @@ out_dir = "dist"
 
 [web]
 app = { title = "Cobalt Cloud - Your Room HDD Cloud" }
+assets_dir = "."          # ← add this line
 
-[web.assets]
-style = ["./tailwind.css"]
+# [web.assets]
+# style = ["./tailwind.css"]

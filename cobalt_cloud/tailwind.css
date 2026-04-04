@@ -1,8 +1,13 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
+/* Tell Tailwind to scan ALL your Rust files for classes */
+@source "./src/**/*.{rs,html,css}";
+@source "./index.html";
+
+/* Optional: your custom base styles */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0a;   /* dark theme for your cloud app */
 }

@@ -43,7 +43,7 @@ Currently deep into:
 - Flutter + Rust FFI bridges
 - Future plans: modified Linux kernel in Rust, custom ROMs, and Bevy games
 
-Check out my work: **[cobalt.vercel.app](https://cobalt.vercel.app)**
+Check out my work: **[cobalt.vercel.app](https://cobaltdev.vercel.app)**
 
 ---
 
@@ -76,7 +76,7 @@ More coming soon.
 - Modified Linux kernel in Rust
 - Custom ROM development
 
-**Inshallah**, these become the foundation of something much bigger.
+**These become the foundation of something much bigger.**
 
 ---
 
@@ -88,7 +88,7 @@ If you're also obsessed with building real systems from scratch — feel free to
 
 **Ibrahim Haji**  
 Founder, Cobalt Labs  
-[cobalt.vercel.app](https://cobalt.vercel.app)  
+[cobaltdev.vercel.app](https://cobaltdev.vercel.app)  
 GitHub: [@ibrahim-3595](https://github.com/ibrahim-3595)
 
 ---

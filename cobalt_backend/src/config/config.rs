@@ -5,8 +5,8 @@ use std::path::Path;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    pub storage_base_path: String,   // e.g. "/mnt/cobalt_storage" or "~/cloud_storage"
-    pub db_path: String,             // "sqlite://cobalt.db?mode=rwc"
+    pub storage_base_path: String,
+    pub db_path: String,
     pub server_port: u16,
     pub default_user: String,
 }
@@ -15,24 +15,37 @@ impl Config {
     pub fn load() -> Result<Self> {
         dotenv().ok();
 
+        // Force a always-writable path inside your home directory (Mac loves this)
         let storage_base_path = env::var("STORAGE_BASE_PATH")
-            .unwrap_or_else(|_| "/run/media/ibrahim/2a0cf554-dd07-41d5-8e30-cfd22565dfb0/home/ibrahim/cloud_storage".to_string()); //mnt/cobalt_storage
+            .unwrap_or_else(|_| {
+                let home = env::var("HOME").unwrap_or_else(|_| "/Users/ibrahimhaji".to_string());
+                format!("{}/cloud_storage", home)
+            });
 
-        // Auto-create base dir (safe for both internal & external after manual mount)
+        println!("Using storage path: {}", storage_base_path);
+
+        // Auto-create base dir + user dir
         if !Path::new(&storage_base_path).exists() {
-            std::fs::create_dir_all(&storage_base_path)?;
+            std::fs::create_dir_all(&storage_base_path)
+                .map_err(|e| anyhow::anyhow!("Failed to create storage dir: {}", e))?;
             println!("✅ Created storage directory: {}", storage_base_path);
         }
 
         let user_dir = format!("{}/users/ibrahim3595", storage_base_path);
         if !Path::new(&user_dir).exists() {
-            std::fs::create_dir_all(&user_dir)?;
+            std::fs::create_dir_all(&user_dir)
+                .map_err(|e| anyhow::anyhow!("Failed to create user dir: {}", e))?;
+            println!("✅ Created user directory for ibrahim3595");
         }
 
         Ok(Self {
             storage_base_path,
-            db_path: env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite://cobalt.db?mode=rwc".to_string()),
-            server_port: env::var("SERVER_PORT").unwrap_or("8080".to_string()).parse()?,
+            db_path: env::var("DATABASE_URL")
+                .unwrap_or_else(|_| "sqlite://cobalt.db?mode=rwc".to_string()),
+            server_port: env::var("SERVER_PORT")
+                .unwrap_or("8080".to_string())
+                .parse()
+                .map_err(|e| anyhow::anyhow!("Invalid SERVER_PORT: {}", e))?,
             default_user: "ibrahim3595".to_string(),
         })
     }

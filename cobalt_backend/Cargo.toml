@@ -38,3 +38,4 @@ object_store = { version = "0.13.2", features = [
 bytes = "1.0"
 anyhow = "1.0"
 blake3 = "1.8.4"
+shellexpand = "3.0"

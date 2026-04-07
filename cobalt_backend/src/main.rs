@@ -15,10 +15,9 @@ use tracing_subscriber;
 
 mod cli;
 mod config;
+mod email;
 mod models;
 mod services;
-
-mod email;
 
 // ─────────────────────────────────────────────────────────────
 // Your existing models (kept for contact form)
@@ -143,12 +142,19 @@ async fn create_contact(
         .bind(&payload.message)
         .execute(&db)
         .await
-        .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "DB error".into()))?;
+        .map_err(|e| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("DB error: {}", e),
+            )
+        })?;
 
-    // email::send_email(...)  // uncomment when email module is ready
+    if let Err(e) = email::send_email(payload.name, payload.email, payload.message).await {
+        eprintln!("Email sending failed: {}", e);
+    }
 
     Ok(Json(ResponseMsg {
-        status: "Message saved".into(),
+        status: "Message received successfully".into(),
     }))
 }
 
@@ -160,17 +166,22 @@ async fn upload_file_handler(
 
     let storage = services::storage::StorageService::new(config.storage_base_path.clone());
 
-    while let Some(field) = multipart.next_field().await
+    while let Some(field) = multipart
+        .next_field()
+        .await
         .map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()))?
     {
-        let filename = field.file_name()
+        let filename = field
+            .file_name()
             .map(|s| s.to_string())
             .unwrap_or_else(|| "unknown_file".to_string());
 
         let username = "ibrahim3595";
 
         // Get the bytes directly (simpler and more reliable)
-        let data = field.bytes().await
+        let data = field
+            .bytes()
+            .await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
         if data.is_empty() {
@@ -179,13 +190,17 @@ async fn upload_file_handler(
 
         // Create a temp file so StorageService can use it
         let temp_path = format!("/tmp/cobalt_temp_{}", filename);
-        tokio::fs::write(&temp_path, &data).await
+        tokio::fs::write(&temp_path, &data)
+            .await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
-        let file = tokio::fs::File::open(&temp_path).await
+        let file = tokio::fs::File::open(&temp_path)
+            .await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
-        let (storage_path, checksum) = storage.upload_file(username, &filename, file).await
+        let (storage_path, checksum) = storage
+            .upload_file(username, &filename, file)
+            .await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
         // Clean up temp file
@@ -195,5 +210,7 @@ async fn upload_file_handler(
         println!("Checksum: {}", checksum);
     }
 
-    Ok(Json(serde_json::json!({"status": "success", "message": "File saved to HDD"})))
+    Ok(Json(
+        serde_json::json!({"status": "success", "message": "File saved to HDD"}),
+    ))
 }

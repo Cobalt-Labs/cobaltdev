@@ -21,14 +21,15 @@ class CobaltDevApp extends StatelessWidget {
       title: 'CobaltDev — Flutter + Rust',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF10B981), // emerald-500
+        primaryColor: const Color(0xFF10B981),
         scaffoldBackgroundColor: const Color(0xFF0A0A0A),
-        fontFamily: 'Inter', // clean modern font
+        fontFamily: 'Inter',
         textTheme: const TextTheme(
           headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
           headlineMedium: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
           bodyLarge: TextStyle(fontSize: 18, color: Colors.white70),
         ),
+        fontFamilyFallback: const ['Noto Color Emoji'],
       ),
       initialRoute: '/',
       routes: {

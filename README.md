@@ -1,169 +1,96 @@
-```markdown
-# ☁️ Cobalt Cloud
+# ⚡ Cobalt Labs
 
-> **Your Private Cloud. Running on your own laptop HDD. Built 100% in Rust.**
+> **Building fast, beautiful, and reliable systems with Flutter & Rust.**
 
-After 7 years of grinding — from HTML/CSS → hating JS → Java → Python → Dart/Flutter + FFI → pure Rust + unsafe Rust + Axum microservices + sqlx journal CLI → now building your own cloud infrastructure.
+After 7 years of grinding — from HTML/CSS to hating JavaScript, through Java, Python, Dart/Flutter + FFI, and finally discovering my true passion in Rust — I founded **Cobalt Labs**.
 
-**Cobalt Cloud** turns your internal or external HDD into a real private cloud. Drag & drop files from a beautiful Dioxus client → they land safely on your hard drive in `/home/ibrahim/cloud_storage/users/ibrahim3595/`.
+I build production-grade applications, high-performance backends, and personal infrastructure tools that I actually use myself.
 
-No AWS. No Google. No bills. Just your room, your data, your rules.
-
-This is the **storage backbone** for your full-full-stack dream: modified Linux kernel in Rust, custom ROMs, Bevy games asset loading, AI/LLM backend, and future startup.
-
-![Cobalt Cloud Banner](cobalt_logo.png)
+![Cobalt Labs](cobalt_logo.png)
 
 ---
 
-## ✨ Features
+## 🚀 What I've Built
 
-- **Real HDD Storage** — Powered by `object_store` + Tokio + blake3 checksums for integrity
-- **Beautiful Dioxus UI** — Desktop (native feel) + Web (WASM) with modern dark Tailwind theme
-- **Drag & Drop Upload** — Live progress bar, success feedback, works on both desktop and web
-- **CLI + GUI** — Same fireproof backend powers both (`cargo run -- upload` and Dioxus client)
-- **User Isolation** — Files automatically stored per user (`users/ibrahim3595/`)
-- **Fast & Secure** — Pure Rust, memory safe, async everything
-- **Future Ready** — Easy to scale to "tons of HDDs in the room", S3-compatible API, Flutter mobile bridge
+### Cobalt Cloud
+**Private self-hosted cloud storage** running on my own laptop HDD.  
+Drag & drop files from a beautiful Dioxus client → saved securely on real hardware.  
+Built with **Rust + Axum + object_store + Dioxus**.
+
+### Secure Journal
+A private, encrypted journaling app with **Rust backend (Axum + SQLx)** and clean Flutter/Dioxus frontend. Your thoughts stay yours.
+
+### Flutter + Rust Hybrid Apps
+Multiple production apps using **Flutter** for stunning UI and **Rust** for performance-critical core via FFI.
+
+### Rust Backend Systems
+Scalable microservices and APIs built with **Axum**, **SQLx**, and **Tokio**. Fast, memory-safe, and production ready.
+
+### Algorithms & CLI Tools
+Collection of Data Structures & Algorithms in Rust + various command-line tools for daily use.
+
+---
+
+## 👨‍💻 About Me
+
+Hi, I'm **Ibrahim Haji** — Founder of **Cobalt Labs**.
+
+I'm a **Flutter + Rust Developer** who loves building end-to-end systems. From pixel-perfect mobile apps to high-performance backends and private cloud infrastructure — I focus on performance, privacy, and ownership.
+
+Currently deep into:
+- Rust systems programming
+- Private cloud & self-hosted infrastructure
+- Flutter + Rust FFI bridges
+- Future plans: modified Linux kernel in Rust, custom ROMs, and Bevy games
+
+Check out my work: **[cobalt.vercel.app](https://cobalt.vercel.app)**
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer          | Technology                          | Purpose                              |
-|----------------|-------------------------------------|--------------------------------------|
-| **Backend**    | Rust + Axum + object_store + sqlx   | API server + real HDD I/O            |
-| **Frontend**   | Dioxus 0.7 (Desktop + Web)          | Reactive, cross-platform UI          |
-| **Storage**    | Local filesystem + blake3           | Fast, reliable file handling         |
-| **Database**   | SQLite (via sqlx)                   | File metadata & tracking             |
-| **HTTP Client**| reqwest (rustls-tls)                | Secure calls from frontend           |
-| **Styling**    | Tailwind CSS                        | Clean dark modern theme              |
+- **Frontend**: Flutter, Dioxus
+- **Backend**: Rust, Axum, SQLx, Tokio
+- **Infrastructure**: object_store, private cloud on real hardware
+- **Tools**: FFI, CLI, DSA in Rust
 
 ---
 
-## 🚀 Quick Start
+## 📦 Current Projects
 
-### 1. Backend (The Brain)
+- **Cobalt Cloud** — Private cloud (Desktop + Web)
+- **Secure Journal** — Encrypted journaling app
+- **Cobalt Frontend** — Flutter web portfolio (this site)
+- **Rust Experiments** — Algorithms, CLI tools, and low-level systems
 
-```bash
-cd cobalt_backend
-
-# Create storage directory (internal or external HDD)
-mkdir -p ~/cloud_storage/users/ibrahim3595
-
-# Start the server
-cargo run -- server
-```
-
-### 2. Frontend (The Beautiful Face)
-
-```bash
-cd cobalt_cloud
-
-# Desktop version (recommended - native performance)
-dx serve --platform desktop
-
-# Web version
-dx serve --platform web
-```
-
-Open the app → drag any file → watch it land safely on your real HDD.
+More coming soon.
 
 ---
 
-## 📦 Building Releases
+## 🔮 Future Plans
 
-```bash
-cd cobalt_cloud
+- Multi-HDD cloud pooling
+- S3-compatible API layer
+- Flutter mobile client with Rust backend
+- Bevy game engine projects
+- Modified Linux kernel in Rust
+- Custom ROM development
 
-# Build native desktop binary
-dx build --platform desktop --release
-
-# Build web static files (you can host anywhere)
-dx build --platform web --release
-```
-
-### Future Release Plans (as you wanted)
-
-- **Android APK** → Connect your existing `cobalt_frontend` Flutter project using `flutter_rust_bridge`
-- **Windows .exe** → Build on Windows machine with `dx build --platform desktop --release`
-- **Linux .deb** → Use `cargo-deb` for Debian/Ubuntu packages
-- **Arch Linux .pkg.tar.zst** → We can create a PKGBUILD when you're ready
-- **AppImage** → Easy portable Linux binary
-
----
-
-## 🧱 Project Structure
-
-```bash
-cobaltdev/
-├── Cargo.toml                  # Workspace root
-├── cobalt_backend/             # Fireproof Rust backend
-│   ├── Cargo.toml
-│   ├── src/
-│   │   ├── main.rs
-│   │   ├── config.rs
-│   │   ├── storage.rs
-│   │   ├── database.rs
-│   │   └── ...
-│   └── migrations/
-│
-└── cobalt_cloud/               # Dioxus client (Desktop + Web)
-    ├── Cargo.toml
-    ├── Dioxus.toml
-    ├── tailwind.css
-    ├── src/
-    │   ├── main.rs
-    │   ├── components/
-    │   ├── pages/
-    │   ├── services/
-    │   ├── hooks/
-    │   └── ...
-    └── public/
-```
-
----
-
-## 🔮 Your Bigger Vision
-
-Cobalt Cloud is just the beginning of your **full-full-stack empire**.
-
-Next milestones:
-- Multi-HDD pooling (tons of drives in your room)
-- Full S3-compatible API
-- JWT authentication + multi-user support
-- Flutter mobile client via FFI
-- Bevy game asset loading directly from this cloud
-- Integration with your modified Linux kernel in Rust
-- AI/LLM data storage backend
-
-**Inshallah** this becomes the solid foundation that gets you that MNC offer or launches your own startup.
+**Inshallah**, these become the foundation of something much bigger.
 
 ---
 
 ## ❤️ Built With Passion
 
-From hating JavaScript in the early days to mastering unsafe Rust and building your own cloud infrastructure — this is what consistent grinding looks like.
+Made in Pune, Maharashtra with pure Rust love and countless late nights.
 
-**Cobalt Cloud** proves that one developer can build what big companies charge millions for.
+If you're also obsessed with building real systems from scratch — feel free to reach out or star the repos.
 
-Made with pure Rust love by **Ibrahim Haji**  
-Pune, Maharashtra
-
-Keep the aim high. The journey is long, but the destination is legendary.
-
-Star this repo if you're also building your own empire ⭐
+**Ibrahim Haji**  
+Founder, Cobalt Labs  
+[cobalt.vercel.app](https://cobalt.vercel.app)  
+GitHub: [@ibrahim-3595](https://github.com/ibrahim-3595)
 
 ---
 
-## 🤝 Contributing
-
-Contributions, ideas, and feedback are always welcome. Feel free to open issues or pull requests.
-
-## 📧 Contact
-
-For questions or collaboration ideas — just reach out.
-
----
-
-**Made in Rust • Powered by Grind • Running on Real Hardware**
-```
+**Made in Rust and Flutter• Powered by Grind • Running on Real Hardware**

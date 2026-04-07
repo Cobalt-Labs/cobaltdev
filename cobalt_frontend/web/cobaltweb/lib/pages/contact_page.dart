@@ -17,69 +17,63 @@ class _ContactPageState extends State<ContactPage> {
   final messageController = TextEditingController();
 
   bool isLoading = false;
+  String? errorMessage;
 
   Future<void> sendMessage() async {
-    if (nameController.text.isEmpty ||
-        emailController.text.isEmpty ||
-        messageController.text.isEmpty) {
-      _showDialog("Error", "Please fill all fields");
+    if (nameController.text.trim().isEmpty ||
+        emailController.text.trim().isEmpty ||
+        messageController.text.trim().isEmpty) {
+      setState(() => errorMessage = "Please fill all fields");
       return;
     }
 
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
 
     try {
       final response = await http.post(
-        Uri.parse("http://localhost:3000/contact"),
+        Uri.parse("http://127.0.0.1:8080/contact"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "name": nameController.text,
-          "email": emailController.text,
-          "message": messageController.text,
+          "name": nameController.text.trim(),
+          "email": emailController.text.trim(),
+          "message": messageController.text.trim(),
         }),
       );
 
       if (response.statusCode == 200) {
-        _showDialog("Success 🚀", "Email sent successfully!");
-
+        _showSuccessDialog();
         nameController.clear();
         emailController.clear();
         messageController.clear();
       } else {
-        _showDialog("Error", "Failed to send message");
+        setState(() => errorMessage = "Server error (${response.statusCode}). Try again.");
       }
     } catch (e) {
-      _showDialog("Error", "Server not reachable");
+      setState(() => errorMessage = "Cannot connect to backend.\nMake sure Rust server is running on port 8080.");
     }
 
     setState(() => isLoading = false);
   }
 
-  void _showDialog(String title, String message) {
+  void _showSuccessDialog() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        backgroundColor: const Color(0xFF1F1F1F),
+        title: const Text("Message Sent 🚀", style: TextStyle(color: Colors.white)),
+        content: const Text(
+          "Thank you! I'll get back to you as soon as possible.",
+          style: TextStyle(color: Colors.white70),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
-          )
+            child: const Text("OK", style: TextStyle(color: Color(0xFF10B981))),
+          ),
         ],
-      ),
-    );
-  }
-
-  InputDecoration _inputStyle(String label) {
-    return InputDecoration(
-      labelText: label,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.blue),
       ),
     );
   }
@@ -93,69 +87,98 @@ class _ContactPageState extends State<ContactPage> {
       body: Center(
         child: AnimatedSection(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),
+            constraints: BoxConstraints(maxWidth: isDesktop ? 700 : double.infinity),
             child: Padding(
               padding: const EdgeInsets.all(40),
               child: GlassCard(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    /// 🔥 TITLE
-                    Text(
-                      "Contact Me",
-                      style: TextStyle(
-                        fontSize: isDesktop ? 36 : 28,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Get In Touch",
+                        style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Have a project or idea? Let's build something great together.",
+                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                      ),
 
-                    const SizedBox(height: 30),
+                      const SizedBox(height: 40),
 
-                    /// 🧾 NAME
-                    TextField(
-                      controller: nameController,
-                      decoration: _inputStyle("Name"),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    /// 📧 EMAIL
-                    TextField(
-                      controller: emailController,
-                      decoration: _inputStyle("Email"),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    /// 💬 MESSAGE
-                    TextField(
-                      controller: messageController,
-                      maxLines: 5,
-                      decoration: _inputStyle("Message"),
-                    ),
-
-                    const SizedBox(height: 25),
-
-                    /// 🚀 BUTTON
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: isLoading ? null : sendMessage,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                      if (errorMessage != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Text(
+                            errorMessage!,
+                            style: const TextStyle(color: Colors.redAccent),
+                          ),
                         ),
-                        child: isLoading
-                            ? const CircularProgressIndicator()
-                            : const Text("Send Message"),
+
+                      TextField(
+                        controller: nameController,
+                        decoration: _inputStyle("Your Name"),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+
+                      TextField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: _inputStyle("Your Email"),
+                      ),
+                      const SizedBox(height: 20),
+
+                      TextField(
+                        controller: messageController,
+                        maxLines: 6,
+                        decoration: _inputStyle("Your Message"),
+                      ),
+
+                      const SizedBox(height: 40),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: isLoading ? null : sendMessage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF10B981),
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          ),
+                          child: isLoading
+                              ? const CircularProgressIndicator(color: Colors.black)
+                              : const Text("Send Message", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputStyle(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white70),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Colors.white24),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
+      ),
+      filled: true,
+      fillColor: Colors.white.withOpacity(0.05),
     );
   }
 }

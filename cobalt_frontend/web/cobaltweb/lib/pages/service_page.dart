@@ -5,234 +5,157 @@ import '../widgets/glass_card.dart';
 class ServicesPage extends StatelessWidget {
   const ServicesPage({super.key});
 
-  int _getGridCount(double width) {
-    if (width > 1000) return 4;
-    if (width > 600) return 2;
-    return 1;
-  }
-
-  double _getResponsiveFont(
-    BuildContext context,
-    double desktop,
-    double mobile,
-  ) {
-    final width = MediaQuery.of(context).size.width;
-    return width > 1000 ? desktop : mobile;
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final gridCount = _getGridCount(width);
     final isDesktop = width > 1000;
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            width: isDesktop ? 1200 : double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                /// 🔥 HERO
-                AnimatedSection(
-                  child: Column(
-                    children: [
-                      Text(
-                        "What I Can Build For You",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: _getResponsiveFont(context, 42, 28),
-                          fontWeight: FontWeight.bold,
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AnimatedSection(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "What I Build",
+                      style: TextStyle(
+                        fontSize: isDesktop ? 58 : 42,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "From mobile apps to scalable Rust backends — I build systems that actually perform.",
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                /// 🚀 SERVICES GRID
-                AnimatedSection(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: gridCount,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                      // childAspectRatio: width < 600 ? 1.3 : 1.2,
-                      childAspectRatio: width < 600 ? 0.9 : 1.1,
                     ),
-                    itemBuilder: (context, index) {
-                      final services = [
-                        _service(
-                          "📱",
-                          "Mobile Apps",
-                          "Flutter apps with clean UI & performance",
-                        ),
-                        _service(
-                          "🌐",
-                          "Web Apps",
-                          "Responsive Flutter web apps",
-                        ),
-                        _service(
-                          "🦀",
-                          "Rust Backend",
-                          "Axum APIs, SQLx, scalable systems",
-                        ),
-                        _service(
-                          "⚡",
-                          "Performance Systems",
-                          "High-speed backend logic in Rust",
-                        ),
-                      ];
-                      return services[index];
-                    },
-                  ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "From beautiful mobile apps to high-performance Rust backends and private cloud infrastructure.",
+                      style: TextStyle(fontSize: 20, color: Colors.white70),
+                    ),
+                  ],
                 ),
+              ),
 
-                const SizedBox(height: 60),
+              const SizedBox(height: 80),
 
-                /// 🧠 PROCESS
-                AnimatedSection(
-                  child: Column(
-                    children: [
-                      const Text("How I Work", style: TextStyle(fontSize: 32)),
-                      const SizedBox(height: 20),
-                      GridView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: gridCount > 3 ? 3 : gridCount,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 1.2,
-                        ),
+              // Services Grid
+              AnimatedSection(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 4,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isDesktop ? 2 : 1,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 30,
+                    childAspectRatio: isDesktop ? 1.8 : 1.6,
+                  ),
+                  itemBuilder: (context, index) {
+                    final services = [
+                      _serviceCard(
+                        "📱",
+                        "Mobile & Desktop Apps",
+                        "Pixel-perfect Flutter applications with clean architecture and smooth animations. Cross-platform (iOS, Android, Desktop, Web).",
+                        "Flutter • Dart • Riverpod",
+                      ),
+                      _serviceCard(
+                        "🦀",
+                        "Rust Backend Systems",
+                        "High-performance, memory-safe backends using Axum, SQLx, and object_store. Built for speed and reliability.",
+                        "Rust • Axum • SQLx • Tokio",
+                      ),
+                      _serviceCard(
+                        "☁️",
+                        "Private Cloud Infrastructure",
+                        "Self-hosted cloud solutions running on your own hardware. Drag & drop file storage with full control.",
+                        "Rust • object_store • Dioxus",
+                      ),
+                      _serviceCard(
+                        "⚡",
+                        "Performance & Systems",
+                        "Low-level optimizations, FFI bridges, CLI tools, and experimental systems programming in Rust.",
+                        "Rust • FFI • DSA • Unsafe",
+                      ),
+                    ];
+                    return services[index];
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 120),
+
+              // CTA Section
+              AnimatedSection(
+                child: Center(
+                  child: GlassCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50),
+                      child: Column(
                         children: [
-                          _step("1", "Plan", "Understand your idea"),
-                          _step("2", "Build", "Develop fast & clean"),
-                          _step("3", "Scale", "Make it production ready"),
+                          const Text(
+                            "Ready to build something great?",
+                            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Let's turn your idea into a production-ready product.",
+                            style: TextStyle(fontSize: 18, color: Colors.white70),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 40),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF10B981),
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                            ),
+                            child: const Text("Start a Project", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 60),
-
-                /// 🛠️ TECH STACK
-                AnimatedSection(
-                  child: Column(
-                    children: const [
-                      Text("Tech Stack", style: TextStyle(fontSize: 32)),
-                      SizedBox(height: 20),
-                      Text(
-                        "Flutter • Rust • Axum • SQLx • Docker • Firebase",
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 60),
-
-                /// 💼 CTA
-                AnimatedSection(
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Let’s Build Something Great",
-                        style: TextStyle(fontSize: 28),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/contact");
-                        },
-                        child: const Text("Start a Project"),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _service(String icon, String title, String desc) {
+  Widget _serviceCard(String emoji, String title, String desc, String tech) {
     return GlassCard(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(32),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 36)),
-            const SizedBox(height: 8),
-
-            Flexible(
-              child: Text(
-                title,
-                style: const TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(emoji, style: const TextStyle(fontSize: 48)),
+            const SizedBox(height: 24),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
-
-            const SizedBox(height: 6),
-
-            Flexible(
-              child: Text(
-                desc,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-              ),
+            const SizedBox(height: 16),
+            Text(
+              desc,
+              style: const TextStyle(color: Colors.white70, height: 1.7),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _step(String num, String title, String desc) {
-    return GlassCard(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(num, style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 8),
-
-            Flexible(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
               ),
-            ),
-
-            const SizedBox(height: 6),
-
-            Flexible(
               child: Text(
-                desc,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+                tech,
+                style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w500),
               ),
             ),
           ],

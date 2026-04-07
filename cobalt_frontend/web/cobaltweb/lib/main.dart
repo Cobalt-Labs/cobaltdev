@@ -18,8 +18,18 @@ class CobaltDevApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CobaltDev',
-      theme: ThemeData.dark(),
+      title: 'CobaltDev — Flutter + Rust',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xFF10B981), // emerald-500
+        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+        fontFamily: 'Inter', // clean modern font
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
+          headlineMedium: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyLarge: TextStyle(fontSize: 18, color: Colors.white70),
+        ),
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const MainLayout(child: HomePage()),
@@ -35,32 +45,27 @@ class CobaltDevApp extends StatelessWidget {
 
 class MainLayout extends StatelessWidget {
   final Widget child;
-
   const MainLayout({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// 🔥 MOBILE DRAWER
       drawer: Drawer(
-        child: Container(
-          color: Colors.black,
-          child: ListView(
-            children: [
-              const DrawerHeader(
-                child: Text("CobaltDev", style: TextStyle(fontSize: 24)),
-              ),
-              _drawerItem(context, "Home", "/"),
-              _drawerItem(context, "Services", "/services"),
-              _drawerItem(context, "Products", "/products"),
-              _drawerItem(context, "Portfolio", "/portfolio"),
-              _drawerItem(context, "About", "/about"),
-              _drawerItem(context, "Contact", "/contact"),
-            ],
-          ),
+        backgroundColor: const Color(0xFF111111),
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              child: Text("CobaltDev", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF10B981))),
+            ),
+            _drawerItem(context, "Home", "/"),
+            _drawerItem(context, "Services", "/services"),
+            _drawerItem(context, "Products", "/products"),
+            _drawerItem(context, "Portfolio", "/portfolio"),
+            _drawerItem(context, "About", "/about"),
+            _drawerItem(context, "Contact", "/contact"),
+          ],
         ),
       ),
-
       body: Column(
         children: [
           const Navbar(),
@@ -72,9 +77,9 @@ class MainLayout extends StatelessWidget {
 
   Widget _drawerItem(BuildContext context, String title, String route) {
     return ListTile(
-      title: Text(title),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
       onTap: () {
-        Navigator.pop(context); // close drawer
+        Navigator.pop(context);
         Navigator.pushReplacementNamed(context, route);
       },
     );

@@ -1,37 +1,48 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
-class Navbar extends StatelessWidget {
+class Navbar extends StatefulWidget {
   const Navbar({super.key});
 
-  Widget navItem(BuildContext context, String title, String route) {
-    final currentRoute = ModalRoute.of(context)?.settings.name;
+  @override
+  State<Navbar> createState() => _NavbarState();
+}
+
+class _NavbarState extends State<Navbar> {
+  String currentRoute = '/';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    currentRoute = ModalRoute.of(context)?.settings.name ?? '/';
+  }
+
+  Widget navItem(String title, String route) {
     final isActive = currentRoute == route;
 
-    return TextButton(
-      onPressed: () => Navigator.pushReplacementNamed(context, route),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          setState(() => currentRoute = route);
+          Navigator.pushReplacementNamed(context, route);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent,
+          ),
+          child: Text(
             title,
             style: TextStyle(
               fontSize: 16,
-              color: isActive ? Colors.blue : Colors.white,
-              fontWeight:
-                  isActive ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive ? const Color(0xFF10B981) : Colors.white70,
             ),
           ),
-
-          /// 🔥 UNDERLINE
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            margin: const EdgeInsets.only(top: 4),
-            height: 2,
-            width: isActive ? 20 : 0,
-            color: Colors.blue,
-          )
-        ],
+        ),
       ),
     );
   }
@@ -39,98 +50,81 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final isMobile = width < 800;
+    final isMobile = width < 900;
 
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 20 : 40,
-            vertical: 20,
+            horizontal: isMobile ? 20 : 60,
+            vertical: 18,
           ),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
-            border: const Border(
-              bottom: BorderSide(color: Colors.white12),
+            color: Colors.black.withOpacity(0.65),
+            border: Border(
+              bottom: BorderSide(color: Colors.white.withOpacity(0.08)),
             ),
           ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Logo
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                child: Row(
+                  children: const [
+                    Text(
+                      "Cobalt",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF10B981),
+                      ),
+                    ),
+                    Text(
+                      "Dev",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-          /// 🔥 MOBILE vs DESKTOP SWITCH
-          child: isMobile
-              ? _mobileNav(context)
-              : _desktopNav(context),
+              if (!isMobile)
+                Row(
+                  children: [
+                    navItem("Home", "/"),
+                    const SizedBox(width: 12),
+                    navItem("Services", "/services"),
+                    const SizedBox(width: 12),
+                    navItem("Products", "/products"),
+                    const SizedBox(width: 12),
+                    navItem("Portfolio", "/portfolio"),
+                    const SizedBox(width: 12),
+                    navItem("About", "/about"),
+                    const SizedBox(width: 12),
+                    navItem("Contact", "/contact"),
+                  ],
+                ),
+
+              // Mobile Menu Button
+              if (isMobile)
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  /// 📱 MOBILE NAVBAR
-  Widget _mobileNav(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/',
-              (route) => false,
-            );
-          },
-          child: const Text(
-            "CobaltDev",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        /// 🔥 MENU BUTTON (FIXED)
-        Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// 💻 DESKTOP NAVBAR (YOUR ORIGINAL STYLE)
-  Widget _desktopNav(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/',
-              (route) => false,
-            );
-          },
-          child: const Text(
-            "CobaltDev",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        Row(
-          children: [
-            navItem(context, "Home", "/"),
-            navItem(context, "Services", "/services"),
-            navItem(context, "Products", "/products"),
-            navItem(context, "Portfolio", "/portfolio"),
-            navItem(context, "About", "/about"),
-            navItem(context, "Contact", "/contact"),
-          ],
-        ),
-      ],
     );
   }
 }

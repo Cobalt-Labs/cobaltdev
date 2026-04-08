@@ -44,6 +44,13 @@ class ProductsPage extends StatelessWidget {
                 runSpacing: 40,
                 children: [
                   _productCard(
+                    "Cobalt Web",
+                    "Flutter app/web hosted describing my products and services",
+                    "Implemented BLoC and Fressed for better state managemen.t",
+                    "⚡",
+                    "Available - https://cobaltdev.vercel.app",
+                  ),
+                  _productCard(
                     "Cobalt Cloud",
                     "Private self-hosted cloud storage",
                     "Drag & drop files from Dioxus client → stored on your own HDD with Rust backend.",
@@ -57,6 +64,14 @@ class ProductsPage extends StatelessWidget {
                     "📖",
                     "Available",
                   ),
+                  _productCard(
+                    "Encrypt Notepad",
+                    "Rust + Flutter via FFI/flutter_rust_bridge",
+                    "Structured UI and performant backend with memory safety.",
+                    "⚡",
+                    "Open Source",
+                  ),
+                  //
                   _productCard(
                     "Rust DSA Library",
                     "Algorithms & Data Structures in Rust",

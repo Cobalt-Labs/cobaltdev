@@ -161,19 +161,19 @@ class _HomePageState extends State<HomePage> {
                           "Secure Journal",
                           "CLI + Dioxus + Axum + SQLx",
                           "A private journaling app with end-to-end encryption and Rust backend",
-                          "https://github.com/ibrahim-3595/Secure-Journal",
+                          "https://github.com/Cobalt-Labs/cobalt_journal",
                         ),
                         _projectCard(
                           "Cobalt Cloud",
                           "Rust Backend + Dioxus Frontend",
                           "Self-hosted private cloud running on my laptop HDD",
-                          "#", // we'll link later
+                          "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
                         ),
                         _projectCard(
-                          "Flutter + Rust FFI Apps",
+                          "Flutter + Rust FFI Apps-Encrypt-Notepad",
                           "Hybrid Mobile + Desktop",
                           "Production apps using Flutter frontend + Rust core via FFI",
-                          "https://github.com/ibrahim-3595",
+                          "https://github.com/ibrahim-3595/Encrypt-Notepad",
                         ),
                       ],
                     ),

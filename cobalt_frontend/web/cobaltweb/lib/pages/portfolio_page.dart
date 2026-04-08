@@ -6,12 +6,12 @@ import '../widgets/glass_card.dart';
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
 
-  Future<void> _openGithub() async {
-    final url = Uri.parse("https://github.com/ibrahim-3595");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    }
-  }
+  // Future<void> _openGithub() async {
+  //   final url = Uri.parse("https://github.com/ibrahim-3595");
+  //   if (await canLaunchUrl(url)) {
+  //     await launchUrl(url, mode: LaunchMode.externalApplication);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,21 @@ class PortfolioPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    //del if unnnecesary
+                    // const SizedBox(height: 16),
+                    // Row(
+                    //   children: [
+                    //     ElevatedButton.icon(
+                    //       onPressed: _openGithub,
+                    //       icon: const Icon(Icons.code),
+                    //       label: const Text("GitHub"),
+                    //       style: ElevatedButton.styleFrom(
+                    //         backgroundColor: const Color(0xFF10B981),
+                    //         foregroundColor: Colors.black,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     const SizedBox(height: 16),
                     const Text(
                       "A collection of apps, backends, and systems I've built over the last 7 years.",

@@ -55,8 +55,18 @@ class MainLayout extends StatelessWidget {
         backgroundColor: const Color(0xFF111111),
         child: ListView(
           children: [
-            const DrawerHeader(
-              child: Text("CobaltDev", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF10B981))),
+            DrawerHeader(
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/cobalt_logo.png',
+                    height: 36,
+                    errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text("CobaltDev", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF10B981))),
+                ],
+              ),
             ),
             _drawerItem(context, "Home", "/"),
             _drawerItem(context, "Services", "/services"),

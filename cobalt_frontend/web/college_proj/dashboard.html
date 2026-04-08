@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Scholarship Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <h2>Scholarship Portal</h2>
+        <a href="index.html" class="logout-btn">Logout</a>
+    </nav>
+    
+    <div class="container">
+        
+        <!-- Scholarship Listing Section -->
+        <div class="section">
+            <h3>Available Scholarships</h3>
+            
+            <div class="scholarship-card">
+                <h4>Merit-Based Scholarship 2024</h4>
+                <p>For students with excellent academic records (GPA &gt; 3.5).</p>
+                <!-- Links to the apply form -->
+                <a href="apply.html" class="btn">Apply Now</a>
+            </div>
+            
+            <div class="scholarship-card">
+                <h4>Need-Based Financial Aid</h4>
+                <p>Support for students requiring financial assistance to complete BCA.</p>
+                <a href="apply.html" class="btn">Apply Now</a>
+            </div>
+            
+            <div class="scholarship-card">
+                <h4>Tech Innovators Grant</h4>
+                <p>Special grant for BCA and BSc IT students building innovative projects.</p>
+                <a href="apply.html" class="btn">Apply Now</a>
+            </div>
+        </div>
+
+        <!-- Status Tracking Section -->
+        <div class="section">
+            <h3>My Applications (Status Tracking)</h3>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>Scholarship Name</th>
+                        <th>Application Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <!-- This table body is given an ID so our JS can find it and add rows -->
+                <tbody id="status-table-body">
+                    <tr>
+                        <td>Merit-Based Scholarship 2023</td>
+                        <td>Oct 10, 2023</td>
+                        <td><span class="status approved">Approved</span></td>
+                    </tr>
+                    <!-- New applications will be added here dynamically by script.js -->
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

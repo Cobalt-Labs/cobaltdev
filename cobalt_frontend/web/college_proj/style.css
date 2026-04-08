@@ -1,0 +1,172 @@
+/* General Reset & Setup */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+h2, h3, h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+/* ====== BUTTONS ====== */
+.btn {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* ====== NAVBAR ====== */
+.navbar {
+    background-color: #fff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between; /* Pushes brand to left, link to right */
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logout-btn {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* ====== LAYOUT & SECTIONS ====== */
+.container {
+    max-width: 900px;
+    margin: 30px auto; /* Centers the content */
+    padding: 20px;
+}
+
+.section {
+    margin-bottom: 40px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Soft shadow */
+}
+
+/* ====== FORMS (Login & Apply) ====== */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.apply-form-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.signup-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* ====== SCHOLARSHIP CARDS ====== */
+.scholarship-card {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Makes card jump up slightly when hovered over */
+.scholarship-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.scholarship-card p {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* ====== TABLES (Status Tracking) ====== */
+.status-table {
+    width: 100%;
+    border-collapse: collapse; /* Merges borders */
+    margin-top: 15px;
+}
+
+.status-table th, .status-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.status-table th {
+    background-color: #fafafa;
+}
+
+/* Fancy Status Badges */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.status.approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}

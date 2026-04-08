@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Portal - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Scholarship Portal</h2>
+        <p>Login to view and apply for scholarships</p>
+        
+        <!-- The form calls our handleLogin function in script.js -->
+        <form onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="student@college.edu">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p class="signup-text">Don't have an account? <a href="#">Sign up here</a></p>
+        </form>
+    </div>
+    
+    <!-- Link the JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

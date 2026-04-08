@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Scholarship</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>Scholarship Portal</h2>
+        <a href="dashboard.html" class="logout-btn">Back to Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <div class="apply-form-container">
+            <h3>Application Form</h3>
+            <p>Please fill out all the details accurately.</p>
+            
+            <!-- This form triggers handleApplicationSubmit() in JS -->
+            <form onsubmit="return handleApplicationSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" required placeholder="Ex: John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label>Course / Year</label>
+                    <!-- Pre-filled as BCA SY just to look nice! -->
+                    <input type="text" required placeholder="Ex: SY BCA" value="SY BCA">
+                </div>
+                
+                <div class="form-group">
+                    <label>Why do you deserve this scholarship?</label>
+                    <textarea rows="5" required placeholder="Explain in brief..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Application</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

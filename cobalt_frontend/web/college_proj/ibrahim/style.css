@@ -1,0 +1,126 @@
+/* Base styles and modern variables */
+:root {
+    --primary: #6c5ce7;
+    --secondary: #00cec9;
+    --dark: #121212;
+    --light: #f5f6fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Animated gradient background */
+body {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--light);
+    height: 100vh;
+    overflow: hidden;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5%;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.nav-links a {
+    color: var(--light);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--secondary);
+}
+
+/* Hero Section & Glassmorphism */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    padding: 0 5%;
+}
+
+/* Frosted glass effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 600px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Typography styles */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--dark);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding: 5px 15px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.bio {
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+/* Button */
+.btn {
+    background: transparent;
+    color: var(--light);
+    border: 2px solid var(--light);
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: var(--light);
+    color: var(--dark);
+    transform: scale(1.05);
+}

@@ -1,0 +1,25 @@
+The time it takes to learn Rust depends on your existing programming background, learning intensity, and the depth of understanding you aim for. Here's a rough estimate based on your dedication:
+
+### **Assumptions**:
+- You’re giving **2 to 3 hours of practice daily**.
+- Prior programming experience (e.g., in languages like C, C++, or Python) can accelerate learning.
+
+#### **Rust Learning Timeline**:
+1. **Beginner Level** (Basic Syntax, Ownership, and Borrowing):
+   - **3 to 6 months**: For someone with programming experience, you could expect to be comfortable with Rust basics like ownership, types, functions, and error handling.
+
+2. **Intermediate Level** (Async, Concurrency, Traits, Generics, and Structs):
+   - **6 to 12 months**: Developing familiarity with Rust’s advanced features like async programming, iterators, traits, lifetimes, and pattern matching.
+
+3. **Advanced Level** (Systems Programming, Unsafe Code, Concurrency, and FFI):
+   - **1 to 2 years**: For deeper system-level programming and using Rust effectively in real-world projects like OS development, web assembly, or embedded systems.
+
+#### **Daily Practice Impact**:
+- **2 to 3 hours daily** is an excellent pace for consistent learning.
+- **Consistency** and **practice** play a key role in gaining fluency.
+- **Real-world projects** (like building a basic OS) can significantly enhance your learning.
+
+### Final Notes:
+- Everyone’s pace may vary depending on background and dedication.
+- Practical projects (like working on Rust-based OS development) can speed up comprehension and retention.
+- Consider contributing to open-source projects or participating in Rust communities for additional learning resources.

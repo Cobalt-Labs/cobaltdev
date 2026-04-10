@@ -1,0 +1,19 @@
+[workspace]
+members = [
+    "backend",
+    "frontend",
+]
+
+resolver = "3"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"

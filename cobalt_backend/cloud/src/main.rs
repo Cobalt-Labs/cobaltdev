@@ -1,5 +1,5 @@
 use anyhow::Result;
-use axum::extract::Multipart;
+use axum::extract::{Multipart, DefaultBodyLimit};
 use axum::{
     Json, Router,
     extract::State,
@@ -81,7 +81,8 @@ async fn main() -> Result<()> {
             let app = Router::new()
                 .route("/", get(root))
                 .route("/contact", post(create_contact))
-                .route("/api/upload", post(upload_file_handler)) // ← UNCOMMENT & ADD THIS
+                .route("/api/upload", post(upload_file_handler)) 
+                .layer(DefaultBodyLimit::max(1024 * 1024 * 1024))
                 .layer(CorsLayer::permissive())
                 .with_state(db_pool);
 

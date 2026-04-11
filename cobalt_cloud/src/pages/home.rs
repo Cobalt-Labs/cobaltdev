@@ -7,7 +7,7 @@ pub fn HomePage() -> Element {
     let files = use_files::use_files();
 
     rsx! {
-        div { class: "min-h-screen bg-zinc-950 text-white",
+        div { class: "min-h-screen bg-gradient-to-br from-zinc-950 to-zinc-900 border-t-2 border-emerald-500/20 text-white font-sans selection:bg-emerald-500/30 selection:text-emerald-100",
             Navbar {}
 
             div { class: "max-w-7xl mx-auto px-8 py-10",
@@ -35,7 +35,7 @@ pub fn HomePage() -> Element {
                     } else {
                         div { class: "grid gap-4",
                             for file in files.read().iter() {
-                                div { class: "bg-zinc-900 hover:bg-zinc-800 transition-all p-6 rounded-3xl flex justify-between items-center",
+                                div { class: "bg-zinc-900/60 backdrop-blur-xl border border-white/5 shadow-lg hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:-translate-y-1 hover:border-emerald-500/30 transition-all duration-300 p-6 rounded-3xl flex justify-between items-center group",
                                     div {
                                         p { class: "font-medium text-lg", "{file.filename}" }
                                         p { class: "text-xs text-zinc-500 mt-1", "Owner: {file.owner_username} • {file.uploaded_at.format(\"%d %b %Y\")}" }

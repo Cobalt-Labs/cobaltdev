@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 members = [
     "cobalt_backend/cloud",
     "cobalt_backend/api/cloud-rust-api",

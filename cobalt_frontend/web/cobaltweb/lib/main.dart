@@ -33,14 +33,25 @@ class CobaltDevApp extends StatelessWidget {
         fontFamilyFallback: const ['Noto Color Emoji'],
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => const MainLayout(child: HomePage()),
-        '/about': (context) => const MainLayout(child: AboutPage()),
-        '/services': (context) => const MainLayout(child: ServicesPage()),
-        '/products': (context) => const MainLayout(child: ProductsPage()),
-        '/cloud': (context) => const MainLayout(child: CloudPage()),
-        '/portfolio': (context) => const MainLayout(child: PortfolioPage()),
-        '/contact': (context) => const MainLayout(child: ContactPage()),
+      onGenerateRoute: (settings) {
+        Widget page;
+        switch (settings.name) {
+          case '/': page = const HomePage(); break;
+          case '/about': page = const AboutPage(); break;
+          case '/services': page = const ServicesPage(); break;
+          case '/products': page = const ProductsPage(); break;
+          case '/cloud': page = const CloudPage(); break;
+          case '/portfolio': page = const PortfolioPage(); break;
+          case '/contact': page = const ContactPage(); break;
+          default: page = const HomePage(); break;
+        }
+        
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (_, __, ___) => MainLayout(child: page),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
       },
     );
   }

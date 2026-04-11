@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/animated_section.dart';
 import '../widgets/glass_card.dart';
 
@@ -32,27 +31,25 @@ class _ContactPageState extends State<ContactPage> {
       errorMessage = null;
     });
 
-    try {
-      final response = await http.post(
-        Uri.parse("http://127.0.0.1:8080/contact"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "name": nameController.text.trim(),
-          "email": emailController.text.trim(),
-          "message": messageController.text.trim(),
-        }),
-      );
+    final String subject = Uri.encodeComponent("CobaltDev Inquiry from ${nameController.text.trim()}");
+    final String body = Uri.encodeComponent(
+        "${messageController.text.trim()}\n\n---\nSender Email: ${emailController.text.trim()}"
+    );
+    
+    final Uri emailUri = Uri.parse("mailto:ibrahimhaji3595@gmail.com?subject=$subject&body=$body");
 
-      if (response.statusCode == 200) {
+    try {
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
         _showSuccessDialog();
         nameController.clear();
         emailController.clear();
         messageController.clear();
       } else {
-        setState(() => errorMessage = "Server error (${response.statusCode}). Try again.");
+        setState(() => errorMessage = "Could not open default email client.");
       }
     } catch (e) {
-      setState(() => errorMessage = "Cannot connect to backend.\nMake sure Rust server is running on port 8080.");
+      setState(() => errorMessage = "Error opening email client: $e");
     }
 
     setState(() => isLoading = false);

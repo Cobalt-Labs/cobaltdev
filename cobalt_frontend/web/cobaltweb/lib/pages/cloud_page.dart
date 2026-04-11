@@ -17,11 +17,12 @@ class CloudPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > 900;
+    final isMobile = width < 700;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 40 : 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,22 +64,22 @@ class CloudPage extends StatelessWidget {
                 spacing: 30,
                 runSpacing: 40,
                 children: [
-                  _featureCard(
+                  _featureCard(context,
                     "Frontend (Dioxus)",
                     "A cross-platform Rust frontend framework used to create the client-side app. Enables smooth drag & drop folder uploading.",
                     "💻",
                   ),
-                  _featureCard(
+                  _featureCard(context,
                     "Backend (Axum)",
                     "High performance backend API running in Rust using Axum and object_store to handle file streaming and chunked uploads.",
                     "🦀",
                   ),
-                  _featureCard(
+                  _featureCard(context,
                     "Self-Hosted",
                     "Designed to run on your own hardware. Your data stays on your local hard drive, giving you full control and privacy.",
                     "🔒",
                   ),
-                  _featureCard(
+                  _featureCard(context,
                     "Desktop & Web",
                     "Dioxus compiles effortlessly into blazingly fast desktop and web applications native to your system.",
                     "⚡",
@@ -91,7 +92,7 @@ class CloudPage extends StatelessWidget {
               Center(
                 child: GlassCard(
                   child: Padding(
-                    padding: const EdgeInsets.all(40),
+                    padding: EdgeInsets.all(isMobile ? 30 : 40),
                     child: Column(
                       children: [
                          const Text(
@@ -126,9 +127,10 @@ class CloudPage extends StatelessWidget {
     );
   }
 
-  Widget _featureCard(String title, String desc, String emoji) {
+  Widget _featureCard(BuildContext context, String title, String desc, String emoji) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 380,
+      width: sw < 450 ? sw - 40 : 380,
       child: GlassCard(
         child: Padding(
           padding: const EdgeInsets.all(24),

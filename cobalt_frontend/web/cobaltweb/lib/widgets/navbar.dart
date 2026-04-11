@@ -24,25 +24,52 @@ class _NavbarState extends State<Navbar> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          setState(() => currentRoute = route);
-          Navigator.pushReplacementNamed(context, route);
+          if (!isActive) {
+            setState(() => currentRoute = route);
+            Navigator.pushReplacementNamed(context, route);
+          }
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: isActive
-                ? const Color(0xFF10B981).withOpacity(0.15)
-                : Colors.transparent,
-          ),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-              color: isActive ? const Color(0xFF10B981) : Colors.white70,
+            color: isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent,
+            border: Border.all(
+              color: isActive ? const Color(0xFF10B981).withOpacity(0.5) : Colors.transparent,
+              width: 1,
             ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isActive) ...[
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF10B981),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFF10B981),
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                  color: isActive ? Colors.white : Colors.white70,
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -81,18 +81,18 @@ class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final isDesktop = width > 800;
+    final isMobile = width < 700;
 
     return Scaffold(
       body: Center(
         child: AnimatedSection(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: isDesktop ? 700 : double.infinity),
-            child: Padding(
-              padding: const EdgeInsets.all(40),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: 40),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 700),
               child: GlassCard(
                 child: Padding(
-                  padding: const EdgeInsets.all(40),
+                  padding: EdgeInsets.all(isMobile ? 24 : 40),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,

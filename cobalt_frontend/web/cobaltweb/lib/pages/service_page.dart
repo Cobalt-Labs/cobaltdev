@@ -10,10 +10,15 @@ class ServicesPage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > 1000;
 
+    final isMobile = width < 700;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 40,
+            vertical: isMobile ? 40 : 80,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,24 +51,28 @@ class ServicesPage extends StatelessWidget {
                   runSpacing: 30,
                   children: [
                     _serviceCard(
+                      context,
                       "📱",
                       "Mobile & Desktop Apps",
                       "Pixel-perfect Flutter applications with clean architecture and smooth animations. Cross-platform (iOS, Android, Desktop, Web).",
                       "Flutter • Dart • Riverpod",
                     ),
                     _serviceCard(
+                      context,
                       "🦀",
                       "Rust Backend Systems",
                       "High-performance, memory-safe backends using Axum, SQLx, and object_store. Built for speed and reliability.",
                       "Rust • Axum • SQLx • Tokio",
                     ),
                     _serviceCard(
+                      context,
                       "☁️",
                       "Private Cloud Infrastructure",
                       "Self-hosted cloud solutions running on your own hardware. Drag & drop file storage with full control.",
                       "Rust • object_store • Dioxus",
                     ),
                     _serviceCard(
+                      context,
                       "⚡",
                       "Performance & Systems",
                       "Low-level optimizations, FFI bridges, CLI tools, and experimental systems programming in Rust.",
@@ -78,34 +87,57 @@ class ServicesPage extends StatelessWidget {
               // CTA Section
               AnimatedSection(
                 child: Center(
-                  child: GlassCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(50),
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Ready to build something great?",
-                            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            "Let's turn your idea into a production-ready product.",
-                            style: TextStyle(fontSize: 18, color: Colors.white70),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 40),
-                          ElevatedButton(
-                            onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF10B981),
-                              foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  child: SizedBox(
+                    width: isMobile ? double.infinity : null,
+                    child: GlassCard(
+                      child: Padding(
+                        padding: EdgeInsets.all(isMobile ? 30 : 50),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Ready to build something great?",
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            child: const Text("Start a Project", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            const Text(
+                              "Let's turn your idea into a production-ready product.",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white70,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 40),
+                            ElevatedButton(
+                              onPressed: () => Navigator.pushReplacementNamed(
+                                context,
+                                '/contact',
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF10B981),
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 60,
+                                  vertical: 20,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                              ),
+                              child: const Text(
+                                "Start a Project",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -118,9 +150,16 @@ class ServicesPage extends StatelessWidget {
     );
   }
 
-  Widget _serviceCard(String emoji, String title, String desc, String tech) {
+  Widget _serviceCard(
+    BuildContext context,
+    String emoji,
+    String title,
+    String desc,
+    String tech,
+  ) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 380,
+      width: sw < 450 ? sw - 40 : 380,
       child: GlassCard(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -131,7 +170,10 @@ class ServicesPage extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 title,
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -140,14 +182,20 @@ class ServicesPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF10B981).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
                   tech,
-                  style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    color: Color(0xFF10B981),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],

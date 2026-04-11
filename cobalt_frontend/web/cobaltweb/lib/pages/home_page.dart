@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > 1100;
     final isTablet = width > 700 && width <= 1100;
+    final isMobile = width <= 700;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 1200),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40),
                         child: AnimatedSection(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +89,9 @@ class _HomePageState extends State<HomePage> {
 
                               const SizedBox(height: 50),
 
-                              Row(
+                              Wrap(
+                                spacing: 20,
+                                runSpacing: 20,
                                 children: [
                                   ElevatedButton(
                                     onPressed: () => Navigator.pushReplacementNamed(context, '/portfolio'),
@@ -100,7 +103,6 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: const Text("View My Work", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   ),
-                                  const SizedBox(width: 20),
                                   OutlinedButton(
                                     onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
                                     style: OutlinedButton.styleFrom(
@@ -137,7 +139,7 @@ class _HomePageState extends State<HomePage> {
 
             // 🔥 FEATURED WORK
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 100),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 60 : 100),
               child: AnimatedSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,19 +159,19 @@ class _HomePageState extends State<HomePage> {
                       spacing: 30,
                       runSpacing: 30,
                       children: [
-                        _projectCard(
+                        _projectCard(context,
                           "Secure Journal",
                           "CLI + Dioxus + Axum + SQLx",
                           "A private journaling app with end-to-end encryption and Rust backend",
                           "https://github.com/Cobalt-Labs/cobalt_journal",
                         ),
-                        _projectCard(
+                        _projectCard(context,
                           "Cobalt Cloud",
                           "Rust Backend + Dioxus Frontend",
                           "Self-hosted private cloud running on my laptop HDD",
                           "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
                         ),
-                        _projectCard(
+                        _projectCard(context,
                           "Flutter + Rust FFI Apps-Encrypt-Notepad",
                           "Hybrid Mobile + Desktop",
                           "Production apps using Flutter frontend + Rust core via FFI",
@@ -185,7 +187,7 @@ class _HomePageState extends State<HomePage> {
             // 🔥 WHY ME SECTION
             Container(
               color: const Color(0xFF111111),
-              padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 40),
+              padding: EdgeInsets.symmetric(vertical: isMobile ? 60 : 100, horizontal: isMobile ? 20 : 40),
               child: AnimatedSection(
                 child: Column(
                   children: [
@@ -199,10 +201,10 @@ class _HomePageState extends State<HomePage> {
                       runSpacing: 40,
                       alignment: WrapAlignment.center,
                       children: [
-                        _whyCard("⚡", "Blazing Fast", "Rust performance + Flutter smoothness"),
-                        _whyCard("🔒", "Production Grade", "Clean architecture & error handling"),
-                        _whyCard("🛠️", "Full-Stack", "From UI to backend to infra"),
-                        _whyCard("🌍", "Cross Platform", "Mobile, Desktop, Web, Cloud"),
+                        _whyCard(context, "⚡", "Blazing Fast", "Rust performance + Flutter smoothness"),
+                        _whyCard(context, "🔒", "Production Grade", "Clean architecture & error handling"),
+                        _whyCard(context, "🛠️", "Full-Stack", "From UI to backend to infra"),
+                        _whyCard(context, "🌍", "Cross Platform", "Mobile, Desktop, Web, Cloud"),
                       ],
                     ),
                   ],
@@ -227,9 +229,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _projectCard(String title, String subtitle, String desc, String url) {
+  Widget _projectCard(BuildContext context, String title, String subtitle, String desc, String url) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 380,
+      width: sw < 450 ? sw - 40 : 380,
       child: GlassCard(
         onTap: () => _openLink(url),
         child: Column(
@@ -259,9 +262,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _whyCard(String emoji, String title, String desc) {
+  Widget _whyCard(BuildContext context, String emoji, String title, String desc) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 280,
+      width: sw < 320 ? sw - 40 : 280,
       child: GlassCard(
         child: Column(
           children: [

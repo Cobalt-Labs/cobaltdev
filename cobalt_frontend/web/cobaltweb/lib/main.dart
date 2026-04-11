@@ -90,12 +90,32 @@ class MainLayout extends StatelessWidget {
   }
 
   Widget _drawerItem(BuildContext context, String title, String route) {
-    return ListTile(
-      title: Text(title, style: const TextStyle(color: Colors.white)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, route);
-      },
+    final currentRoute = ModalRoute.of(context)?.settings.name ?? '/';
+    final isActive = currentRoute == route;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        tileColor: isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent,
+        leading: Icon(
+          isActive ? Icons.chevron_right : Icons.circle,
+          size: isActive ? 24 : 12,
+          color: isActive ? const Color(0xFF10B981) : Colors.white24,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isActive ? const Color(0xFF10B981) : Colors.white70,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            fontSize: 18,
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+          if (!isActive) Navigator.pushReplacementNamed(context, route);
+        },
+      ),
     );
   }
 }

@@ -9,11 +9,12 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > 900;
+    final isMobile = width < 700;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 40 : 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,21 +45,28 @@ class ProductsPage extends StatelessWidget {
                 runSpacing: 40,
                 children: [
                   _productCard(
+                    context,
                     "Cobalt Web",
                     "Flutter app/web hosted describing my products and services",
                     "Implemented BLoC and Fressed for better state managemen.t",
                     "⚡",
                     "Available - https://cobaltdev.vercel.app",
                   ),
-                  _productCard(
-                    "Cobalt Cloud",
-                    "Rust + Dioxus Cloud Storage",
-                    "Self-hosted cloud with Dioxus frontend and Axum Rust backend. Click to learn more!",
-                    "☁️",
-                    "Available",
+                  InkWell(
                     onTap: () => Navigator.pushReplacementNamed(context, '/cloud'),
+                    borderRadius: BorderRadius.circular(20),
+                    child: _productCard(
+                      context,
+                      "Cobalt Cloud",
+                      "Rust + Dioxus Cloud Storage",
+                      "Self-hosted cloud with Dioxus frontend and Axum Rust backend. Click to learn more!",
+                      "☁️",
+                      "Available",
+                      onTap: () => Navigator.pushReplacementNamed(context, '/cloud'),
+                    ),
                   ),
                   _productCard(
+                    context,
                     "Secure Journal",
                     "Private encrypted journaling app",
                     "CLI + Dioxus frontend with Axum + SQLx backend. Your thoughts stay yours.",
@@ -66,6 +74,7 @@ class ProductsPage extends StatelessWidget {
                     "Available",
                   ),
                   _productCard(
+                    context,
                     "Encrypt Notepad",
                     "Rust + Flutter via FFI/flutter_rust_bridge",
                     "Structured UI and performant backend with memory safety.",
@@ -74,6 +83,7 @@ class ProductsPage extends StatelessWidget {
                   ),
                   //
                   _productCard(
+                    context,
                     "Rust DSA Library",
                     "Algorithms & Data Structures in Rust",
                     "Clean, well-documented implementations for learning and production use.",
@@ -87,8 +97,8 @@ class ProductsPage extends StatelessWidget {
 
               Center(
                 child: GlassCard(
-                  child: const Padding(
-                    padding: EdgeInsets.all(60),
+                  child: Padding(
+                    padding: EdgeInsets.all(isMobile ? 30 : 60),
                     child: Text(
                       "More products coming soon...",
                       style: TextStyle(fontSize: 22, color: Colors.white70),
@@ -104,9 +114,10 @@ class ProductsPage extends StatelessWidget {
     );
   }
 
-  Widget _productCard(String title, String subtitle, String desc, String emoji, String status, {VoidCallback? onTap}) {
+  Widget _productCard(BuildContext context, String title, String subtitle, String desc, String emoji, String status, {VoidCallback? onTap}) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 380,
+      width: sw < 450 ? sw - 40 : 380,
       child: GlassCard(
         onTap: onTap,
         child: Padding(

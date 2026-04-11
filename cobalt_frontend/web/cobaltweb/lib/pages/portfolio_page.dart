@@ -6,16 +6,19 @@ import '../widgets/glass_card.dart';
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width > 1100;
+    final isMobile = width < 700;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 40,
+            vertical: isMobile ? 40 : 80,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,48 +49,65 @@ class PortfolioPage extends StatelessWidget {
               // Apps Section
               _sectionTitle("📱 Mobile & Desktop Apps"),
               const SizedBox(height: 30),
-              _projectGrid(_appProjects()),
+              _projectGrid(context, _appProjects()),
 
               const SizedBox(height: 100),
 
               // Backend Section
               _sectionTitle("🦀 Rust Backend Systems"),
               const SizedBox(height: 30),
-              _projectGrid(_backendProjects()),
+              _projectGrid(context, _backendProjects()),
 
               const SizedBox(height: 100),
 
               // Systems & Experiments
               _sectionTitle("⚡ Systems & Experiments"),
               const SizedBox(height: 30),
-              _projectGrid(_systemProjects()),
+              _projectGrid(context, _systemProjects()),
 
               const SizedBox(height: 120),
 
               // CTA
               Center(
-                child: GlassCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Want to see more or discuss a project?",
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF10B981),
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 18),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                child: SizedBox(
+                  width: isMobile ? double.infinity : null,
+                  child: GlassCard(
+                    child: Padding(
+                      padding: EdgeInsets.all(isMobile ? 30 : 40),
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Want to see more or discuss a project?",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          child: const Text("Let's Build Something Together", style: TextStyle(fontSize: 18)),
-                        ),
-                      ],
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pushReplacementNamed(
+                              context,
+                              '/contact',
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF10B981),
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 50,
+                                vertical: 18,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                            child: const Text(
+                              "Let's Build Something Together",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -102,24 +122,27 @@ class PortfolioPage extends StatelessWidget {
   Widget _sectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 34,
-        fontWeight: FontWeight.bold,
-      ),
+      style: const TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
     );
   }
 
-  Widget _projectGrid(List<Map<String, dynamic>> projects) {
+  Widget _projectGrid(
+    BuildContext context,
+    List<Map<String, dynamic>> projects,
+  ) {
     return Wrap(
       spacing: 30,
       runSpacing: 40,
-      children: projects.map((project) => _projectCard(project)).toList(),
+      children: projects
+          .map((project) => _projectCard(context, project))
+          .toList(),
     );
   }
 
-  Widget _projectCard(Map<String, dynamic> project) {
+  Widget _projectCard(BuildContext context, Map<String, dynamic> project) {
+    final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 380,
+      width: sw < 450 ? sw - 40 : 380,
       child: GlassCard(
         onTap: project['url'] != null ? () => _openLink(project['url']) : null,
         child: Column(
@@ -177,7 +200,9 @@ class PortfolioPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
-                  onPressed: project['url'] != null ? () => _openLink(project['url']) : null,
+                  onPressed: project['url'] != null
+                      ? () => _openLink(project['url'])
+                      : null,
                   icon: const Icon(Icons.open_in_new, size: 18),
                   label: const Text("View Project"),
                   style: TextButton.styleFrom(
@@ -206,14 +231,16 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Flutter + Rust Hybrid Apps",
         "tech": "Flutter • Rust • FFI",
-        "desc": "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
+        "desc":
+            "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
         "icon": "📱",
         "url": "https://github.com/ibrahim-3595",
       },
       {
         "title": "Secure Journal App",
         "tech": "Flutter • Rust • SQLx",
-        "desc": "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
+        "desc":
+            "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
         "icon": "📖",
         "url": "https://github.com/ibrahim-3595/Secure-Journal",
       },
@@ -225,14 +252,17 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Cobalt Cloud",
         "tech": "Rust • Axum • Dioxus",
-        "desc": "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
+        "desc":
+            "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
         "icon": "☁️",
-        "url": "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
+        "url":
+            "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
       },
       {
         "title": "Axum Microservices",
         "tech": "Rust • Axum • SQLx",
-        "desc": "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
+        "desc":
+            "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
         "icon": "🦀",
         "url": "https://github.com/ibrahim-3595",
       },
@@ -244,14 +274,16 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Algorithms in Rust",
         "tech": "Rust • DSA",
-        "desc": "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
+        "desc":
+            "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
         "icon": "⚡",
         "url": "https://github.com/ibrahim-3595",
       },
       {
         "title": "Rust CLI Tools",
         "tech": "Rust • CLI • SQLx",
-        "desc": "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
+        "desc":
+            "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
         "icon": "🖥️",
         "url": "https://github.com/ibrahim-3595",
       },

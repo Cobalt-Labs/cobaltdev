@@ -224,10 +224,10 @@ class PortfolioPage extends StatelessWidget {
     return [
       {
         "title": "Cobalt Cloud",
-        "tech": "Rust • Axum • object_store",
-        "desc": "Self-hosted private cloud infrastructure running on my laptop HDD. Drag & drop from Dioxus frontend.",
+        "tech": "Rust • Axum • Dioxus",
+        "desc": "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
         "icon": "☁️",
-        "url": "#",
+        "url": "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
       },
       {
         "title": "Axum Microservices",

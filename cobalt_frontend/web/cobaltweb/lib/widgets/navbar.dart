@@ -119,6 +119,8 @@ class _NavbarState extends State<Navbar> {
                       const SizedBox(width: 12),
                       navItem("Products", "/products"),
                       const SizedBox(width: 12),
+                      navItem("Cloud", "/cloud"),
+                      const SizedBox(width: 12),
                       navItem("Portfolio", "/portfolio"),
                       const SizedBox(width: 12),
                       navItem("About", "/about"),

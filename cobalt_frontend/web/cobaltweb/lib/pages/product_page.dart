@@ -52,10 +52,11 @@ class ProductsPage extends StatelessWidget {
                   ),
                   _productCard(
                     "Cobalt Cloud",
-                    "Private self-hosted cloud storage",
-                    "Drag & drop files from Dioxus client → stored on your own HDD with Rust backend.",
+                    "Rust + Dioxus Cloud Storage",
+                    "Self-hosted cloud with Dioxus frontend and Axum Rust backend. Click to learn more!",
                     "☁️",
-                    "In Development",
+                    "Available",
+                    onTap: () => Navigator.pushReplacementNamed(context, '/cloud'),
                   ),
                   _productCard(
                     "Secure Journal",
@@ -103,10 +104,11 @@ class ProductsPage extends StatelessWidget {
     );
   }
 
-  Widget _productCard(String title, String subtitle, String desc, String emoji, String status) {
+  Widget _productCard(String title, String subtitle, String desc, String emoji, String status, {VoidCallback? onTap}) {
     return SizedBox(
       width: 380,
       child: GlassCard(
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(32),
           child: Column(

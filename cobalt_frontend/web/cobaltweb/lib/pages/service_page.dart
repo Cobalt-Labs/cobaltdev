@@ -41,45 +41,35 @@ class ServicesPage extends StatelessWidget {
 
               // Services Grid
               AnimatedSection(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 4,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isDesktop ? 2 : 1,
-                    crossAxisSpacing: 30,
-                    mainAxisSpacing: 30,
-                    childAspectRatio: isDesktop ? 1.8 : 1.6,
-                  ),
-                  itemBuilder: (context, index) {
-                    final services = [
-                      _serviceCard(
-                        "📱",
-                        "Mobile & Desktop Apps",
-                        "Pixel-perfect Flutter applications with clean architecture and smooth animations. Cross-platform (iOS, Android, Desktop, Web).",
-                        "Flutter • Dart • Riverpod",
-                      ),
-                      _serviceCard(
-                        "🦀",
-                        "Rust Backend Systems",
-                        "High-performance, memory-safe backends using Axum, SQLx, and object_store. Built for speed and reliability.",
-                        "Rust • Axum • SQLx • Tokio",
-                      ),
-                      _serviceCard(
-                        "☁️",
-                        "Private Cloud Infrastructure",
-                        "Self-hosted cloud solutions running on your own hardware. Drag & drop file storage with full control.",
-                        "Rust • object_store • Dioxus",
-                      ),
-                      _serviceCard(
-                        "⚡",
-                        "Performance & Systems",
-                        "Low-level optimizations, FFI bridges, CLI tools, and experimental systems programming in Rust.",
-                        "Rust • FFI • DSA • Unsafe",
-                      ),
-                    ];
-                    return services[index];
-                  },
+                child: Wrap(
+                  spacing: 30,
+                  runSpacing: 30,
+                  children: [
+                    _serviceCard(
+                      "📱",
+                      "Mobile & Desktop Apps",
+                      "Pixel-perfect Flutter applications with clean architecture and smooth animations. Cross-platform (iOS, Android, Desktop, Web).",
+                      "Flutter • Dart • Riverpod",
+                    ),
+                    _serviceCard(
+                      "🦀",
+                      "Rust Backend Systems",
+                      "High-performance, memory-safe backends using Axum, SQLx, and object_store. Built for speed and reliability.",
+                      "Rust • Axum • SQLx • Tokio",
+                    ),
+                    _serviceCard(
+                      "☁️",
+                      "Private Cloud Infrastructure",
+                      "Self-hosted cloud solutions running on your own hardware. Drag & drop file storage with full control.",
+                      "Rust • object_store • Dioxus",
+                    ),
+                    _serviceCard(
+                      "⚡",
+                      "Performance & Systems",
+                      "Low-level optimizations, FFI bridges, CLI tools, and experimental systems programming in Rust.",
+                      "Rust • FFI • DSA • Unsafe",
+                    ),
+                  ],
                 ),
               ),
 
@@ -129,36 +119,39 @@ class ServicesPage extends StatelessWidget {
   }
 
   Widget _serviceCard(String emoji, String title, String desc, String tech) {
-    return GlassCard(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(emoji, style: const TextStyle(fontSize: 48)),
-            const SizedBox(height: 24),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              desc,
-              style: const TextStyle(color: Colors.white70, height: 1.7),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(30),
+    return SizedBox(
+      width: 380,
+      child: GlassCard(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 48)),
+              const SizedBox(height: 24),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
-              child: Text(
-                tech,
-                style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w500),
+              const SizedBox(height: 16),
+              Text(
+                desc,
+                style: const TextStyle(color: Colors.white70, height: 1.7),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Text(
+                  tech,
+                  style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

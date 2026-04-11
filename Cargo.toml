@@ -1,6 +1,9 @@
 [workspace]
-members = ["cobalt_backend", "cobalt_cloud"]
-resolver = "2"
+members = [
+    "cobalt_backend/cloud",
+    "cobalt_backend/api/cloud-rust-api",
+    "cobalt_backend/api/todo_api"
+]
 
 [workspace.dependencies.axum]
 version = "0.8.8"

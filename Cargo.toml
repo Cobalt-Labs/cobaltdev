@@ -13,7 +13,7 @@ features = ["multipart", "tracing"]
 
 [workspace.dependencies.sqlx]
 version = "0.8"
-features = ["runtime-tokio", "sqlite", "macros", "migrate"]
+features = ["runtime-tokio", "sqlite", "macros", "migrate", "chrono"]
 
 [workspace.dependencies.tokio]
 version = "1"

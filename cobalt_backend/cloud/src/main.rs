@@ -12,6 +12,7 @@ mod models;
 mod services;
 mod handlers;
 mod middleware;
+mod utils;
 
 #[derive(Serialize)]
 struct ResponseMsg {

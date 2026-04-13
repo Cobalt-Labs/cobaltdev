@@ -1,0 +1,11 @@
+[package]
+name = "minigrep"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+users = "0.11"
+hostname = "0.3"
+dirs = "5.0"
+config = "0.15.18"
+env = "1.0.1"

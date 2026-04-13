@@ -1,5 +1,0 @@
-[build]
-target = "x86_64.json"
-rustflags = [
-    "-C", "link-arg=-Tlinker.ld"
-]

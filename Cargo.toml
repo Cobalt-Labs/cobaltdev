@@ -3,7 +3,8 @@ resolver = "2"
 members = [
     "cobalt_backend/cloud", "cobalt_backend/api/taskflow-api",
     "cobalt_cloud", 
-    "cobalt_ai/scratch_model",
+    "cobalt_ai/scratch_model", 
+    "cobalt_systems/kernel",
 ]
 
 [workspace.dependencies.axum]
@@ -17,3 +18,9 @@ features = ["runtime-tokio", "sqlite", "macros", "migrate", "chrono"]
 [workspace.dependencies.tokio]
 version = "1"
 features = ["full"]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

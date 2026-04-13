@@ -1,0 +1,18 @@
+A. OS dev
+1. minimal os kernel
+2. Unix-Like Shell
+3. File System Implementation
+4. Bootloader in Rust
+5. Rust-Based Drivers for Hardware
+
+B. System utilities & tools
+1. Custom CLI Tools (Better than Bash Scripts)
+2. Package Manager
+3. Rust-Based Task Manager
+4. Custom Text Editor (like Vim/Neovim but in Rust)
+5. Custom Linux Distro
+
+C. Embedded System & IoT
+1. Rust on Raspberry Pi
+2. Bare Metal Programming (No OS, Direct Hardware Control)
+3. Rust Robotics Programming

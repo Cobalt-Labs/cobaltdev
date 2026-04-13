@@ -1,2 +1,4 @@
 Makefile linguist-vendored
 *.py linguist-vendored
+cobalt_backend/** linguist-vendored
+tools/** linguist-vendored

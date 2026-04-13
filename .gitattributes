@@ -1,1 +1,2 @@
 Makefile linguist-vendored
+*.py linguist-vendored

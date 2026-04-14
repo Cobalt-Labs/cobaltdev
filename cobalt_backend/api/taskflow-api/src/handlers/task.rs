@@ -1,5 +1,5 @@
 //expand later 
-use axum::{extract::State, Json, http::StatusCode, extract::Path};
+use axum::{extract::{State, Path}, Json, http::StatusCode};
 use crate::state::AppState;
 use crate::models::task::{Task, CreateTask};
 
@@ -7,7 +7,6 @@ pub async fn create_task(
     State(state): State<AppState>,
     Json(payload): Json<CreateTask>,
 ) -> Result<Json<Task>, (StatusCode, String)> {
-    // TODO: Add authentication check later
     let task = crate::services::task_service::create_task(&state.db, payload).await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e))?;
 

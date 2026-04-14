@@ -1,6 +1,6 @@
 use axum::{extract::State, Json, http::StatusCode};
 use crate::state::AppState;
-use crate::models::user::{User, CreateUser, LoginRequest, LoginResponse};
+use crate::models::user::{CreateUser, LoginRequest, LoginResponse};
 use crate::services::user_service;
 use crate::utils::security;
 

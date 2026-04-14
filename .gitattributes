@@ -1,23 +1,19 @@
-# Force Rust to be the dominant language
 *.rs linguist-language=Rust
 *.toml linguist-language=Rust
 Cargo.lock linguist-language=Rust
 Cargo.toml linguist-language=Rust
 
-# Dart second
 *.dart linguist-language=Dart
 *.flutter linguist-language=Dart
 pubspec.yaml linguist-language=Dart
 pubspec.lock linguist-language=Dart
 
-# Demote Python heavily
 *.py linguist-vendored
 *.ipynb linguist-vendored
 requirements.txt linguist-vendored
 venv/ linguist-vendored
 __pycache__/ linguist-vendored
 
-# Demote other folders
 cobalt_backend/** linguist-vendored
 cobalt_cloud/** linguist-vendored
 cobalt_frontend/** linguist-vendored
@@ -25,5 +21,4 @@ tools/** linguist-vendored
 notebooks/** linguist-vendored
 python_lab/** linguist-vendored
 
-# Keep Makefile as vendored if you want
 Makefile linguist-vendored

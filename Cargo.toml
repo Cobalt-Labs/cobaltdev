@@ -4,7 +4,7 @@ members = [
     "cobalt_backend/cloud", "cobalt_backend/api/taskflow-api",
     "cobalt_cloud", 
     "cobalt_ai/scratch_model", 
-    "cobalt_systems/kernel",
+    "cobalt_systems/kernel", "cobalt_ai",
 ]
 
 [workspace.dependencies.axum]

@@ -1,0 +1,16 @@
+[package]
+name = "cobalt_ai"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8.9", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+linfa = "0.8.1"
+linfa-clustering = "0.8.1"
+rand = "0.10.1"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"

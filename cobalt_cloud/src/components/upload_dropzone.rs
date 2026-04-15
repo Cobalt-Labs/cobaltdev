@@ -3,10 +3,10 @@ use dioxus::html::HasFileData;
 
 #[component]
 pub fn UploadDropzone() -> Element {
-    let mut is_dragging = use_signal(|| false);
-    let mut progress = use_signal(|| 0u8);
-    let mut uploading = use_signal(|| false);
-    let mut status = use_signal(|| String::new());
+    let is_dragging = use_signal(|| false);
+    let progress = use_signal(|| 0u8);
+    let uploading = use_signal(|| false);
+    let status = use_signal(|| String::new());
 
     let ondragenter = move |_| is_dragging.set(true);
     let ondragleave = move |_| is_dragging.set(false);
@@ -15,32 +15,28 @@ pub fn UploadDropzone() -> Element {
         evt.prevent_default();
         is_dragging.set(false);
 
-        // Keep the user's working FileData usage since Dioxus Desktop 0.7 apparently uses it here
-        let files = evt.data().files();
+        // Access files from the event (returns Vec<FileData> in Dioxus 0.7)
+        let files = evt.files();
         
         for file in files {
-            // Need to specify the type to help the compiler in some Edge cases
-            let file_path = file.path().to_string_lossy().to_string();
             let mut prog = progress;
             let mut up = uploading;
             let mut st = status;
+            
+            // Capture name from file
+            let file_name = file.name();
 
             spawn(async move {
                 up.set(true);
                 prog.set(10);
-                st.set(format!("Reading {}...", file_path));
+                st.set(format!("Reading {}...", file_name));
 
-                if let Ok(file_bytes) = tokio::fs::read(&file_path).await {
-                    let f_name = std::path::Path::new(&file_path)
-                        .file_name()
-                        .unwrap_or_default()
-                        .to_string_lossy()
-                        .to_string();
-
+                // Standard cross-platform way in Dioxus 0.7 to read bytes
+                if let Some(bytes) = file.read().await {
                     prog.set(50);
                     st.set("Uploading...".to_string());
 
-                    match crate::services::api::upload_file_bytes(f_name, file_bytes).await {
+                    match crate::services::api::upload_file_bytes(file_name, bytes).await {
                         Ok(_) => {
                             prog.set(100);
                             st.set("✅ File securely saved!".to_string());
@@ -52,11 +48,14 @@ pub fn UploadDropzone() -> Element {
                     }
                 } else {
                     prog.set(0);
-                    st.set(format!("❌ Could not read file from path"));
+                    st.set(format!("❌ Could not read file content"));
                 }
                 
                 if prog() == 100 {
+                    // Delay for better UX before clearing status (Desktop only for tokio::time safety)
+                    #[cfg(not(target_arch = "wasm32"))]
                     tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+                    
                     up.set(false);
                     prog.set(0);
                     st.set(String::new());

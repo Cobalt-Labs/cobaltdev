@@ -31,3 +31,4 @@ fn app() -> Element {
         Router::<Route> {}
     }
 }
+mod api_test;

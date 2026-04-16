@@ -1,19 +1,16 @@
 [workspace]
 resolver = "2"
 members = [
-    "cobalt_backend/cloud", "cobalt_backend/api/taskflow-api",
+    # "cobalt_backend/cloud", "cobalt_backend/api/taskflow-api", 
+    # uncomment when workiong on backend/cloud/api
     "cobalt_cloud", 
-    "cobalt_ai/scratch_model", 
-    "cobalt_systems/kernel", "cobalt_ai",
+    "cobalt_ai", "cobalt_ai/scratch_model",
+    "cobalt_systems/kernel",
 ]
 
 [workspace.dependencies.axum]
 version = "0.8.8"
 features = ["multipart", "tracing"]
-
-[workspace.dependencies.sqlx]
-version = "0.8"
-features = ["runtime-tokio", "sqlite", "macros", "migrate", "chrono"]
 
 [workspace.dependencies.tokio]
 version = "1"

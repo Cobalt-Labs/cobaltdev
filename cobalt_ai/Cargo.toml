@@ -14,3 +14,7 @@ rand = "0.10.1"
 anyhow = "1.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
+burn = { version = "0.20.1", features = ["std", "tui", "train", "vision", "wgpu", "fusion"], default-features = false }
+
+# run this cmd to run the ai
+# cargo run --manifest-path cobalt_ai/Cargo.toml

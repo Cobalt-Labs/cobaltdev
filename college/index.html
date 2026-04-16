@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Example College Dashboard</title>
+
+<style>
+:root {
+  --bg: #0f172a;
+  --card: rgba(255,255,255,0.05);
+  --glass: rgba(255,255,255,0.08);
+  --accent: #22c55e;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: radial-gradient(circle at top, #1e293b, #020617);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.card {
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+}
+
+tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.enrolled { background: #16a34a; }
+.pending { background: #f59e0b; }
+.alumni { background: #64748b; }
+
+button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: black;
+}
+
+.btn-secondary {
+  background: #334155;
+  color: white;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+footer {
+  text-align: center;
+  margin-top: 30px;
+  color: var(--muted);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>🎓 Example College</h1>
+  <span id="date"></span>
+</header>
+
+<div class="grid">
+
+<div class="card">
+<h2>Student Roster</h2>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Major</th>
+<th>Year</th>
+<th>GPA</th>
+<th>Status</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="tableBody">
+<tr>
+<td>1001</td>
+<td>Aisha Thompson</td>
+<td>Computer Science</td>
+<td>Senior</td>
+<td>3.85</td>
+<td><span class="status enrolled">Enrolled</span></td>
+<td><button class="btn-secondary" onclick="viewProfile(1001)">View</button></td>
+</tr>
+</tbody>
+</table>
+
+<br>
+
+<button class="btn-primary" onclick="addDummy()">Add Dummy</button> <button class="btn-secondary" onclick="exportCSV()">Export</button>
+
+</div>
+
+<div class="card">
+<h2>New Applicant</h2>
+
+<form onsubmit="submitForm(event)">
+<input id="name" placeholder="Full name" required>
+<input id="email" placeholder="Email" required>
+<select id="program">
+<option value="">Program</option>
+<option>CS</option>
+<option>Biology</option>
+</select>
+
+<textarea id="msg" placeholder="Why join?"></textarea>
+
+<button class="btn-primary">Submit</button>
+
+</form>
+
+<p id="status"></p>
+
+</div>
+
+</div>
+
+<footer>© Example College</footer>
+
+</div>
+
+<script>
+
+document.getElementById("date").innerText =
+new Date().toLocaleDateString();
+
+function viewProfile(id){
+  alert("Viewing " + id);
+}
+
+function addDummy(){
+  const row = `
+  <tr>
+    <td>2000</td>
+    <td>New Student</td>
+    <td>Math</td>
+    <td>Freshman</td>
+    <td>3.0</td>
+    <td><span class="status pending">Pending</span></td>
+    <td><button class="btn-secondary">View</button></td>
+  </tr>`;
+  document.getElementById("tableBody").innerHTML += row;
+}
+
+function exportCSV(){
+  alert("Export simulated");
+}
+
+function submitForm(e){
+  e.preventDefault();
+  document.getElementById("status").innerText =
+  "✅ Submitted successfully";
+}
+
+</script>
+
+</body>
+</html>

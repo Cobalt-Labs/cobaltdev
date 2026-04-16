@@ -1,0 +1,3 @@
+[alias]
+ai = "run --manifest-path cobalt_ai/Cargo.toml"
+backend = "run -p cobalt_backend"

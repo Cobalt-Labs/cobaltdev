@@ -1,6 +1,11 @@
 use dioxus::prelude::*;
 // use dioxus_router::prelude::*;
 
+/// Tasks for upcoming days..
+/// enhance drag and drop feature and add upload from Finder for Cloud-GUI
+/// build, train, analyze the backend for the llm model 
+/// create an initial setup for the bootloader and kernel
+
 mod models;
 mod services;
 mod hooks;

@@ -1,9 +1,9 @@
-use dioxus::prelude::*;
 use dioxus::html::HasFileData;
+use dioxus::prelude::*;
 
 #[component]
 pub fn UploadDropzone() -> Element {
-    let is_dragging = use_signal(|| false);
+    let mut is_dragging = use_signal(|| false);
     let progress = use_signal(|| 0u8);
     let uploading = use_signal(|| false);
     let status = use_signal(|| String::new());
@@ -17,12 +17,12 @@ pub fn UploadDropzone() -> Element {
 
         // Access files from the event (returns Vec<FileData> in Dioxus 0.7)
         let files = evt.files();
-        
+
         for file in files {
             let mut prog = progress;
             let mut up = uploading;
             let mut st = status;
-            
+
             // Capture name from file
             let file_name = file.name();
 
@@ -31,12 +31,11 @@ pub fn UploadDropzone() -> Element {
                 prog.set(10);
                 st.set(format!("Reading {}...", file_name));
 
-                // Standard cross-platform way in Dioxus 0.7 to read bytes
-                if let Some(bytes) = file.read().await {
+                if let Ok(bytes) = file.read_bytes().await {
                     prog.set(50);
                     st.set("Uploading...".to_string());
 
-                    match crate::services::api::upload_file_bytes(file_name, bytes).await {
+                    match crate::services::api::upload_file_bytes(file_name, bytes.to_vec()).await {
                         Ok(_) => {
                             prog.set(100);
                             st.set("✅ File securely saved!".to_string());
@@ -48,14 +47,14 @@ pub fn UploadDropzone() -> Element {
                     }
                 } else {
                     prog.set(0);
-                    st.set(format!("❌ Could not read file content"));
+                    st.set("❌ Could not read file content".to_string());
                 }
-                
+
                 if prog() == 100 {
                     // Delay for better UX before clearing status (Desktop only for tokio::time safety)
                     #[cfg(not(target_arch = "wasm32"))]
                     tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-                    
+
                     up.set(false);
                     prog.set(0);
                     st.set(String::new());
@@ -89,7 +88,7 @@ pub fn UploadDropzone() -> Element {
                 }
             } else {
                 div {
-                    p { 
+                    p {
                         class: "text-6xl mb-6 transition-transform duration-300 drop-shadow-xl",
                         class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600 hover:text-white" },
                         if is_dragging() { "☁️" } else { "⬆️" }

@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 axum = { workspace = true }
 tokio = { workspace = true }
-sqlx = { workspace = true }
 
+sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "macros", "migrate", "chrono"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
 tower = "0.5"

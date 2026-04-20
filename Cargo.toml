@@ -1,9 +1,9 @@
 [workspace]
 resolver = "2"
 members = [
-    # "cobalt_backend/cloud", "cobalt_backend/api/taskflow-api", 
+    "cobalt_backend/cloud",
     # uncomment when workiong on backend/cloud/api
-    "cobalt_cloud", 
+    "cobalt_cloud",
     "cobalt_ai", "cobalt_ai/scratch_model",
     "cobalt_systems/kernel",
 ]

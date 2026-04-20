@@ -21,9 +21,12 @@ pub async fn auth_middleware(
         _ => return Err((StatusCode::UNAUTHORIZED, "Missing or invalid Authorization header".into())),
     };
 
+    let config = crate::config::config::Config::load()
+        .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Config loading error".into()))?;
+
     let claims = decode::<Claims>(
         token,
-        &DecodingKey::from_secret("your-jwt-secret-from-env".as_ref()),
+        &DecodingKey::from_secret(config.jwt_secret.as_bytes()),
         &Validation::default(),
     ).map_err(|_| (StatusCode::UNAUTHORIZED, "Invalid token".into()))?;
 

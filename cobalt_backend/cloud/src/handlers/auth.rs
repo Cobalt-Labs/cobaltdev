@@ -39,11 +39,12 @@ pub async fn login(
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".into()));
     }
 
+    let config = crate::config::config::Config::load().map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
     let claims = Claims::new(user.username.clone());
     let token = encode(
         &Header::default(),
         &claims,
-        &EncodingKey::from_secret(b"super-secret-change-in-production-32-chars-min"),
+        &EncodingKey::from_secret(config.jwt_secret.as_bytes()),
     ).map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
     Ok(Json(LoginResponse { token, username: user.username }))

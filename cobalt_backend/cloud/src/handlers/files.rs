@@ -2,13 +2,17 @@ use axum::{
     extract::{State, Multipart},
     Json,
     http::StatusCode,
+    Extension,
 };
+use uuid::Uuid;
+use crate::models::Claims;
 use serde_json::json;
 use crate::config::config::Config;
 use crate::services::storage::StorageService;
 
 pub async fn upload_file_handler(
     State(pool): State<sqlx::SqlitePool>,
+    Extension(claims): Extension<Claims>,
     mut multipart: Multipart,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
     let config = Config::load().map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
@@ -29,17 +33,21 @@ pub async fn upload_file_handler(
         let file = tokio::fs::File::open(&temp_path).await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
-        let (storage_path, checksum, _) = storage.upload_file("ibrahim3595", &name, file).await
+        let (storage_path, checksum, size_bytes) = storage.upload_file(&claims.sub, &name, file).await
             .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
         
+        let file_id = Uuid::new_v4().to_string();
+
         sqlx::query(
-            "INSERT INTO files (user_id, filename, storage_path, checksum, created_at) VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO files (id, filename, storage_path, owner_username, size_bytes, checksum, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
         )
-        .bind("ibrahim3595")
+        .bind(&file_id)
         .bind(&name)
         .bind(&storage_path)
+        .bind(&claims.sub)
+        .bind(size_bytes)
         .bind(&checksum)
-        .bind(chrono::Utc::now())
+        .bind(chrono::Utc::now().to_rfc3339())
         .execute(&pool)
         .await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("DB error: {}", e)))?;

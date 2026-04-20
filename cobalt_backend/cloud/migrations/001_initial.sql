@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL
 );
 
@@ -17,5 +18,5 @@ CREATE TABLE IF NOT EXISTS files (
 );
 
 -- Insert default user (you)
-INSERT OR IGNORE INTO users (username, created_at) 
-VALUES ('ibrahim3595', datetime('now'));
+INSERT OR IGNORE INTO users (username, password_hash, created_at) 
+VALUES ('ibrahim3595', '', datetime('now'));

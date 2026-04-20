@@ -1,4 +1,4 @@
-use dioxus::html::HasFileData;
+use dioxus::html::{FileData, HasFileData};
 use dioxus::prelude::*;
 
 #[component]
@@ -8,22 +8,12 @@ pub fn UploadDropzone() -> Element {
     let uploading = use_signal(|| false);
     let status = use_signal(|| String::new());
 
-    let ondragenter = move |_| is_dragging.set(true);
-    let ondragleave = move |_| is_dragging.set(false);
-
-    let ondrop = move |evt: DragEvent| {
-        evt.prevent_default();
-        is_dragging.set(false);
-
-        // Access files from the event (returns Vec<FileData> in Dioxus 0.7)
-        let files = evt.files();
-
+    let process_files = move |files: Vec<FileData>| {
         for file in files {
             let mut prog = progress;
             let mut up = uploading;
             let mut st = status;
 
-            // Capture name from file
             let file_name = file.name();
 
             spawn(async move {
@@ -65,18 +55,48 @@ pub fn UploadDropzone() -> Element {
         }
     };
 
-    rsx! {
-        div {
-            class: "border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 transform",
-            class: if is_dragging() { "border-emerald-400 bg-emerald-900/10 shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] scale-[1.02]" } else { "border-zinc-700/40 hover:border-zinc-500 hover:bg-zinc-900/40" },
+    let ondragenter = move |evt: DragEvent| {
+        evt.prevent_default();
+        is_dragging.set(true);
+    };
+    let ondragleave = move |evt: DragEvent| {
+        evt.prevent_default();
+        is_dragging.set(false);
+    };
+    let ondragover = move |evt: DragEvent| {
+        evt.prevent_default();
+    };
 
+    let ondrop = move |evt: DragEvent| {
+        evt.prevent_default();
+        is_dragging.set(false);
+        process_files(evt.files());
+    };
+
+    let onchange = move |evt: FormEvent| {
+        evt.prevent_default();
+        process_files(evt.files());
+    };
+
+    rsx! {
+        label {
+            class: "block w-full border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 transform cursor-pointer relative",
+            class: if is_dragging() { "border-emerald-400 bg-emerald-900/10 shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] scale-[1.02]" } else { "border-zinc-700/40 hover:border-zinc-500 hover:bg-zinc-900/40" },
+            
             ondragenter: ondragenter,
             ondragleave: ondragleave,
-            ondragover: move |e| e.prevent_default(),
+            ondragover: ondragover,
             ondrop: ondrop,
 
+            input {
+                type: "file",
+                multiple: true,
+                class: "hidden",
+                onchange: onchange,
+            }
+
             if uploading() {
-                div { class: "py-6",
+                div { class: "py-6 pointer-events-none",
                     p { class: "text-lg text-emerald-100 font-medium tracking-wide mb-4", "{status}" }
                     div { class: "w-full max-w-sm mx-auto bg-zinc-950/80 p-1 h-4 rounded-full overflow-hidden border border-white/5 shadow-inner",
                         div {
@@ -87,14 +107,14 @@ pub fn UploadDropzone() -> Element {
                     }
                 }
             } else {
-                div {
+                div { class: "pointer-events-none",
                     p {
                         class: "text-6xl mb-6 transition-transform duration-300 drop-shadow-xl",
-                        class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600 hover:text-white" },
+                        class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600" },
                         if is_dragging() { "☁️" } else { "⬆️" }
                     }
                     p { class: "text-2xl font-bold text-white mb-2 tracking-tight", "Secure Dropzone" }
-                    p { class: "text-zinc-400 font-medium", "Drag and drop files to instantly sync to your HDD" }
+                    p { class: "text-zinc-400 font-medium", "Drag and drop files or click to instantly sync to your HDD" }
                 }
             }
         }

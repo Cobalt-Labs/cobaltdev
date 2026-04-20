@@ -19,34 +19,17 @@ warning: unused import: `echo::Echo`
 9 | pub use echo::Echo;
   |         ^^^^^^^^^^
 
-error[E0599]: the method `read` exists for struct `FileData`, but its trait bounds were not satisfied
-  --> cobalt_cloud/src/components/upload_dropzone.rs:35:43
-   |
-35 |                 if let Some(bytes) = file.read().await {
-   |                                           ^^^^ method cannot be called on `FileData` due to unsatisfied trait bounds
-   |
-  ::: /Users/ibrahimhaji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dioxus-html-0.7.5/src/file_data.rs:6:1
-   |
- 6 | pub struct FileData {
-   | ------------------- doesn't satisfy `FileData: Readable` or `FileData: dioxus::prelude::ReadableExt`
-   |
-   = note: the following trait bounds were not satisfied:
-           `FileData: Readable`
-           which is required by `FileData: dioxus::prelude::ReadableExt`
-
-error[E0599]: no method named `file_engine` found for struct `Rc<DragData>` in the current scope
- --> cobalt_cloud/src/api_test.rs:7:46
+error[E0308]: mismatched types
+ --> cobalt_cloud/src/api_test.rs:4:12
   |
-7 |             if let Some(engine) = evt.data().file_engine() {
-  |                                              ^^^^^^^^^^^ method not found in `Rc<DragData>`
-
-error[E0282]: type annotations needed
- --> cobalt_cloud/src/api_test.rs:8:30
+4 |     if let Some(files) = evt.files() {
+  |            ^^^^^^^^^^^   ----------- this expression has type `Vec<FileData>`
+  |            |
+  |            expected `Vec<FileData>`, found `Option<_>`
   |
-8 |                  for name in engine.files() {
-  |                              ^^^^^^ cannot infer type
+  = note: expected struct `Vec<FileData>`
+               found enum `std::option::Option<_>`
 
-Some errors have detailed explanations: E0282, E0599.
-For more information about an error, try `rustc --explain E0282`.
+For more information about this error, try `rustc --explain E0308`.
 warning: `cobalt_cloud` (bin "cobalt_cloud") generated 3 warnings
-error: could not compile `cobalt_cloud` (bin "cobalt_cloud") due to 3 previous errors; 3 warnings emitted
+error: could not compile `cobalt_cloud` (bin "cobalt_cloud") due to 1 previous error; 3 warnings emitted

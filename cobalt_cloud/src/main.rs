@@ -12,7 +12,7 @@ mod hooks;
 mod components;
 mod pages;
 // ignore line
-use pages::{home::HomePage, login::LoginPage};
+use pages::{home::HomePage, login::LoginPage, signup::SignupPage, forgot_password::ForgotPassPage};
 
 #[derive(Routable, Clone, PartialEq)]
 enum Route {
@@ -20,6 +20,10 @@ enum Route {
     HomePage,
     #[route("/login")]
     LoginPage,
+    #[route("/signup")]
+    SignupPage,
+    #[route("/forgot-password")]
+    ForgotPassPage,
 }
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
@@ -29,6 +33,8 @@ fn main() {
 }
 
 fn app() -> Element {
+    crate::hooks::use_files::use_provide_files_context();
+    
     rsx! {
         document::Stylesheet {
             href: TAILWIND_CSS

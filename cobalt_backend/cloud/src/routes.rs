@@ -15,6 +15,7 @@ pub fn create_router() -> Router<sqlx::SqlitePool> {
         .route("/contact", post(auth::create_contact))
         .route("/auth/login", post(auth::login))
         .route("/auth/register", post(auth::register))
+        .route("/auth/forgot-password", post(auth::forgot_password))
         .nest("/api", protected_routes)
         .layer(DefaultBodyLimit::max(500 * 1024 * 1024)) // allow up to 500 MB uploads
         .layer(CorsLayer::permissive())

@@ -38,8 +38,20 @@ pub fn LoginPage() -> Element {
                     "Login to Your Cloud"
                 }
 
-                p { class: "text-center text-zinc-500 text-sm mt-6",
-                    "Your data stays in your room • Pure Rust"
+                div { class: "mt-8 space-y-3 text-center",
+                    p { class: "text-zinc-500 text-sm",
+                        "Don't have an account? "
+                        a { href: "/signup", class: "text-emerald-400 hover:text-emerald-300 transition-colors font-bold", "Sign up" }
+                    }
+                    a { 
+                        href: "/forgot-password", 
+                        class: "block text-zinc-500 hover:text-zinc-300 text-xs font-bold uppercase tracking-widest transition-colors", 
+                        "Forgot Password?" 
+                    }
+                }
+
+                p { class: "text-center text-zinc-400/30 text-[10px] mt-10 uppercase tracking-[0.2em] font-black",
+                    "Pure Rust • Secure Cloud"
                 }
             }
         }

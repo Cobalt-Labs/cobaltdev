@@ -84,45 +84,45 @@ pub fn UploadDropzone() -> Element {
     };
 
     rsx! {
-        div { class: "relative w-full group",
-            // Transparent Overlay Input (Catching all clicks and drops)
+        label {
+            class: "block w-full border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 transform cursor-pointer relative overflow-hidden",
+            class: if is_dragging() { "border-emerald-400 bg-emerald-900/10 shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] scale-[1.02]" } else { "border-zinc-700/40 hover:border-zinc-500 hover:bg-zinc-900/40" },
+            
+            // Critical: Drop events on the container
+            ondragenter: ondragenter,
+            ondragleave: ondragleave,
+            ondragover: ondragover,
+            ondrop: ondrop,
+
+            // The invisible input that fulfills the click transaction
             input {
                 r#type: "file",
                 multiple: true,
-                class: "absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20",
+                class: "absolute pointer-events-none opacity-0",
+                style: "width: 1px; height: 1px; top: 0; left: 0;",
                 onchange: onchange,
-                ondragenter: ondragenter,
-                ondragleave: ondragleave,
-                ondragover: ondragover,
-                ondrop: ondrop,
             }
 
-            // Decorative UI (Behind the input)
-            div {
-                class: "block w-full border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 transform relative overflow-hidden",
-                class: if is_dragging() { "border-emerald-400 bg-emerald-900/10 shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] scale-[1.02]" } else { "border-zinc-700/40 group-hover:border-zinc-500 group-hover:bg-zinc-900/40" },
-                
-                if uploading() {
-                    div { class: "py-6 pointer-events-none",
-                        p { class: "text-lg text-emerald-100 font-medium tracking-wide mb-4", "{status}" }
-                        div { class: "w-full max-w-sm mx-auto bg-zinc-950/80 p-1 h-4 rounded-full overflow-hidden border border-white/5 shadow-inner",
-                            div {
-                                class: "h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 ease-out relative overflow-hidden",
-                                style: "width: {progress}%",
-                                div { class: "absolute inset-0 bg-white/20 blur-[2px] right-0 translate-x-1/2 w-8" }
-                            }
+            if uploading() {
+                div { class: "py-6 pointer-events-none",
+                    p { class: "text-lg text-emerald-100 font-medium tracking-wide mb-4", "{status}" }
+                    div { class: "w-full max-w-sm mx-auto bg-zinc-950/80 p-1 h-4 rounded-full overflow-hidden border border-white/5 shadow-inner",
+                        div {
+                            class: "h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 ease-out relative overflow-hidden",
+                            style: "width: {progress}%",
+                            div { class: "absolute inset-0 bg-white/20 blur-[2px] right-0 translate-x-1/2 w-8" }
                         }
                     }
-                } else {
-                    div { class: "pointer-events-none",
-                        p {
-                            class: "text-6xl mb-6 transition-transform duration-300 drop-shadow-xl",
-                            class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600" },
-                            if is_dragging() { "☁️" } else { "⬆️" }
-                        }
-                        p { class: "text-2xl font-bold text-white mb-2 tracking-tight", "Secure Dropzone" }
-                        p { class: "text-zinc-400 font-medium", "Drag and drop files or click to instantly sync to your HDD" }
+                }
+            } else {
+                div { class: "pointer-events-none",
+                    p {
+                        class: "text-6xl mb-6 transition-transform duration-300 drop-shadow-xl",
+                        class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600" },
+                        if is_dragging() { "☁️" } else { "⬆️" }
                     }
+                    p { class: "text-2xl font-bold text-white mb-2 tracking-tight", "Secure Dropzone" }
+                    p { class: "text-zinc-400 font-medium", "Drag and drop files or click to instantly sync to your HDD" }
                 }
             }
         }

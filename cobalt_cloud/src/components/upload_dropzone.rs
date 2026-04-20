@@ -9,12 +9,14 @@ pub fn UploadDropzone() -> Element {
     let status = use_signal(|| String::new());
     let files_state = crate::hooks::use_files::use_files_state();
 
+    let auth = crate::hooks::use_auth::use_auth_state();
     let process_files = move |files: Vec<FileData>| {
         for file in files {
             let mut prog = progress;
             let mut up = uploading;
             let mut st = status;
             let files_state = files_state;
+            let token = auth.peek().token.clone();
 
             let file_name = file.name();
 
@@ -27,7 +29,7 @@ pub fn UploadDropzone() -> Element {
                     prog.set(40);
                     st.set(format!("Uploading {} ({} bytes)...", file_name, bytes.len()));
 
-                    match crate::services::api::upload_file_bytes(file_name, bytes.to_vec()).await {
+                    match crate::services::api::upload_file_bytes(file_name, bytes.to_vec(), token).await {
                         Ok(_) => {
                             prog.set(100);
                             st.set("✅ File securely saved!".to_string());
@@ -98,8 +100,7 @@ pub fn UploadDropzone() -> Element {
             input {
                 r#type: "file",
                 multiple: true,
-                class: "absolute pointer-events-none opacity-0",
-                style: "width: 1px; height: 1px; top: 0; left: 0;",
+                style: "display: none;",
                 onchange: onchange,
             }
 

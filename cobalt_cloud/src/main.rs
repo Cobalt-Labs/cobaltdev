@@ -11,19 +11,19 @@ mod services;
 mod hooks;
 mod components;
 mod pages;
-// ignore line
+
 use pages::{home::HomePage, login::LoginPage, signup::SignupPage, forgot_password::ForgotPassPage};
 
 #[derive(Routable, Clone, PartialEq)]
 enum Route {
     #[route("/")]
-    HomePage,
-    #[route("/login")]
-    LoginPage,
+    LoginPage {},
+    #[route("/home")]
+    HomePage {},
     #[route("/signup")]
-    SignupPage,
+    SignupPage {},
     #[route("/forgot-password")]
-    ForgotPassPage,
+    ForgotPassPage {},
 }
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
@@ -33,7 +33,38 @@ fn main() {
 }
 
 fn app() -> Element {
+    let mut auth_state = crate::hooks::use_auth::use_provide_auth_context();
     crate::hooks::use_files::use_provide_files_context();
+
+    // PERSISTENCE: Load from localStorage on startup
+    use_effect(move || {
+        spawn(async move {
+            let res = document::eval(r#"
+                let data = localStorage.getItem("cobalt_auth");
+                if (data) return data;
+                return null;
+            "#).await;
+            
+            if let Ok(data_val) = res {
+                if let Some(data_str) = data_val.as_str() {
+                    if let Ok(state) = serde_json::from_str::<crate::hooks::use_auth::AuthState>(data_str) {
+                        *auth_state.write() = state;
+                    }
+                }
+            }
+        });
+    });
+
+    // PERSISTENCE: Save to localStorage whenever auth_state changes
+    use_effect(move || {
+        let auth = auth_state.read().clone();
+        spawn(async move {
+            if let Ok(json) = serde_json::to_string(&auth) {
+                let js = format!("localStorage.setItem('cobalt_auth', '{}')", json);
+                let _ = document::eval(&js).await;
+            }
+        });
+    });
     
     rsx! {
         document::Stylesheet {

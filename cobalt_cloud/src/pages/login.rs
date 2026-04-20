@@ -3,7 +3,8 @@ use crate::hooks::use_auth;
 
 #[component]
 pub fn LoginPage() -> Element {
-    let mut auth = use_auth::use_auth();
+    let mut auth = crate::hooks::use_auth::use_auth_state();
+    let nav = use_navigator();
     let mut username = use_signal(|| "ibrahim3595".to_string());
     let mut password = use_signal(String::new);
 
@@ -34,6 +35,7 @@ pub fn LoginPage() -> Element {
                             token: Some("fake-jwt-token-for-now".to_string()),
                             username: Some(username.read().clone()),
                         });
+                        nav.push(crate::Route::HomePage {});
                     },
                     "Login to Your Cloud"
                 }

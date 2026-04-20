@@ -4,17 +4,21 @@ use reqwest::{Client, Response};
 
 const BACKEND_URL: &str = "http://127.0.0.1:8001";
 
-pub async fn upload_file_bytes(filename: String, file_bytes: Vec<u8>) -> Result<()> {
+pub async fn upload_file_bytes(filename: String, file_bytes: Vec<u8>, token: Option<String>) -> Result<()> {
     let client = Client::new();
     
     let part = Part::bytes(file_bytes).file_name(filename);
     let form = Form::new().part("file", part);
 
-    let resp: Response = client
+    let mut req = client
         .post(format!("{}/api/upload", BACKEND_URL))
-        .multipart(form)
-        .send()
-        .await?;
+        .multipart(form);
+    
+    if let Some(t) = token {
+        req = req.bearer_auth(t);
+    }
+
+    let resp: Response = req.send().await?;
 
     if !resp.status().is_success() {
         return Err(anyhow::anyhow!("Upload failed: {}", resp.status()));

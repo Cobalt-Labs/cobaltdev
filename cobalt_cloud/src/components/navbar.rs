@@ -2,6 +2,8 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn Navbar() -> Element {
+    let mut auth = crate::hooks::use_auth::use_auth_state();
+    let nav = use_navigator();
     rsx! {
         nav { class: "sticky top-0 z-50 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5 px-8 py-4 flex items-center justify-between",
             div { class: "flex items-center gap-3",
@@ -12,6 +14,10 @@ pub fn Navbar() -> Element {
                 span { class: "text-emerald-400", "● Connected to Local HDD" }
                 button {
                     class: "px-5 py-2 bg-white text-black rounded-xl font-medium hover:bg-zinc-200 transition",
+                    onclick: move |_| {
+                        auth.set(crate::hooks::use_auth::AuthState::default());
+                        nav.push(crate::Route::LoginPage {});
+                    },
                     "Logout"
                 }
             }

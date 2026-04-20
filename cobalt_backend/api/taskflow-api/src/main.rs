@@ -23,8 +23,10 @@ async fn main() {
         .layer(CorsLayer::permissive())
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
-    println!("Test-flow API running on http://0.0.0.0:8080");
+    let port = std::env::var("SERVER_PORT").unwrap_or_else(|_| "8001".to_string());
+    let addr = format!("0.0.0.0:{}", port);
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    println!("Test-flow API running on http://{}", addr);
 
     axum::serve(listener, app).await.unwrap();
 }

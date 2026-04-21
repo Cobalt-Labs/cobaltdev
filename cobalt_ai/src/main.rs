@@ -1,4 +1,5 @@
 mod model;
+mod data; 
 
 use burn::tensor::{Tensor, backend::Backend};
 fn computation<B: Backend>() {

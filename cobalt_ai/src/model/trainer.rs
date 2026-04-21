@@ -1,26 +1,43 @@
-use burn::train::LearnerBuilder;
-use burn::train::metric::{AccuracyMetric, LossMetric};
-use burn::optim::AdamConfig;
-use crate::model::transformer::CobaltModelConfig;
+use burn::optim::{AdamConfig, Optimizer, GradientsParams};
+use burn::tensor::backend::AutodiffBackend;
 use burn::prelude::*;
+use burn::tensor::Int;
+use burn::nn::loss::CrossEntropyLoss;
+
+use crate::model::transformer::CobaltModelConfig;
 
 pub fn train<B: AutodiffBackend>(device: B::Device) {
-    let config = CobaltModelConfig::new(8, 6, 512, 5000, 512); // Heads, Layers, D_Model, Vocab, Seq
-    let optimizer = AdamConfig::new().init();
-    
-    let artifacts_path = "./data/checkpoints";
+    let config = CobaltModelConfig::new(8, 6, 512, 5000, 512);
 
-    let learner = LearnerBuilder::new(artifacts_path)
-        .metric_train_numeric(LossMetric::new())
-        .metric_valid_numeric(LossMetric::new())
-        .with_file_checkpointer(1) // Save every epoch
-        .devices(vec![device.clone()])
-        .num_epochs(10)
-        .build(
-            config.init(&device),
-            optimizer,
-            1e-4,
-        );
+    let mut model = config.init(&device);
+    let mut optimizer = AdamConfig::new().init();
 
-    println!("Trainer initialized on device: {:?}", device);
+    let loss_fn = CrossEntropyLoss::new(None, &device);
+
+    let num_epochs = 10;
+    let learning_rate = 1e-4;
+
+    println!("Training on device: {:?}", device);
+
+    for epoch in 0..num_epochs {
+        let inputs = Tensor::<B, 2, Int>::zeros([32, 512], &device);
+        let targets = Tensor::<B, 2, Int>::zeros([32, 512], &device);
+
+        let outputs = model.forward(inputs);
+
+        let [batch, seq, vocab] = outputs.dims();
+
+        let logits = outputs.reshape([batch * seq, vocab]);
+        let targets = targets.reshape([batch * seq]);
+
+        let loss = loss_fn.forward(logits, targets);
+
+        let grads = loss.backward();
+
+        let grads = GradientsParams::from_grads(grads, &model);
+
+        model = optimizer.step(learning_rate, model, grads);
+
+        println!("Epoch {} - Loss: {:?}", epoch, loss);
+    }
 }

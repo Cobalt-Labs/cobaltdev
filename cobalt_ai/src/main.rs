@@ -1,3 +1,5 @@
+mod model;
+
 use burn::tensor::{Tensor, backend::Backend};
 fn computation<B: Backend>() {
     // Create the device where to do the computation

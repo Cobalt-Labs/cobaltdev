@@ -35,3 +35,4 @@ shellexpand = "3.0"
 jsonwebtoken = "10.3.0"
 aes-gcm = "0.10"
 rand = {version = "0.8", features = ["std"] }
+thiserror = "2.0.18"

@@ -5,7 +5,7 @@ members = [
     # uncomment when workiong on backend/cloud/api
     "cobalt_cloud",
     "cobalt_ai", "cobalt_ai/experiments/scratch_model",
-    "cobalt_systems/kernel",
+    "cobalt_systems/kernel", "cobalt_embedded",
 ]
 
 [workspace.dependencies.axum]

@@ -106,6 +106,7 @@ pub fn UploadDropzone() -> Element {
             input {
                 r#type: "file",
                 multiple: true,
+                accept: "*/*",
                 style: "display: none;",
                 onchange: onchange,
             }

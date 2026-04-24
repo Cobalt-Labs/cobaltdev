@@ -10,8 +10,8 @@ pub struct FilesState {
 
 impl FilesState {
     pub fn refresh(&self) {
-        let mut refresh = self.refresh;
-        refresh.set(*self.refresh.peek() + 1);
+        let next_val = *self.refresh.peek() + 1;
+        self.refresh.set(next_val);
     }
 }
 

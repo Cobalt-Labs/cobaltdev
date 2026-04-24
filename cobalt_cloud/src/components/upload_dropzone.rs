@@ -15,7 +15,7 @@ pub fn UploadDropzone() -> Element {
             let mut prog = progress;
             let mut up = uploading;
             let mut st = status;
-            let files_state = files_state;
+            let mut files_state = files_state;
             let token = auth.peek().token.clone();
 
             let original_name = file.name();

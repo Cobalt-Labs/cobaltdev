@@ -18,7 +18,13 @@ pub fn UploadDropzone() -> Element {
             let files_state = files_state;
             let token = auth.peek().token.clone();
 
-            let file_name = file.name();
+            let original_name = file.name();
+            // In desktop environments, file.name() might return an absolute path.
+            // Extract just the filename to ensure correct backend storage paths.
+            let file_name = std::path::Path::new(&original_name)
+                .file_name()
+                .map(|n| n.to_string_lossy().to_string())
+                .unwrap_or(original_name);
 
             spawn(async move {
                 up.set(true);

@@ -45,6 +45,27 @@ pub async fn list_files(token: Option<String>) -> Result<Vec<crate::models::File
     Ok(data)
 }
 
+pub async fn login(username: String, password: String) -> Result<crate::hooks::use_auth::AuthState> {
+    let client = Client::new();
+    let resp = client
+        .post(format!("{}/auth/login", BACKEND_URL))
+        .json(&serde_json::json!({
+            "username": username,
+            "password": password,
+        }))
+        .send()
+        .await?;
+
+    if !resp.status().is_success() {
+        let status = resp.status();
+        let err_text = resp.text().await.unwrap_or_else(|_| "Unknown error".to_string());
+        return Err(anyhow::anyhow!("Login failed ({}): {}", status, err_text));
+    }
+
+    let data: crate::hooks::use_auth::AuthState = resp.json().await?;
+    Ok(data)
+}
+
 pub async fn signup(username: String, password: String) -> Result<()> {
     let client = Client::new();
     let resp = client

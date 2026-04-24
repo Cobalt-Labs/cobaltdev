@@ -20,7 +20,7 @@ pub async fn login(
     }
 
     let user: Option<User> = sqlx::query_as(
-        "SELECT id, username, password_hash, created_at FROM users WHERE username = ?"
+        "SELECT id, username, password_hash, created_at FROM users WHERE username = ? COLLATE NOCASE"
     )
     .bind(&payload.username)
     .fetch_optional(&pool)

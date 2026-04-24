@@ -5,8 +5,9 @@ use crate::hooks::use_auth;
 pub fn LoginPage() -> Element {
     let mut auth = crate::hooks::use_auth::use_auth_state();
     let nav = use_navigator();
-    let mut username = use_signal(|| "ibrahim3595".to_string());
+    let mut username = use_signal(String::new);
     let mut password = use_signal(String::new);
+    let mut show_password = use_signal(|| false);
 
     rsx! {
         div { class: "min-h-screen bg-gradient-to-br from-zinc-950 to-zinc-900 flex items-center justify-center text-white font-sans",
@@ -20,22 +21,38 @@ pub fn LoginPage() -> Element {
                     oninput: move |e| username.set(e.value())
                 }
 
-                input {
-                    class: "w-full bg-zinc-950/50 border border-white/5 rounded-2xl px-5 py-4 mb-8 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all text-white placeholder-zinc-500",
-                    r#type: "password",
-                    placeholder: "Password",
-                    value: "{password}",
-                    oninput: move |e| password.set(e.value())
+                div { class: "relative mb-8",
+                    input {
+                        class: "w-full bg-zinc-950/50 border border-white/5 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all text-white placeholder-zinc-500",
+                        r#type: if show_password() { "text" } else { "password" },
+                        placeholder: "Password",
+                        value: "{password}",
+                        oninput: move |e| password.set(e.value())
+                    }
+                    button {
+                        class: "absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-emerald-400 transition-colors",
+                        onclick: move |_| show_password.set(!show_password()),
+                        if show_password() { "👁️‍🗨️" } else { "👁️" }
+                    }
                 }
 
                 button {
                     class: "w-full bg-emerald-500 hover:bg-emerald-400 py-4 rounded-2xl font-bold text-lg text-zinc-950 shadow-[0_0_20px_-5px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.6)] transition-all transform hover:-translate-y-0.5",
                     onclick: move |_| {
-                        auth.set(crate::hooks::use_auth::AuthState {
-                            token: Some("fake-jwt-token-for-now".to_string()),
-                            username: Some(username.read().clone()),
+                        let user = username.read().clone();
+                        let pass = password.read().clone();
+                        spawn(async move {
+                            match crate::services::api::login(user, pass).await {
+                                Ok(state) => {
+                                    auth.set(state);
+                                    nav.push(crate::Route::HomePage {});
+                                }
+                                Err(e) => {
+                                    // In a production app, we would show a nice toast here
+                                    eprintln!("Login failed: {}", e);
+                                }
+                            }
                         });
-                        nav.push(crate::Route::HomePage {});
                     },
                     "Login to Your Cloud"
                 }
@@ -43,10 +60,14 @@ pub fn LoginPage() -> Element {
                 div { class: "mt-8 space-y-3 text-center",
                     p { class: "text-zinc-500 text-sm",
                         "Don't have an account? "
-                        a { href: "/signup", class: "text-emerald-400 hover:text-emerald-300 transition-colors font-bold", "Sign up" }
+                        Link { 
+                            to: crate::Route::SignupPage {}, 
+                            class: "text-emerald-400 hover:text-emerald-300 transition-colors font-bold", 
+                            "Sign up" 
+                        }
                     }
-                    a { 
-                        href: "/forgot-password", 
+                    Link { 
+                        to: crate::Route::ForgotPassPage {}, 
                         class: "block text-zinc-500 hover:text-zinc-300 text-xs font-bold uppercase tracking-widest transition-colors", 
                         "Forgot Password?" 
                     }

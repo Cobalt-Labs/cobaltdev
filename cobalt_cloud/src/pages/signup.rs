@@ -60,8 +60,8 @@ pub fn SignupPage() -> Element {
                             }
                             h2 { class: "text-2xl font-bold mb-3", "Success!" }
                             p { class: "text-zinc-400 mb-8", "Your account has been created successfully." }
-                            a { 
-                                href: "/login",
+                            Link { 
+                                to: crate::Route::LoginPage {},
                                 class: "flex items-center justify-center w-full py-4 bg-emerald-500 text-black font-bold rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_10px_40px_-10px_rgba(16,185,129,0.5)]",
                                 "Go to Login" 
                             }
@@ -116,7 +116,11 @@ pub fn SignupPage() -> Element {
                         div { class: "mt-10 text-center",
                             p { class: "text-zinc-500 font-medium",
                                 "Already have an account? "
-                                a { href: "/login", class: "text-emerald-400 hover:text-emerald-300 transition-colors ml-1 font-bold", "Log in" }
+                                Link { 
+                                    to: crate::Route::LoginPage {}, 
+                                    class: "text-emerald-400 hover:text-emerald-300 transition-colors ml-1 font-bold", 
+                                    "Log in" 
+                                }
                             }
                         }
                     }

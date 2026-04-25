@@ -23,9 +23,9 @@ jobs:
       - name: Install Dioxus CLI
         run: cargo install dioxus-cli --locked
       - name: Build Web
-        run: cd cobalt_cloud && dx build --release
+        run: cd cobalt_cloud && dx build --release --platform web
       - name: Zip Web Build
-        run: cd cobalt_cloud/dist && zip -r ../../cobalt-cloud-web.zip .
+        run: zip -r cobalt-cloud-web.zip target/dx/cobalt_cloud/release/web/public
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
@@ -50,10 +50,10 @@ jobs:
         run: cd cobalt_cloud && dx build --release --platform desktop
       - name: Zip Desktop Build (Mac)
         if: runner.os == 'macOS'
-        run: cd cobalt_cloud/dist && zip -r ../../${{ matrix.artifact_name }} .
+        run: zip -r ${{ matrix.artifact_name }} target/dx/cobalt_cloud/release/desktop
       - name: Zip Desktop Build (Windows)
         if: runner.os == 'Windows'
-        run: Compress-Archive -Path cobalt_cloud/dist/* -DestinationPath ${{ matrix.artifact_name }}
+        run: Compress-Archive -Path target/dx/cobalt_cloud/release/desktop/* -DestinationPath ${{ matrix.artifact_name }}
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:

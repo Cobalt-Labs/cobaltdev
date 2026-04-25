@@ -21,9 +21,9 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - name: Install Dioxus CLI
-        run: cargo install dioxus-cli --version 0.6.0-alpha.2 # Update if needed for 0.7
+        run: cargo install dioxus-cli --locked
       - name: Build Web
-        run: cd cobalt_cloud && dx build --release --platform web
+        run: cd cobalt_cloud && dx build --release
       - name: Zip Web Build
         run: cd cobalt_cloud/dist && zip -r ../../cobalt-cloud-web.zip .
       - name: Upload Release Asset
@@ -38,16 +38,14 @@ jobs:
         include:
           - os: macos-latest
             artifact_name: cobalt-cloud-mac.zip
-            binary: cobalt_cloud
           - os: windows-latest
             artifact_name: cobalt-cloud-windows.zip
-            binary: cobalt_cloud.exe
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - name: Install Dioxus CLI
-        run: cargo install dioxus-cli
+        run: cargo install dioxus-cli --locked
       - name: Build Desktop
         run: cd cobalt_cloud && dx build --release --platform desktop
       - name: Zip Desktop Build (Mac)

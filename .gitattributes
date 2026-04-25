@@ -3,10 +3,10 @@
 Cargo.lock linguist-language=Rust
 Cargo.toml linguist-language=Rust
 
-*.dart linguist-language=Dart
-*.flutter linguist-language=Dart
-pubspec.yaml linguist-language=Dart
-pubspec.lock linguist-language=Dart
+#*.dart linguist-language=Dart
+#*.flutter linguist-language=Dart
+#pubspec.yaml linguist-language=Dart
+#pubspec.lock linguist-language=Dart
 
 *.py linguist-vendored
 *.ipynb linguist-vendored

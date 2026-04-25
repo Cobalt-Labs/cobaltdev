@@ -16,14 +16,15 @@ jobs:
     name: Build Dioxus Apps
     strategy:
       matrix:
+        app: [cobalt_cloud, cobalt_frontend/app/secure_journal/frontend]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - app: cobalt_cloud
             short_name: cobalt-cloud
-            target_name: cobalt-cloud
+            target_name: cobalt_cloud
           - app: cobalt_frontend/app/secure_journal/frontend
             short_name: secure-journal
             target_name: frontend
-        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -73,8 +74,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android, i686-linux-android
+      - name: Install Codegen
+        run: cargo install flutter_rust_bridge_codegen --version 2.0.0 --locked
       - name: Install Dependencies
         run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter pub get
+      - name: Run Codegen
+        run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter_rust_bridge_codegen generate
       - name: Build APK
         run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter build apk --release
       - name: Copy APK

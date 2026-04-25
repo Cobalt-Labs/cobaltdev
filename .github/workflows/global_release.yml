@@ -49,11 +49,11 @@ jobs:
       
       - name: Zip Mac
         if: matrix.os == 'macos-latest'
-        run: zip -r ${{ matrix.short_name }}-mac.zip target/dx/${{ matrix.target_name }}/release/desktop
+        run: zip -r ${{ matrix.short_name }}-mac.zip target/dx/${{ matrix.target_name }}/release/macos
       
       - name: Zip Windows
         if: matrix.os == 'windows-latest'
-        run: Compress-Archive -Path target/dx/${{ matrix.target_name }}/release/desktop/* -DestinationPath ${{ matrix.short_name }}-windows.zip
+        run: Compress-Archive -Path target/dx/${{ matrix.target_name }}/release/windows/* -DestinationPath ${{ matrix.short_name }}-windows.zip
 
       - name: Upload Assets
         uses: softprops/action-gh-release@v2

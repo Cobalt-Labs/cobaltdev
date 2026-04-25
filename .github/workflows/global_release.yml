@@ -21,7 +21,7 @@ jobs:
         include:
           - app: cobalt_cloud
             short_name: cobalt-cloud
-            target_name: cobalt-cloud
+            target_name: cobalt_cloud
           - app: cobalt_frontend/app/secure_journal/frontend
             short_name: secure-journal
             target_name: frontend
@@ -49,11 +49,11 @@ jobs:
       
       - name: Zip Mac
         if: matrix.os == 'macos-latest'
-        run: zip -r ${{ matrix.short_name }}-mac.zip target/dx/${{ matrix.target_name }}/release/desktop
+        run: zip -r ${{ matrix.short_name }}-mac.zip target/dx/${{ matrix.target_name }}/release/macos
       
       - name: Zip Windows
         if: matrix.os == 'windows-latest'
-        run: Compress-Archive -Path target/dx/${{ matrix.target_name }}/release/desktop/* -DestinationPath ${{ matrix.short_name }}-windows.zip
+        run: Compress-Archive -Path target/dx/${{ matrix.target_name }}/release/windows/* -DestinationPath ${{ matrix.short_name }}-windows.zip
 
       - name: Upload Assets
         uses: softprops/action-gh-release@v2
@@ -74,8 +74,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android, i686-linux-android
+      - name: Install Codegen
+        run: cargo install flutter_rust_bridge_codegen --version 2.0.0 --locked
       - name: Install Dependencies
         run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter pub get
+      - name: Run Codegen
+        run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter_rust_bridge_codegen generate
       - name: Build APK
         run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter build apk --release
       - name: Copy APK

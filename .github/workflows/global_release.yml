@@ -16,8 +16,6 @@ jobs:
     name: Build Dioxus Apps
     strategy:
       matrix:
-        app: [cobalt_cloud, cobalt_frontend/app/secure_journal/frontend]
-        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - app: cobalt_cloud
             short_name: cobalt-cloud
@@ -25,6 +23,7 @@ jobs:
           - app: cobalt_frontend/app/secure_journal/frontend
             short_name: secure-journal
             target_name: frontend
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

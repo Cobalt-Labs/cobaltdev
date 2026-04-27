@@ -15,10 +15,9 @@ impl FilesState {
     }
 }
 
-pub fn use_provide_files_context() -> FilesState {
+pub fn use_provide_files_context(auth: Signal<crate::hooks::use_auth::AuthState>) -> FilesState {
     let files = use_signal(Vec::new);
     let refresh = use_signal(|| 0);
-    let auth = crate::hooks::use_auth::use_auth_state();
     let state = FilesState { files, refresh };
     
     use_context_provider(|| state);
@@ -26,7 +25,9 @@ pub fn use_provide_files_context() -> FilesState {
     use_effect(move || {
         let mut files = files;
         let _ = refresh(); // Track refresh counter
-        let token = auth.peek().token.clone();
+        let auth_val = auth.read();
+        let token = auth_val.token.clone();
+        
         spawn(async move {
             if let Ok(data) = api::list_files(token).await {
                 files.set(data);

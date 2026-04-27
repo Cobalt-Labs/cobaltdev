@@ -34,7 +34,7 @@ fn main() {
 
 fn app() -> Element {
     let mut auth_state = crate::hooks::use_auth::use_provide_auth_context();
-    crate::hooks::use_files::use_provide_files_context();
+    crate::hooks::use_files::use_provide_files_context(auth_state);
 
     // PERSISTENCE: Load from localStorage on startup
     use_effect(move || {

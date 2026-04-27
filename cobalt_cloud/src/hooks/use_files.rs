@@ -2,9 +2,18 @@ use dioxus::prelude::*;
 use crate::services::api;
 use crate::models::FileMetadata;
 
+#[derive(Clone, PartialEq)]
+pub struct PendingUpload {
+    pub id: String,
+    pub filename: String,
+    pub progress: u8,
+    pub status: String,
+}
+
 #[derive(Clone, Copy)]
 pub struct FilesState {
     pub files: Signal<Vec<FileMetadata>>,
+    pub pending_uploads: Signal<Vec<PendingUpload>>,
     pub refresh: Signal<usize>, // Use a counter to trigger re-fetches
 }
 
@@ -13,12 +22,29 @@ impl FilesState {
         let next_val = *self.refresh.peek() + 1;
         self.refresh.set(next_val);
     }
+
+    pub fn add_pending(&mut self, upload: PendingUpload) {
+        self.pending_uploads.write().push(upload);
+    }
+
+    pub fn update_pending(&mut self, id: &str, progress: u8, status: String) {
+        let mut pending = self.pending_uploads.write();
+        if let Some(u) = pending.iter_mut().find(|u| u.id == id) {
+            u.progress = progress;
+            u.status = status;
+        }
+    }
+
+    pub fn remove_pending(&mut self, id: &str) {
+        self.pending_uploads.write().retain(|u| u.id != id);
+    }
 }
 
 pub fn use_provide_files_context(auth: Signal<crate::hooks::use_auth::AuthState>) -> FilesState {
     let files = use_signal(Vec::new);
+    let pending_uploads = use_signal(Vec::new);
     let refresh = use_signal(|| 0);
-    let state = FilesState { files, refresh };
+    let state = FilesState { files, pending_uploads, refresh };
     
     use_context_provider(|| state);
 
@@ -29,8 +55,12 @@ pub fn use_provide_files_context(auth: Signal<crate::hooks::use_auth::AuthState>
         let token = auth_val.token.clone();
         
         spawn(async move {
-            if let Ok(data) = api::list_files(token).await {
-                files.set(data);
+            match api::list_files(token).await {
+                Ok(data) => files.set(data),
+                Err(e) => {
+                    eprintln!("Failed to fetch files: {}", e);
+                    // We could add an error signal to FilesState if we want to show it in UI
+                }
             }
         });
     });

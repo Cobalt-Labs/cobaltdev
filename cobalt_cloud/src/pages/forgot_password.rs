@@ -75,7 +75,9 @@ pub fn ForgotPassPage() -> Element {
                     }
 
                     div { class: "mt-10 text-center",
-                        a { href: "/login", class: "text-zinc-500 hover:text-white transition-colors font-bold flex items-center justify-center gap-2",
+                        Link { 
+                            to: crate::Route::LoginPage {},
+                            class: "text-zinc-500 hover:text-white transition-colors font-bold flex items-center justify-center gap-2",
                             "Back to Login"
                         }
                     }

@@ -3,6 +3,7 @@ use axum::{
     Json,
     http::StatusCode,
     Extension,
+    response::IntoResponse,
 };
 use uuid::Uuid;
 use crate::models::Claims;
@@ -55,11 +56,21 @@ pub async fn upload_file_handler(
         println!("Secure upload: {} → {}", name, storage_path);
     }
 
-    Ok(Json(json!({
+    let res = json!({
         "status": "success",
         "filename": filename,
         "message": "File uploaded and saved securely"
-    })))
+    });
+
+    (
+        StatusCode::OK,
+        [
+            ("Access-Control-Allow-Origin", "*"),
+            ("Access-Control-Allow-Methods", "POST, OPTIONS"),
+            ("Access-Control-Allow-Headers", "Content-Type, Authorization"),
+        ],
+        Json(res)
+    ).into_response()
 }
 
 pub async fn list_files_handler() -> Json<serde_json::Value> {

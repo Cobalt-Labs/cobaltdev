@@ -60,16 +60,24 @@ fn app() -> Element {
         let auth = auth_state.read().clone();
         spawn(async move {
             if let Ok(json) = serde_json::to_string(&auth) {
-                let js = format!("localStorage.setItem('cobalt_auth', '{}')", json);
+                // Escape single quotes for JS compatibility
+                let escaped_json = json.replace("'", "\\'");
+                let js = format!("localStorage.setItem('cobalt_auth', '{}')", escaped_json);
                 let _ = document::eval(&js).await;
             }
         });
     });
     
     rsx! {
+        document::Link {
+            href: "https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap",
+            rel: "stylesheet"
+        }
         document::Stylesheet {
             href: TAILWIND_CSS
         }
-        Router::<Route> {}
+        div { class: "font-['Outfit'] select-none",
+            Router::<Route> {}
+        }
     }
 }

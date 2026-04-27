@@ -1,5 +1,6 @@
 use dioxus::html::{FileData, HasFileData};
 use dioxus::prelude::*;
+use uuid::Uuid;
 
 #[component]
 pub fn UploadDropzone() -> Element {
@@ -19,49 +20,56 @@ pub fn UploadDropzone() -> Element {
             let token = auth.peek().token.clone();
 
             let original_name = file.name();
-            // In desktop environments, file.name() might return an absolute path.
-            // Extract just the filename to ensure correct backend storage paths.
             let file_name = std::path::Path::new(&original_name)
                 .file_name()
                 .map(|n| n.to_string_lossy().to_string())
                 .unwrap_or(original_name);
+            
+            let upload_id = Uuid::new_v4().to_string();
 
             spawn(async move {
                 up.set(true);
                 prog.set(5);
                 st.set(format!("Opening connection for {}...", file_name));
+                
+                files_state.add_pending(crate::hooks::use_files::PendingUpload {
+                    id: upload_id.clone(),
+                    filename: file_name.clone(),
+                    progress: 5,
+                    status: "Connecting...".to_string(),
+                });
 
                 if let Ok(bytes) = file.read_bytes().await {
                     prog.set(40);
                     st.set(format!("Uploading {} ({} bytes)...", file_name, bytes.len()));
+                    files_state.update_pending(&upload_id, 40, format!("Uploading ({} bytes)", bytes.len()));
 
-                    match crate::services::api::upload_file_bytes(file_name, bytes.to_vec(), token).await {
+                    match crate::services::api::upload_file_bytes(file_name.clone(), bytes.to_vec(), token).await {
                         Ok(_) => {
                             prog.set(100);
                             st.set("✅ File securely saved!".to_string());
+                            files_state.update_pending(&upload_id, 100, "Completed".to_string());
                             files_state.refresh(); // Trigger immediate list refresh
                         }
                         Err(e) => {
                             prog.set(0);
                             st.set(format!("❌ Failed API: {}", e));
+                            files_state.update_pending(&upload_id, 0, format!("Error: {}", e));
                         }
                     }
                 } else {
                     prog.set(0);
                     st.set("❌ Could not read file content".to_string());
+                    files_state.update_pending(&upload_id, 0, "Read error".to_string());
                 }
 
                 if prog() == 100 {
-                    #[cfg(not(target_arch = "wasm32"))]
-                    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
-
                     up.set(false);
                     prog.set(0);
                     st.set(String::new());
+                    // Delay removal slightly so user sees success
+                    files_state.remove_pending(&upload_id);
                 } else {
-                    // Keep error message visible for a bit longer
-                    #[cfg(not(target_arch = "wasm32"))]
-                    tokio::time::sleep(std::time::Duration::from_secs(4)).await;
                     up.set(false);
                 }
             });

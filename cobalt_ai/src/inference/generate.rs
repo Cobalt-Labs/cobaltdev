@@ -17,7 +17,7 @@ pub fn generate_text<B: Backend>(device: B::Device, prompt: &str, num_tokens: us
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
     
     let recorder = CompactRecorder::new();
-    let record = recorder.load("models/cobalt_model.bin".into(), &device).expect("Failed to load model weights. Did you run train first?");
+    let record = recorder.load("models/cobalt_model".into(), &device).expect("Failed to load model weights. Did you run train first?");
     let model: CobaltModel<B> = config.init(&device).load_record(record);
 
     let mut tokens = dataset.tokenizer.encode(prompt);

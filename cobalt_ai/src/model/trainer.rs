@@ -1,9 +1,8 @@
 use burn::optim::{AdamConfig, Optimizer, GradientsParams};
 use burn::tensor::backend::AutodiffBackend;
 use burn::prelude::*;
-use burn::tensor::Int;
 use burn::nn::loss::CrossEntropyLoss;
-use burn::record::{CompactRecorder, Recorder};
+use burn::record::{CompactRecorder};
 
 use crate::model::transformer::CobaltModelConfig;
 use crate::data::loader::TextDataset;

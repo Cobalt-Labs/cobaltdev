@@ -37,7 +37,7 @@ dependencies:
   video_player: ^2.11.1
   http: ^1.6.0
   url_launcher: ^6.3.2
-  flutter_dropzone: ^1.2.0
+  flutter_dropzone: ^4.2.1
 
 dev_dependencies:
   flutter_test:

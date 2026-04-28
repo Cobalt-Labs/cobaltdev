@@ -1,12 +1,13 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class GlassCard extends StatelessWidget {
+/// A clean, flat card — no blur, no glass, no glow.
+/// Think Vercel / Linear dashboard card.
+class GlassCard extends StatefulWidget {
   final Widget child;
   final double? height;
   final double? width;
   final EdgeInsets? padding;
-  final VoidCallback? onTap; // for hover/click effect
+  final VoidCallback? onTap;
 
   const GlassCard({
     super.key,
@@ -18,46 +19,40 @@ class GlassCard extends StatelessWidget {
   });
 
   @override
+  State<GlassCard> createState() => _GlassCardState();
+}
+
+class _GlassCardState extends State<GlassCard> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.2),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 30,
-              spreadRadius: -5,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              padding: padding ?? const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white.withOpacity(0.1),
-                    Colors.white.withOpacity(0.05),
-                  ],
-                ),
-              ),
-              child: child,
+    return MouseRegion(
+      cursor: widget.onTap != null
+          ? SystemMouseCursors.click
+          : MouseCursor.defer,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          height: widget.height,
+          width: widget.width,
+          padding: widget.padding ?? const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: _hovered && widget.onTap != null
+                ? const Color(0xFF252530)
+                : const Color(0xFF1C1C24),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _hovered && widget.onTap != null
+                  ? const Color(0xFF6366F1).withOpacity(0.4)
+                  : const Color(0xFF2E2E3A),
+              width: 1,
             ),
           ),
+          child: widget.child,
         ),
       ),
     );

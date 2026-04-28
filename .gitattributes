@@ -1,29 +1,24 @@
-# Force Rust detection (your original + Cargo files)
 *.rs linguist-language=Rust
 *.toml linguist-language=Rust
 Cargo.lock linguist-language=Rust
 Cargo.toml linguist-language=Rust
 
-# Force Dart/Flutter detection (uncommented + improved)
 *.dart linguist-language=Dart
 *.flutter linguist-language=Dart
 pubspec.yaml linguist-language=Dart
 pubspec.lock linguist-language=Dart
 
-# Completely hide JavaScript (this is what was pushing JS to the top)
 *.js linguist-vendored
 *.mjs linguist-vendored
 *.jsx linguist-vendored
 *.ts linguist-vendored          # if you have any TypeScript
 *.tsx linguist-vendored
 
-# Hide heavy frontend/backend directories that are mostly JS/HTML/CSS
 cobalt_frontend/** linguist-vendored
 cobalt_backend/** linguist-vendored
 cobalt_cloud/** linguist-vendored
 cobalt_embedded/** linguist-vendored   # if it has JS noise
 
-# Your existing vendored stuff (cleaned up a bit)
 *.py linguist-vendored
 *.ipynb linguist-vendored
 requirements.txt linguist-vendored
@@ -33,7 +28,6 @@ tools/** linguist-vendored
 notebooks/** linguist-vendored
 python_lab/** linguist-vendored
 
-# Other common noise
 Makefile linguist-vendored=false     # keep Makefile visible but small
 *.html linguist-vendored
 *.css linguist-vendored
@@ -41,6 +35,5 @@ Makefile linguist-vendored=false     # keep Makefile visible but small
 .DS_Store linguist-vendored
 *.lock linguist-vendored             # other lockfiles if any
 
-# Documentation / generated
 README.md linguist-documentation
 LICENSE linguist-documentation

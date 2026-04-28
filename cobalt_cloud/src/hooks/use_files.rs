@@ -40,7 +40,7 @@ impl FilesState {
     }
 }
 
-pub fn use_provide_files_context(auth: Signal<crate::hooks::use_auth::AuthState>) -> FilesState {
+pub fn use_provide_files_context(mut auth: Signal<crate::hooks::use_auth::AuthState>) -> FilesState {
     let files = use_signal(Vec::new);
     let pending_uploads = use_signal(Vec::new);
     let refresh = use_signal(|| 0);
@@ -53,13 +53,23 @@ pub fn use_provide_files_context(auth: Signal<crate::hooks::use_auth::AuthState>
         let _ = refresh(); // Track refresh counter
         let auth_val = auth.read();
         let token = auth_val.token.clone();
-        
+
+        // Don't fetch if not logged in
+        if token.is_none() {
+            return;
+        }
+
         spawn(async move {
             match api::list_files(token).await {
                 Ok(data) => files.set(data),
                 Err(e) => {
-                    eprintln!("Failed to fetch files: {}", e);
-                    // We could add an error signal to FilesState if we want to show it in UI
+                    let msg = e.to_string();
+                    eprintln!("Failed to fetch files: {}", msg);
+                    // If we get a 401, the token is expired — clear auth and force re-login
+                    if msg.contains("401") || msg.contains("Unauthorized") || msg.contains("expired") {
+                        auth.write().token = None;
+                        auth.write().username = None;
+                    }
                 }
             }
         });

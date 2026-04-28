@@ -6,7 +6,7 @@ use axum::{
     response::IntoResponse,
 };
 use uuid::Uuid;
-use crate::models::Claims;
+use crate::models::{Claims, FileMetadata};
 use serde_json::json;
 use crate::config::config::Config;
 use crate::services::storage::StorageService;
@@ -89,14 +89,14 @@ pub async fn list_files_handler(
     State(pool): State<sqlx::SqlitePool>,
     Extension(claims): Extension<Claims>,
 ) -> impl IntoResponse {
-    let files: () = match sqlx::query_as::<_, crate::models::FileMetadata>(
+    let files = match sqlx::query_as::<_, FileMetadata>(
         "SELECT id, filename, storage_path, owner_username, size_bytes, checksum, uploaded_at FROM files WHERE owner_username = ?"
     )
     .bind(&claims.sub)
     .fetch_all(&pool)
     .await {
         Ok(f) => f,
-        Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+        Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, format!("DB error: {}", e)).into_response(),
     };
 
     (

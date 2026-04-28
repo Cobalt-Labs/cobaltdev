@@ -130,7 +130,7 @@ pub fn HomePage() -> Element {
                                 div { class: "grid gap-4",
                                     for file in filtered_files.read().iter() {
                                         div { 
-                                            key: "{file.filename}",
+                                            key: "{file.id}",
                                             class: "group bg-zinc-900/40 backdrop-blur-2xl border border-white/5 p-6 rounded-3xl flex justify-between items-center hover:bg-zinc-800/40 hover:border-emerald-500/30 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-emerald-500/5",
                                             div { class: "flex items-center gap-5",
                                                 div { class: "w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-emerald-500/50 transition-colors",
@@ -139,7 +139,7 @@ pub fn HomePage() -> Element {
                                                 div {
                                                     p { class: "font-bold text-lg group-hover:text-emerald-400 transition-colors", "{file.filename}" }
                                                     p { class: "text-xs text-zinc-500 font-medium", 
-                                                        "{file.owner_username} • {file.uploaded_at.format(\"%b %d, %Y\")}" 
+                                                        "{file.owner_username} • {file.uploaded_at}" 
                                                     }
                                                 }
                                             }

@@ -11,17 +11,15 @@ pub struct User {
     pub created_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, FromRow, Clone)]
 pub struct FileMetadata {
-    pub id: Uuid,
+    pub id: String, // Changed to String to match DB TEXT
     pub filename: String,
     pub storage_path: String,
     pub owner_username: String,
     pub size_bytes: i64,
     pub checksum: String,
-    pub encrypted_checksum: String,
-    pub uploaded_at: DateTime<Utc>,
-    pub is_encrypted: bool,
+    pub uploaded_at: String, // Changed to String to match DB TEXT
 }
 
 #[derive(Debug, Deserialize)]

@@ -49,19 +49,19 @@ pub fn UploadDropzone() -> Element {
                     match crate::services::api::upload_file_bytes(file_name.clone(), bytes.to_vec(), token).await {
                         Ok(_) => {
                             prog.set(100);
-                            st.set("✅ File securely saved!".to_string());
-                            files_state.update_pending(&upload_id, 100, "Completed".to_string());
+                            st.set("File saved.".to_string());
+                            files_state.update_pending(&upload_id, 100, "Done".to_string());
                             files_state.refresh(); // Trigger immediate list refresh
                         }
                         Err(e) => {
                             prog.set(0);
-                            st.set(format!("❌ Failed API: {}", e));
+                            st.set(format!("Error: {}", e));
                             files_state.update_pending(&upload_id, 0, format!("Error: {}", e));
                         }
                     }
                 } else {
                     prog.set(0);
-                    st.set("❌ Could not read file content".to_string());
+                    st.set("Could not read file.".to_string());
                     files_state.update_pending(&upload_id, 0, "Read error".to_string());
                 }
 
@@ -103,16 +103,14 @@ pub fn UploadDropzone() -> Element {
 
     rsx! {
         label {
-            class: "block w-full border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 transform cursor-pointer relative overflow-hidden",
-            class: if is_dragging() { "border-emerald-400 bg-emerald-900/10 shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] scale-[1.02]" } else { "border-zinc-700/40 hover:border-zinc-500 hover:bg-zinc-900/40" },
+            class: "block w-full border-2 border-dashed rounded-xl p-10 text-center transition-colors duration-200 cursor-pointer",
+            class: if is_dragging() { "border-blue-500 bg-blue-500/5" } else { "border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800/50" },
             
-            // Critical: Drop events on the container
             ondragenter: ondragenter,
             ondragleave: ondragleave,
             ondragover: ondragover,
             ondrop: ondrop,
 
-            // The invisible input that fulfills the click transaction
             input {
                 r#type: "file",
                 multiple: true,
@@ -122,25 +120,25 @@ pub fn UploadDropzone() -> Element {
             }
 
             if uploading() {
-                div { class: "py-6 pointer-events-none",
-                    p { class: "text-lg text-emerald-100 font-medium tracking-wide mb-4", "{status}" }
-                    div { class: "w-full max-w-sm mx-auto bg-zinc-950/80 p-1 h-4 rounded-full overflow-hidden border border-white/5 shadow-inner",
+                div { class: "py-2 pointer-events-none",
+                    p { class: "text-sm text-zinc-300 mb-3", "{status}" }
+                    div { class: "w-full h-1.5 bg-zinc-700 rounded-full overflow-hidden",
                         div {
-                            class: "h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 ease-out relative overflow-hidden",
+                            class: "h-full bg-blue-500 rounded-full transition-all duration-500",
                             style: "width: {progress}%",
-                            div { class: "absolute inset-0 bg-white/20 blur-[2px] right-0 translate-x-1/2 w-8" }
                         }
                     }
                 }
             } else {
                 div { class: "pointer-events-none",
                     p {
-                        class: "text-6xl mb-6 transition-transform duration-300 drop-shadow-xl",
-                        class: if is_dragging() { "scale-110 -translate-y-2" } else { "text-zinc-600" },
-                        if is_dragging() { "☁️" } else { "⬆️" }
+                        class: "text-2xl mb-3",
+                        if is_dragging() { "📂" } else { "↑" }
                     }
-                    p { class: "text-2xl font-bold text-white mb-2 tracking-tight", "Secure Dropzone" }
-                    p { class: "text-zinc-400 font-medium", "Drag and drop files or click to instantly sync to your HDD" }
+                    p { class: "text-sm font-medium text-zinc-300 mb-1",
+                        if is_dragging() { "Drop to upload" } else { "Drop files here" }
+                    }
+                    p { class: "text-xs text-zinc-500", "or click to browse" }
                 }
             }
         }

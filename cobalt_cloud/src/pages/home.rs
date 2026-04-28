@@ -5,8 +5,9 @@ use crate::components::{Navbar, UploadDropzone};
 #[component]
 pub fn HomePage() -> Element {
     let files = use_files::use_files();
+    let files_state = crate::hooks::use_files::use_files_state();
     let mut search_query = use_signal(String::new);
-
+ 
     let filtered_files = use_memo(move || {
         let query = search_query().to_lowercase();
         files.read()
@@ -15,7 +16,7 @@ pub fn HomePage() -> Element {
             .cloned()
             .collect::<Vec<_>>()
     });
-
+ 
     rsx! {
         div { class: "min-h-screen bg-zinc-950 text-white font-sans selection:bg-emerald-500/30 selection:text-emerald-100",
             // Background Decorative Elements
@@ -23,12 +24,12 @@ pub fn HomePage() -> Element {
                 div { class: "absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] animate-pulse" }
                 div { class: "absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" }
             }
-
+ 
             div { class: "relative z-10",
                 Navbar {}
-
+ 
                 div { class: "max-w-6xl mx-auto px-6 py-12",
-
+ 
                     // Hero Section
                     div { class: "mb-16 text-center md:text-left",
                         div { class: "inline-block px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6 animate-in fade-in slide-in-from-bottom-2", 
@@ -41,11 +42,11 @@ pub fn HomePage() -> Element {
                             "End-to-end encrypted storage running directly on your local hardware. No middleman, no subscription, total control." 
                         }
                     }
-
+ 
                     // Main Content Grid
                     div { class: "grid lg:grid-cols-3 gap-10",
                         
-                        // Left Column: Upload & Stats
+                        // Left Column: Upload
                         div { class: "lg:col-span-1 space-y-8",
                             div { class: "sticky top-28 space-y-8",
                                 // Upload Zone
@@ -56,32 +57,6 @@ pub fn HomePage() -> Element {
                                     }
                                     UploadDropzone {}
                                     p { class: "text-zinc-500 text-[10px] mt-6 uppercase tracking-widest font-black text-center opacity-50", "Secure Local Transfer" }
-                                }
-
-                                // Storage Stats
-                                div { class: "bg-zinc-900/40 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-8 shadow-2xl",
-                                    h3 { class: "text-sm font-black text-zinc-500 uppercase tracking-widest mb-6", "Storage Quota" }
-                                    div { class: "space-y-6",
-                                        div {
-                                            div { class: "flex justify-between items-end mb-2",
-                                                span { class: "text-xs font-bold text-zinc-400", "Total Capacity" }
-                                                span { class: "text-sm font-black text-white", "1.2 TB" }
-                                            }
-                                            div { class: "h-2 bg-zinc-950 rounded-full overflow-hidden border border-white/5",
-                                                div { class: "h-full bg-emerald-500 w-[12%] shadow-[0_0_10px_rgba(16,185,129,0.3)]" }
-                                            }
-                                        }
-                                        div { class: "grid grid-cols-2 gap-4",
-                                            div {
-                                                p { class: "text-[10px] text-zinc-500 font-bold uppercase", "Used" }
-                                                p { class: "text-lg font-black text-emerald-400", "144 GB" }
-                                            }
-                                            div {
-                                                p { class: "text-[10px] text-zinc-500 font-bold uppercase", "Available" }
-                                                p { class: "text-lg font-black text-white", "1.05 TB" }
-                                            }
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -108,43 +83,41 @@ pub fn HomePage() -> Element {
                                     button { 
                                         class: "p-2 bg-zinc-900 rounded-lg border border-white/5 text-zinc-400 hover:text-white transition",
                                         onclick: move |_| {
-                                            let mut files_state = crate::hooks::use_files::use_files_state();
-                                            files_state.refresh();
+                                            let mut fs = files_state;
+                                            fs.refresh();
                                         },
                                         "🔄" 
                                     }
                                 }
                             }
-
+ 
                             // Active Uploads Section
-                            if let files_state = crate::hooks::use_files::use_files_state() {
-                                if !files_state.pending_uploads.read().is_empty() {
-                                    div { class: "mb-10 space-y-4",
-                                        h3 { class: "text-xs font-black text-emerald-500 uppercase tracking-[0.2em] ml-2", "Active Uploads" }
-                                        for upload in files_state.pending_uploads.read().iter() {
-                                            div { 
-                                                key: "{upload.id}",
-                                                class: "bg-emerald-500/5 border border-emerald-500/20 rounded-3xl p-6 animate-in fade-in slide-in-from-top-2",
-                                                div { class: "flex items-center justify-between mb-3",
-                                                    div { class: "flex items-center gap-3",
-                                                        span { class: "text-xl", "⏳" }
-                                                        p { class: "font-bold text-white", "{upload.filename}" }
-                                                    }
-                                                    span { class: "text-emerald-400 font-mono font-bold", "{upload.progress}%" }
+                            if !files_state.pending_uploads.read().is_empty() {
+                                div { class: "mb-10 space-y-4",
+                                    h3 { class: "text-xs font-black text-emerald-500 uppercase tracking-[0.2em] ml-2", "Active Uploads" }
+                                    for upload in files_state.pending_uploads.read().iter() {
+                                        div { 
+                                            key: "{upload.id}",
+                                            class: "bg-emerald-500/5 border border-emerald-500/20 rounded-3xl p-6 animate-in fade-in slide-in-from-top-2",
+                                            div { class: "flex items-center justify-between mb-3",
+                                                div { class: "flex items-center gap-3",
+                                                    span { class: "text-xl", "⏳" }
+                                                    p { class: "font-bold text-white", "{upload.filename}" }
                                                 }
-                                                div { class: "h-2 bg-zinc-950 rounded-full overflow-hidden border border-white/5",
-                                                    div { 
-                                                        class: "h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300",
-                                                        style: "width: {upload.progress}%"
-                                                    }
-                                                }
-                                                p { class: "text-[10px] text-zinc-500 mt-2 font-medium italic", "{upload.status}" }
+                                                span { class: "text-emerald-400 font-mono font-bold", "{upload.progress}%" }
                                             }
+                                            div { class: "h-2 bg-zinc-950 rounded-full overflow-hidden border border-white/5",
+                                                div { 
+                                                    class: "h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300",
+                                                    style: "width: {upload.progress}%"
+                                                }
+                                            }
+                                            p { class: "text-[10px] text-zinc-500 mt-2 font-medium italic", "{upload.status}" }
                                         }
                                     }
                                 }
                             }
-
+ 
                             if filtered_files.read().is_empty() {
                                 div { class: "bg-zinc-900/20 border-2 border-dashed border-white/5 rounded-[2.5rem] py-32 text-center group hover:border-emerald-500/20 transition-all duration-500",
                                     div { class: "w-20 h-20 bg-zinc-900 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-white/5 group-hover:scale-110 transition-transform duration-500",

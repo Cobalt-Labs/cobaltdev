@@ -4,7 +4,7 @@ use reqwest::{Client, Response};
 use uuid::Uuid;
 use chrono::Utc;
 
-const BACKEND_URL: &str = "http://127.0.0.1:8001";
+const BACKEND_URL: &str = "http://localhost:8001";
 
 pub async fn upload_file_bytes(filename: String, file_bytes: Vec<u8>, token: Option<String>) -> Result<()> {
     let client = Client::new();
@@ -72,15 +72,21 @@ pub async fn list_files(token: Option<String>) -> Result<Vec<crate::models::File
         req = req.bearer_auth(t);
     }
 
-    // FIX 1: Type annotation for the request send
     let resp: Response = req.send().await
         .map_err(|e| anyhow::anyhow!("Connection error: {}. (URL: {}/api/files)", e, BACKEND_URL))?;
     
-    // FIX 2: Explicitly turbofish the JSON type to avoid "multiple candidates" 
-    // and help the compiler distinguish your model.
-    let data = resp.json::<Vec<crate::models::FileMetadata>>().await?;
+    if !resp.status().is_success() {
+        let status = resp.status();
+        let err_text = resp.text().await.unwrap_or_else(|_| "Unknown error".to_string());
+        return Err(anyhow::anyhow!("Fetch failed ({}): {}", status, err_text));
+    }
+
+    let data: serde_json::Value = resp.json().await?;
+    let files = serde_json::from_value::<Vec<crate::models::FileMetadata>>(
+        data["files"].clone()
+    ).map_err(|e| anyhow::anyhow!("JSON Parse error: {}. Data: {}", e, data))?;
     
-    Ok(data)
+    Ok(files)
 }
 
 pub async fn login(username: String, password: String) -> Result<crate::hooks::use_auth::AuthState> {

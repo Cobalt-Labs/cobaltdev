@@ -26,18 +26,20 @@ pub fn UploadDropzone() -> Element {
                 .unwrap_or(original_name);
             
             let upload_id = Uuid::new_v4().to_string();
+            
+            // Add to pending state synchronously before spawning async task
+            // This ensures the UI updates INSTANTLY
+            files_state.add_pending(crate::hooks::use_files::PendingUpload {
+                id: upload_id.clone(),
+                filename: file_name.clone(),
+                progress: 5,
+                status: "Initializing...".to_string(),
+            });
 
             spawn(async move {
                 up.set(true);
                 prog.set(5);
                 st.set(format!("Opening connection for {}...", file_name));
-                
-                files_state.add_pending(crate::hooks::use_files::PendingUpload {
-                    id: upload_id.clone(),
-                    filename: file_name.clone(),
-                    progress: 5,
-                    status: "Connecting...".to_string(),
-                });
 
                 if let Ok(bytes) = file.read_bytes().await {
                     prog.set(40);

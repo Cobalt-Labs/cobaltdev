@@ -15,31 +15,42 @@ pub async fn upload_file_handler(
     State(pool): State<sqlx::SqlitePool>,
     Extension(claims): Extension<Claims>,
     mut multipart: Multipart,
-) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let config = Config::load().map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+) -> impl IntoResponse {
+    let config = match Config::load() {
+        Ok(c) => c,
+        Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    };
     let storage = StorageService::new(config.storage_base_path.clone());
 
     let mut filename = String::new();
 
-    while let Some(field) = multipart.next_field().await.map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()))? {
+    while let Ok(Some(field)) = multipart.next_field().await {
         let name = field.file_name().unwrap_or("unknown").to_string();
         filename = name.clone();
 
-        let data = field.bytes().await.map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        let data = match field.bytes().await {
+            Ok(d) => d,
+            Err(e) => return (StatusCode::BAD_REQUEST, e.to_string()).into_response(),
+        };
 
         let temp_path = format!("/tmp/{}", name);
-        tokio::fs::write(&temp_path, &data).await
-            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        if let Err(e) = tokio::fs::write(&temp_path, &data).await {
+            return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response();
+        }
 
-        let file = tokio::fs::File::open(&temp_path).await
-            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        let file = match tokio::fs::File::open(&temp_path).await {
+            Ok(f) => f,
+            Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+        };
 
-        let (storage_path, checksum, size_bytes) = storage.upload_file(&claims.sub, &name, file).await
-            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        let (storage_path, checksum, size_bytes) = match storage.upload_file(&claims.sub, &name, file).await {
+            Ok(res) => res,
+            Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+        };
         
         let file_id = Uuid::new_v4().to_string();
 
-        sqlx::query(
+        if let Err(e) = sqlx::query(
             "INSERT INTO files (id, filename, storage_path, owner_username, size_bytes, checksum, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
         )
         .bind(&file_id)
@@ -50,8 +61,9 @@ pub async fn upload_file_handler(
         .bind(&checksum)
         .bind(chrono::Utc::now().to_rfc3339())
         .execute(&pool)
-        .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("DB error: {}", e)))?;
+        .await {
+            return (StatusCode::INTERNAL_SERVER_ERROR, format!("DB error: {}", e)).into_response();
+        }
         
         println!("Secure upload: {} → {}", name, storage_path);
     }
@@ -73,6 +85,30 @@ pub async fn upload_file_handler(
     ).into_response()
 }
 
-pub async fn list_files_handler() -> Json<serde_json::Value> {
-    Json(json!({"status": "ok", "files": []}))
+pub async fn list_files_handler(
+    State(pool): State<sqlx::SqlitePool>,
+    Extension(claims): Extension<Claims>,
+) -> impl IntoResponse {
+    let files: () = match sqlx::query_as::<_, crate::models::FileMetadata>(
+        "SELECT id, filename, storage_path, owner_username, size_bytes, checksum, uploaded_at FROM files WHERE owner_username = ?"
+    )
+    .bind(&claims.sub)
+    .fetch_all(&pool)
+    .await {
+        Ok(f) => f,
+        Err(e) => return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    };
+
+    (
+        StatusCode::OK,
+        [
+            ("Access-Control-Allow-Origin", "*"),
+            ("Access-Control-Allow-Methods", "GET, OPTIONS"),
+            ("Access-Control-Allow-Headers", "Content-Type, Authorization"),
+        ],
+        Json(json!({
+            "status": "success",
+            "files": files
+        }))
+    ).into_response()
 }

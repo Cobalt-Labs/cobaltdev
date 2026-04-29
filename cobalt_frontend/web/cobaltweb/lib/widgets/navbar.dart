@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -30,46 +29,19 @@ class _NavbarState extends State<Navbar> {
           }
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent,
-            border: Border.all(
-              color: isActive ? const Color(0xFF10B981).withOpacity(0.5) : Colors.transparent,
-              width: 1,
-            ),
+            borderRadius: BorderRadius.circular(8),
+            color: isActive ? Colors.white.withOpacity(0.08) : Colors.transparent,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isActive) ...[
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF10B981),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF10B981),
-                        blurRadius: 6,
-                        spreadRadius: 2,
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-              ],
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                  color: isActive ? Colors.white : Colors.white70,
-                ),
-              ),
-            ],
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
+              color: isActive ? Colors.white : Colors.white70,
+            ),
           ),
         ),
       ),
@@ -81,93 +53,63 @@ class _NavbarState extends State<Navbar> {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 900;
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: isMobile ? 24 : 40,
-              vertical: 16,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0F0F13).withOpacity(0.5),
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.1),
-                width: 1,
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 40,
+        vertical: 16,
+      ),
+      decoration: const BoxDecoration(
+        color: Color(0xFF18181B), // zinc-900
+        border: Border(bottom: BorderSide(color: Color(0xFF27272A))), // border-zinc-800
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Wordmark logo without emojis
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => Navigator.pushReplacementNamed(context, '/'),
+              child: const Text(
+                "Cobalt Cloud",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  letterSpacing: -0.3,
+                ),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+
+          if (!isMobile)
+            Row(
               children: [
-                // Logo
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/cobalt_logo.png',
-                        height: 36,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const SizedBox(),
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
-                        "Cobalt",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF10B981),
-                        ),
-                      ),
-                      const Text(
-                        "Dev",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                if (!isMobile)
-                  Row(
-                    children: [
-                      navItem("Home", "/"),
-                      const SizedBox(width: 12),
-                      navItem("Services", "/services"),
-                      const SizedBox(width: 12),
-                      navItem("Products", "/products"),
-                      const SizedBox(width: 12),
-                      navItem("Cloud", "/cloud"),
-                      const SizedBox(width: 12),
-                      navItem("Portfolio", "/portfolio"),
-                      const SizedBox(width: 12),
-                      navItem("About", "/about"),
-                      const SizedBox(width: 12),
-                      navItem("Contact", "/contact"),
-                    ],
-                  ),
-
-                // Mobile Menu Button
-                if (isMobile)
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                    ),
-                  ),
+                navItem("Home", "/"),
+                const SizedBox(width: 4),
+                navItem("Services", "/services"),
+                const SizedBox(width: 4),
+                navItem("Products", "/products"),
+                const SizedBox(width: 4),
+                navItem("Cloud", "/cloud"),
+                const SizedBox(width: 4),
+                navItem("Portfolio", "/portfolio"),
+                const SizedBox(width: 4),
+                navItem("About", "/about"),
+                const SizedBox(width: 4),
+                navItem("Contact", "/contact"),
               ],
             ),
-          ),
-        ),
+
+          // Mobile Menu Button
+          if (isMobile)
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, color: Colors.white70),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+        ],
       ),
     );
   }

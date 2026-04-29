@@ -19,16 +19,16 @@ class CobaltDevApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CobaltDev — Flutter + Rust',
+      title: 'CobaltDev',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF10B981),
-        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+        primaryColor: const Color(0xFF6366F1), // Indigo instead of Emerald
+        scaffoldBackgroundColor: const Color(0xFF18181B), // Zinc 900
         fontFamily: 'Inter',
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
-          headlineMedium: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
-          bodyLarge: TextStyle(fontSize: 18, color: Colors.white70),
+          headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
+          headlineMedium: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
+          bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
         ),
         fontFamilyFallback: const ['Noto Color Emoji'],
       ),
@@ -65,20 +65,17 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: const Color(0xFF111111),
+        backgroundColor: const Color(0xFF18181B),
         child: ListView(
+          padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/cobalt_logo.png',
-                    height: 36,
-                    errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text("CobaltDev", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF10B981))),
-                ],
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFF27272A))),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Cobalt Cloud", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
               ),
             ),
             _drawerItem(context, "Home", "/"),
@@ -105,21 +102,16 @@ class MainLayout extends StatelessWidget {
     final isActive = currentRoute == route;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        tileColor: isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent,
-        leading: Icon(
-          isActive ? Icons.chevron_right : Icons.circle,
-          size: isActive ? 24 : 12,
-          color: isActive ? const Color(0xFF10B981) : Colors.white24,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        tileColor: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
         title: Text(
           title,
           style: TextStyle(
-            color: isActive ? const Color(0xFF10B981) : Colors.white70,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-            fontSize: 18,
+            color: isActive ? Colors.white : Colors.white70,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+            fontSize: 15,
           ),
         ),
         onTap: () {

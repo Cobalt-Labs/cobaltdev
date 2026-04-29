@@ -12,9 +12,10 @@ class AboutPage extends StatelessWidget {
     final isMobile = width < 700;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF18181B), // zinc-900
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 40 : 80),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 40 : 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -25,14 +26,16 @@ class AboutPage extends StatelessWidget {
                     Text(
                       "About Me",
                       style: TextStyle(
-                        fontSize: isDesktop ? 58 : 42,
-                        fontWeight: FontWeight.bold,
+                        fontSize: isDesktop ? 48 : 36,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -1,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
                     const Text(
-                      "7 years of grinding. From hating JavaScript to falling in love with Rust.",
-                      style: TextStyle(fontSize: 22, color: Colors.white70),
+                      "From simple interfaces to highly optimized Rust backends.",
+                      style: TextStyle(fontSize: 18, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -45,45 +48,43 @@ class AboutPage extends StatelessWidget {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 800),
                     child: GlassCard(
-                      child: Padding(
-                        padding: EdgeInsets.all(isMobile ? 30 : 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "My Journey",
-                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF10B981)),
-                            ),
-                            const SizedBox(height: 20),
-                            const Text(
-                              "I've been programming for over 7 years. What started as simple mobile applications turned into a deep passion for system-level programming and highly optimized backends.\n\nToday, I build seamless, native-feeling experiences using Flutter and power them with unyielding Rust backends.",
-                              style: TextStyle(fontSize: 18, color: Colors.white70, height: 1.8),
-                            ),
-                            const SizedBox(height: 24),
-                            const Text(
-                              "Currently, I'm focused on Cobalt Cloud—a self-hosted platform running on raw Rust—and building cross-platform Dioxus frontend apps.",
-                              style: TextStyle(fontSize: 18, color: Colors.white70, height: 1.8),
-                            ),
-                          ],
-                        ),
+                      padding: EdgeInsets.all(isMobile ? 32 : 48),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "My Journey",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: -0.5),
+                          ),
+                          const SizedBox(height: 24),
+                          const Text(
+                            "I've been programming for over 7 years. What started as simple mobile applications turned into a deep passion for system-level programming and highly optimized backends.\n\nToday, I build seamless, native-feeling experiences using Flutter and power them with unyielding Rust backends.",
+                            style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.7),
+                          ),
+                          const SizedBox(height: 24),
+                          const Text(
+                            "Currently, I'm focused on Cobalt Cloud—a self-hosted platform running on raw Rust—and building cross-platform Dioxus frontend apps.",
+                            style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.7),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 80),
 
               // Quick Stats
               AnimatedSection(
                 child: Wrap(
-                  spacing: 30,
-                  runSpacing: 30,
+                  spacing: 24,
+                  runSpacing: 24,
                   alignment: WrapAlignment.center,
                   children: [
                     _statCard(context, "7+", "Years Coding"),
                     _statCard(context, "10+", "Production Apps"),
-                    _statCard(context, "100%", "Rust-pilled"),
+                    _statCard(context, "100%", "Rust Backend"),
                   ],
                 ),
               ),
@@ -97,20 +98,18 @@ class AboutPage extends StatelessWidget {
   Widget _statCard(BuildContext context, String number, String label) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 400 ? sw - 40 : 200,
+      width: sw < 400 ? sw - 48 : 200,
       child: GlassCard(
-        child: Padding(
-          padding: EdgeInsets.all(sw < 400 ? 16 : 24),
-          child: Column(
-            children: [
-              Text(
-                number,
-                style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Color(0xFF10B981)),
-              ),
-              const SizedBox(height: 8),
-              Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: Colors.white70)),
-            ],
-          ),
+        padding: EdgeInsets.all(sw < 400 ? 24 : 32),
+        child: Column(
+          children: [
+            Text(
+              number,
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xFF6366F1), letterSpacing: -1), // Indigo
+            ),
+            const SizedBox(height: 8),
+            Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: Colors.white70, fontWeight: FontWeight.w500)),
+          ],
         ),
       ),
     );

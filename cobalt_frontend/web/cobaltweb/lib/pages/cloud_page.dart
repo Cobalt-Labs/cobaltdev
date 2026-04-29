@@ -46,7 +46,7 @@ class _CloudPageState extends State<CloudPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Uploaded $name successfully! ($dropCount/$dropLimit)"),
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: const Color(0xFF4F46E5), // Indigo
       ),
     );
   }
@@ -58,9 +58,10 @@ class _CloudPageState extends State<CloudPage> {
     final isMobile = width < 700;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF18181B),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 40 : 80),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 40 : 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,27 +70,30 @@ class _CloudPageState extends State<CloudPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Cobalt Cloud ☁️",
+                      "Cobalt Cloud",
                       style: TextStyle(
-                        fontSize: isDesktop ? 62 : 48,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF10B981),
+                        fontSize: isDesktop ? 48 : 36,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -1,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     const Text(
-                      "A self-hosted private cloud infrastructure built with Rust & Dioxus.",
-                      style: TextStyle(fontSize: 22, color: Colors.white70),
+                      "A self-hosted private cloud infrastructure built with Rust.",
+                      style: TextStyle(fontSize: 18, color: Colors.white70),
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton.icon(
                       onPressed: _openGithub,
-                      icon: const Icon(Icons.code),
-                      label: const Text("View on GitHub"),
+                      icon: const Icon(Icons.code, size: 18),
+                      label: const Text("View on GitHub", style: TextStyle(fontWeight: FontWeight.w500)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
-                        foregroundColor: Colors.black,
+                        backgroundColor: const Color(0xFF27272A), // zinc-800
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        elevation: 0,
                       ),
                     ),
                   ],
@@ -104,19 +108,19 @@ class _CloudPageState extends State<CloudPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Try it out (Demo)",
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      "Upload Files",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Drag and drop files here. Limit: $dropLimit files.",
-                      style: const TextStyle(color: Colors.white54),
+                      "Drag and drop files here to upload to the local node.",
+                      style: const TextStyle(color: Colors.white54, fontSize: 15),
                     ),
                     const SizedBox(height: 24),
                     Stack(
                       children: [
                         SizedBox(
-                          height: 250,
+                          height: 200,
                           child: DropzoneView(
                             operation: DragOperation.copy,
                             cursor: CursorType.Default,
@@ -128,15 +132,17 @@ class _CloudPageState extends State<CloudPage> {
                         ),
                         IgnorePointer(
                           child: Container(
-                            height: 250,
+                            height: 200,
                             decoration: BoxDecoration(
                               color: isHighlighted 
-                                ? const Color(0xFF10B981).withOpacity(0.1) 
-                                : Colors.white.withOpacity(0.03),
-                              borderRadius: BorderRadius.circular(24),
+                                ? const Color(0xFF27272A) // zinc-800
+                                : const Color(0xFF18181B), // zinc-900
+                              borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: isHighlighted ? const Color(0xFF10B981) : Colors.white10,
-                                width: 2,
+                                color: isHighlighted ? const Color(0xFF6366F1) : const Color(0xFF3F3F46), // zinc-700
+                                width: 1,
+                                // Dashed effect visually isn't native to basic Border without custom painter, 
+                                // so we use a solid flat border with Vercel aesthetic
                                 style: BorderStyle.solid,
                               ),
                             ),
@@ -146,22 +152,23 @@ class _CloudPageState extends State<CloudPage> {
                                 children: [
                                   Icon(
                                     Icons.cloud_upload_outlined,
-                                    size: 64,
-                                    color: isHighlighted ? const Color(0xFF10B981) : Colors.white24,
+                                    size: 32,
+                                    color: isHighlighted ? const Color(0xFF6366F1) : Colors.white38,
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
-                                    isHighlighted ? "Drop it!" : "Drag files here",
+                                    isHighlighted ? "Drop file to upload" : "Select or drag files",
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      color: isHighlighted ? const Color(0xFF10B981) : Colors.white38,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: isHighlighted ? Colors.white : Colors.white70,
                                     ),
                                   ),
                                   if (dropCount > 0) ...[
                                     const SizedBox(height: 12),
                                     Text(
                                       "$dropCount / $dropLimit uploaded",
-                                      style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.bold),
+                                      style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w500, fontSize: 13),
                                     ),
                                   ]
                                 ],
@@ -174,11 +181,14 @@ class _CloudPageState extends State<CloudPage> {
                     if (uploadedFiles.isNotEmpty) ...[
                       const SizedBox(height: 20),
                       Wrap(
-                        spacing: 10,
-                        children: uploadedFiles.map((f) => Chip(
-                          label: Text(f),
-                          backgroundColor: Colors.white10,
-                          labelStyle: const TextStyle(color: Colors.white70),
+                        spacing: 8,
+                        children: uploadedFiles.map((f) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF27272A), // zinc-800
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(f, style: const TextStyle(color: Colors.white70, fontSize: 13)),
                         )).toList(),
                       ),
                     ]
@@ -189,65 +199,26 @@ class _CloudPageState extends State<CloudPage> {
               const SizedBox(height: 80),
 
               Wrap(
-                spacing: 30,
-                runSpacing: 40,
+                spacing: 24,
+                runSpacing: 24,
                 children: [
                   _featureCard(context,
                     "Frontend (Dioxus)",
-                    "A cross-platform Rust frontend framework used to create the client-side app. Enables smooth drag & drop folder uploading.",
-                    "💻",
+                    "A cross-platform Rust frontend framework used to create the client-side app. Enables smooth drag & drop.",
                   ),
                   _featureCard(context,
                     "Backend (Axum)",
-                    "High performance backend API running in Rust using Axum and object_store to handle file streaming and chunked uploads.",
-                    "🦀",
+                    "High performance backend API running in Rust using Axum and object_store.",
                   ),
                   _featureCard(context,
                     "Self-Hosted",
-                    "Designed to run on your own hardware. Your data stays on your local hard drive, giving you full control and privacy.",
-                    "🔒",
-                  ),
-                  _featureCard(context,
-                    "Desktop & Web",
-                    "Dioxus compiles effortlessly into blazingly fast desktop and web applications native to your system.",
-                    "⚡",
+                    "Designed to run on your own hardware. Your data stays on your local hard drive.",
                   ),
                 ],
               ),
               
-              const SizedBox(height: 120),
+              const SizedBox(height: 80),
 
-              Center(
-                child: GlassCard(
-                  child: Padding(
-                    padding: EdgeInsets.all(isMobile ? 30 : 40),
-                    child: Column(
-                      children: [
-                         const Text(
-                          "Ready to take back your data?",
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "Check out the project structure in the repository. Star ⭐ the project if you find it helpful!",
-                          style: TextStyle(fontSize: 16, color: Colors.white70),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        OutlinedButton(
-                          onPressed: _openGithub,
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF10B981),
-                            side: const BorderSide(color: Color(0xFF10B981)),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                          ),
-                          child: const Text("Deploy Cobalt Cloud"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -255,23 +226,19 @@ class _CloudPageState extends State<CloudPage> {
     );
   }
 
-  Widget _featureCard(BuildContext context, String title, String desc, String emoji) {
+  Widget _featureCard(BuildContext context, String title, String desc) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 40 : 380,
+      width: sw < 450 ? sw - 48 : 340,
       child: GlassCard(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 42)),
-              const SizedBox(height: 16),
-              Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 12),
-              Text(desc, style: const TextStyle(color: Colors.white70, height: 1.5)),
-            ],
-          ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 12),
+            Text(desc, style: const TextStyle(color: Colors.white70, height: 1.5, fontSize: 15)),
+          ],
         ),
       ),
     );

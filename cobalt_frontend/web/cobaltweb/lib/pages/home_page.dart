@@ -26,185 +26,132 @@ class _HomePageState extends State<HomePage> {
     final isMobile = width <= 700;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF18181B), // zinc-900
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 🔥 HERO SECTION
+            // HERO SECTION
             SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  // Background gradient
-                  Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF0A0A0A),
-                          Color(0xFF111111),
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48),
+                    child: AnimatedSection(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Ibrahim Haji",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 64 : isTablet ? 48 : 40,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -1,
+                              height: 1.1,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Flutter + Rust Developer",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 28 : 22,
+                              color: const Color(0xFF6366F1), // Indigo
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+
+                          const Text(
+                            "Building production-grade mobile apps, high-performance backends, and private cloud infrastructure with Flutter & Rust.",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              height: 1.6,
+                            ),
+                          ),
+
+                          const SizedBox(height: 48),
+
+                          Wrap(
+                            spacing: 16,
+                            runSpacing: 16,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pushReplacementNamed(context, '/portfolio'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF4F46E5), // Indigo 600
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                  elevation: 0, // Flat
+                                ),
+                                child: const Text("View My Work", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                              ),
+                              OutlinedButton(
+                                onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  side: const BorderSide(color: Color(0xFF3F3F46)), // zinc-700
+                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                                child: const Text("Let's Talk", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
                   ),
-
-                  Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 1200),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40),
-                        child: AnimatedSection(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Ibrahim Haji",
-                                style: TextStyle(
-                                  fontSize: isDesktop ? 68 : isTablet ? 52 : 42,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.1,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                "Flutter + Rust Developer",
-                                style: TextStyle(
-                                  fontSize: isDesktop ? 32 : 24,
-                                  color: const Color(0xFF10B981),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-
-                              const Text(
-                                "Building production-grade mobile apps, high-performance backends, and private cloud infrastructure with Flutter & Rust.",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white70,
-                                  height: 1.6,
-                                ),
-                              ),
-
-                              const SizedBox(height: 50),
-
-                              Wrap(
-                                spacing: 20,
-                                runSpacing: 20,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pushReplacementNamed(context, '/portfolio'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF10B981),
-                                      foregroundColor: Colors.black,
-                                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                                    ),
-                                    child: const Text("View My Work", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: Colors.white54),
-                                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                                    ),
-                                    child: const Text("Let's Talk", style: TextStyle(fontSize: 18)),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 80),
-
-                              // Trust signals
-                              Wrap(
-                                spacing: 40,
-                                runSpacing: 20,
-                                children: const [
-                                  Text("7+ Years Experience", style: TextStyle(color: Colors.white70)),
-                                  Text("Flutter • Rust • Axum", style: TextStyle(color: Colors.white70)),
-                                  Text("Private Cloud Infra", style: TextStyle(color: Colors.white70)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
 
-            // 🔥 FEATURED WORK
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40, vertical: isMobile ? 60 : 100),
+            // FEATURED WORK
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 60 : 100),
+              color: const Color(0xFF18181B), // uniform background
               child: AnimatedSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Featured Projects",
-                      style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, letterSpacing: -0.5),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     const Text(
                       "Real stuff I've built with passion",
-                      style: TextStyle(fontSize: 20, color: Colors.white70),
+                      style: TextStyle(fontSize: 18, color: Colors.white70),
                     ),
-                    const SizedBox(height: 60),
+                    const SizedBox(height: 48),
 
                     Wrap(
-                      spacing: 30,
-                      runSpacing: 30,
+                      spacing: 24,
+                      runSpacing: 24,
                       children: [
                         _projectCard(context,
                           "Secure Journal",
                           "CLI + Dioxus + Axum + SQLx",
-                          "A private journaling app with end-to-end encryption and Rust backend",
+                          "A private journaling app with end-to-end encryption and Rust backend.",
                           "https://github.com/Cobalt-Labs/cobalt_journal",
                         ),
                         _projectCard(context,
                           "Cobalt Cloud",
                           "Rust Backend + Dioxus Frontend",
-                          "Self-hosted private cloud running on my laptop HDD",
+                          "Self-hosted private cloud running on my laptop HDD.",
                           "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
                         ),
                         _projectCard(context,
-                          "Flutter + Rust FFI Apps-Encrypt-Notepad",
+                          "Encrypt Notepad",
                           "Hybrid Mobile + Desktop",
-                          "Production apps using Flutter frontend + Rust core via FFI",
+                          "Production apps using Flutter frontend + Rust core via FFI.",
                           "https://github.com/ibrahim-3595/Encrypt-Notepad",
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // 🔥 WHY ME SECTION
-            Container(
-              color: const Color(0xFF111111),
-              padding: EdgeInsets.symmetric(vertical: isMobile ? 60 : 100, horizontal: isMobile ? 20 : 40),
-              child: AnimatedSection(
-                child: Column(
-                  children: [
-                    const Text(
-                      "Why Work With Me?",
-                      style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 60),
-                    Wrap(
-                      spacing: 40,
-                      runSpacing: 40,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        _whyCard(context, "⚡", "Blazing Fast", "Rust performance + Flutter smoothness"),
-                        _whyCard(context, "🔒", "Production Grade", "Clean architecture & error handling"),
-                        _whyCard(context, "🛠️", "Full-Stack", "From UI to backend to infra"),
-                        _whyCard(context, "🌍", "Cross Platform", "Mobile, Desktop, Web, Cloud"),
                       ],
                     ),
                   ],
@@ -215,11 +162,11 @@ class _HomePageState extends State<HomePage> {
             // FOOTER
             Container(
               padding: const EdgeInsets.all(60),
-              color: Colors.black,
+              color: const Color(0xFF09090B), // zinc-950
               child: const Center(
                 child: Text(
-                  "© 2026 CobaltDev • Built with Flutter & Rust",
-                  style: TextStyle(color: Colors.white54),
+                  "© 2026 CobaltDev",
+                  style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
             ),
@@ -232,48 +179,20 @@ class _HomePageState extends State<HomePage> {
   Widget _projectCard(BuildContext context, String title, String subtitle, String desc, String url) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 40 : 380,
+      width: sw < 450 ? sw - 48 : 360,
       child: GlassCard(
         onTap: () => _openLink(url),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 180,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1F1F1F),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Center(
-                child: Icon(Icons.code, size: 60, color: Color(0xFF10B981)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
-            Text(subtitle, style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w500)),
-            const SizedBox(height: 12),
-            Text(desc, style: const TextStyle(color: Colors.white70, height: 1.5)),
-            const SizedBox(height: 20),
-            const Text("View Project →", style: TextStyle(color: Color(0xFF10B981))),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _whyCard(BuildContext context, String emoji, String title, String desc) {
-    final sw = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: sw < 320 ? sw - 40 : 280,
-      child: GlassCard(
-        child: Column(
-          children: [
-            Text(emoji, style: const TextStyle(fontSize: 48)),
+            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
+            Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF6366F1), fontWeight: FontWeight.w500)),
             const SizedBox(height: 16),
-            Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Text(desc, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+            Text(desc, style: const TextStyle(color: Colors.white70, height: 1.5, fontSize: 15)),
+            const SizedBox(height: 24),
+            const Text("View Project →", style: TextStyle(color: Color(0xFF6366F1), fontSize: 14, fontWeight: FontWeight.w500)),
           ],
         ),
       ),

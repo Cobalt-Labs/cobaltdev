@@ -8,7 +8,7 @@ pub struct Config {
     pub storage_base_path: String,
     pub db_path: String,
     pub server_port: u16,
-    pub default_user: String,
+    pub _default_user: String,
     pub jwt_secret: String,
     pub encryption_key: String,
 }
@@ -45,7 +45,7 @@ impl Config {
                 .unwrap_or("8080".to_string())
                 .parse()
                 .map_err(|e| anyhow::anyhow!("Invalid SERVER_PORT: {}", e))?,
-            default_user: "ibrahim3595".to_string(),
+            _default_user: "ibrahim3595".to_string(),
             jwt_secret: env::var("JWT_SECRET").unwrap_or_else(|_| {
                 eprintln!(
                     "WARNING: Using default JWT secret. Set JWT_SECRET in .env for production!"

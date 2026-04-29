@@ -8,14 +8,14 @@ use bytes::Bytes;
 
 pub struct StorageService {
     store: Arc<LocalFileSystem>,
-    base_path: String,
+    _base_path: String,
 }
 
 impl StorageService {
-    pub fn new(base_path: String) -> Self {
-        let store = Arc::new(LocalFileSystem::new_with_prefix(&base_path)
+    pub fn new(_base_path: String) -> Self {
+        let store = Arc::new(LocalFileSystem::new_with_prefix(&_base_path)
             .expect("Failed to create local store"));
-        Self { store, base_path }
+        Self { store, _base_path }
     }
 
     pub async fn upload_file(

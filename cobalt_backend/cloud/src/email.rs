@@ -5,7 +5,6 @@ use lettre::{
 };
 
 pub async fn send_email(name: String, email: String, message: String) -> Result<(), String> {
-    // Build sender and recipient properly
     let from = Mailbox::new(
         Some("CobaltDev".to_string()),
         "ibrahim.haji.3595@gmail.com".parse().map_err(|e| format!("Invalid from address: {}", e))?,
@@ -39,6 +38,6 @@ pub async fn send_email(name: String, email: String, message: String) -> Result<
     mailer.send(email_msg).await
         .map_err(|e| format!("Failed to send email: {}", e))?;
 
-    println!("✅ Email sent successfully from contact form!");
+    println!("Email sent successfully from contact form!");
     Ok(())
 }

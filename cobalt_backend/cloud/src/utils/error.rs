@@ -1,7 +1,3 @@
-// errors.rs
-// Why: Axum requires errors to implement IntoResponse.
-// This lets every layer of your app use `?` and get proper HTTP errors.
-
 use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},

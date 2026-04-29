@@ -106,7 +106,6 @@ pub async fn forgot_password(
     let username = payload.get("username").and_then(|v| v.as_str()).unwrap_or("unknown");
     println!("Password reset requested for: {}", username);
     
-    // In a real app, we'd check if user exists and send an email
     Ok(Json(json!({
         "status": "success",
         "message": "If that username exists, a reset link has been sent to the registered email."

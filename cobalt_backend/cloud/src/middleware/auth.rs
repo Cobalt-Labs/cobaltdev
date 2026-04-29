@@ -26,8 +26,6 @@ pub async fn auth_middleware(
     let config = crate::config::config::Config::load()
         .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Config loading error".into()))?;
 
-    // Validate JWT — disable audience check since we don't use the aud claim.
-    // jsonwebtoken v10 requires this to be explicitly disabled.
     let mut validation = Validation::default();
     validation.validate_aud = false;
 

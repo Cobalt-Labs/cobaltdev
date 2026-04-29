@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
@@ -13,13 +12,13 @@ pub struct User {
 
 #[derive(Debug, Serialize, Deserialize, FromRow, Clone)]
 pub struct FileMetadata {
-    pub id: String, // Changed to String to match DB TEXT
+    pub id: String,
     pub filename: String,
     pub storage_path: String,
     pub owner_username: String,
     pub size_bytes: i64,
     pub checksum: String,
-    pub uploaded_at: String, // Changed to String to match DB TEXT
+    pub uploaded_at: String,
 }
 
 #[derive(Debug, Deserialize)]

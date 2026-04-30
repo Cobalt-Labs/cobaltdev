@@ -80,7 +80,6 @@ impl TextDataset {
         let mut target_data = Vec::with_capacity(batch_size * seq_len);
         
         for _ in 0..batch_size {
-            // Cheap psuedorandom seed jump
             self.seed = self.seed.wrapping_add(1308721);
             let start_idx = self.seed % max_idx;
             let end_idx = start_idx + seq_len;

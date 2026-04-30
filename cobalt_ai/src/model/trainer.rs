@@ -13,12 +13,12 @@ pub fn train<B: AutodiffBackend>(device: B::Device) {
     // Hyperparameters
     let batch_size = 32;
     let seq_len = 128;
-    let num_epochs = 5;
+    let num_epochs = 20; //5
     let d_model = 256;
     let n_layers = 4;
     let n_heads = 4;
     let learning_rate = 1e-3;
-    let iterations_per_epoch = 50; // Keep it super tiny for swift demonstration
+    let iterations_per_epoch = 500; //50
 
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
     let mut model: crate::model::transformer::CobaltModel<B> = config.init(&device);
@@ -47,8 +47,11 @@ pub fn train<B: AutodiffBackend>(device: B::Device) {
             
             model = optimizer.step(learning_rate, model, grads);
 
-            if i == iterations_per_epoch - 1 {
-                println!("Epoch {} completed - Final Batch Loss: {}", epoch, loss);
+            // if i == iterations_per_epoch - 1 {
+            //     println!("Epoch {} completed - Final Batch Loss: {}", epoch, loss);
+            // }
+            if i % 10 == 0 {
+                println!("Epoch {:>2} | Iter {:>4} | Loss: {:.4}", epoch, i, loss);
             }
         }
     }

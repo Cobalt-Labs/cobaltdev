@@ -81,8 +81,6 @@ class _NavbarState extends State<Navbar> {
                     const SizedBox(width: 8),
                     NavItem(title: "Products", route: "/products", currentRoute: currentRoute),
                     const SizedBox(width: 8),
-                    NavItem(title: "Cloud", route: "/cloud", currentRoute: currentRoute),
-                    const SizedBox(width: 8),
                     NavItem(title: "Portfolio", route: "/portfolio", currentRoute: currentRoute),
                     const SizedBox(width: 8),
                     NavItem(title: "About", route: "/about", currentRoute: currentRoute),

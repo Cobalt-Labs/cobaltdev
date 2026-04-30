@@ -5,7 +5,6 @@ import 'pages/product_page.dart';
 import 'pages/portfolio_page.dart';
 import 'pages/about_page.dart';
 import 'pages/contact_page.dart';
-import 'pages/cloud_page.dart';
 import 'widgets/navbar.dart';
 
 void main() {
@@ -40,7 +39,6 @@ class CobaltDevApp extends StatelessWidget {
           case '/about': page = const AboutPage(); break;
           case '/services': page = const ServicesPage(); break;
           case '/products': page = const ProductsPage(); break;
-          case '/cloud': page = const CloudPage(); break;
           case '/portfolio': page = const PortfolioPage(); break;
           case '/contact': page = const ContactPage(); break;
           default: page = const HomePage(); break;
@@ -88,7 +86,6 @@ class MainLayout extends StatelessWidget {
             _drawerItem(context, "Home", "/"),
             _drawerItem(context, "Services", "/services"),
             _drawerItem(context, "Products", "/products"),
-            _drawerItem(context, "Cloud", "/cloud"),
             _drawerItem(context, "Portfolio", "/portfolio"),
             _drawerItem(context, "About", "/about"),
             _drawerItem(context, "Contact", "/contact"),

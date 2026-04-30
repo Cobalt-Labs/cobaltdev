@@ -44,19 +44,30 @@ class _NavbarState extends State<Navbar> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () => Navigator.pushReplacementNamed(context, '/'),
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF818CF8)],
-                    ).createShader(bounds),
-                    child: const Text(
-                      "CobaltDev",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/cobalt_logo.png',
+                        height: 28,
+                        width: 28,
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF818CF8)],
+                        ).createShader(bounds),
+                        child: const Text(
+                          "CobaltDev",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

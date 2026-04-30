@@ -69,13 +69,20 @@ class MainLayout extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: Color(0x338B5CF6))),
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Cobalt Cloud", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset('assets/images/cobalt_logo.png', width: 24, height: 24),
+                    const SizedBox(width: 12),
+                    const Text("CobaltDev", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
+                  ],
+                ),
               ),
             ),
             _drawerItem(context, "Home", "/"),

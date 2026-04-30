@@ -12,7 +12,7 @@ class ServicesPage extends StatelessWidget {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B), // zinc-900
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(

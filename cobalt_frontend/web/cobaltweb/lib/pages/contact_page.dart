@@ -59,7 +59,7 @@ class _ContactPageState extends State<ContactPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: const Color(0xFF18181B), // zinc-900
+        backgroundColor: const Color(0xFF0B091C),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFF27272A))), // border-zinc-800
         title: const Text("Message Sent", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
         content: const Text(
@@ -69,7 +69,7 @@ class _ContactPageState extends State<ContactPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("OK", style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w500)), // Indigo
+            child: const Text("OK", style: TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w500)),
           ),
         ],
       ),
@@ -82,7 +82,7 @@ class _ContactPageState extends State<ContactPage> {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B),
+      backgroundColor: Colors.transparent,
       body: Center(
         child: AnimatedSection(
           child: SingleChildScrollView(
@@ -180,10 +180,10 @@ class _ContactPageState extends State<ContactPage> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Color(0xFF6366F1), width: 1), // Indigo
+        borderSide: const BorderSide(color: Color(0xFFA855F7), width: 1),
       ),
       filled: true,
-      fillColor: const Color(0xFF18181B), // zinc-900
+      fillColor: Colors.white.withOpacity(0.025),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }

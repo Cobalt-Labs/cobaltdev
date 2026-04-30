@@ -13,7 +13,7 @@ class PortfolioPage extends StatelessWidget {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B), // zinc-900
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -145,7 +145,7 @@ class PortfolioPage extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               project['tech'],
-              style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w500, fontSize: 14),
+              style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w500, fontSize: 14),
             ),
             const SizedBox(height: 16),
             Text(
@@ -164,7 +164,7 @@ class PortfolioPage extends StatelessWidget {
                     icon: const Icon(Icons.arrow_forward, size: 16),
                     label: const Text("View Project"),
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF6366F1),
+                      foregroundColor: const Color(0xFFA855F7),
                       textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,

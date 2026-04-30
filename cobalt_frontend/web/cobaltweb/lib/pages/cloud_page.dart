@@ -58,7 +58,7 @@ class _CloudPageState extends State<CloudPage> {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B),
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 40 : 80),
@@ -136,10 +136,10 @@ class _CloudPageState extends State<CloudPage> {
                             decoration: BoxDecoration(
                               color: isHighlighted 
                                 ? const Color(0xFF27272A) // zinc-800
-                                : const Color(0xFF18181B), // zinc-900
+                                : Colors.transparent,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: isHighlighted ? const Color(0xFF6366F1) : const Color(0xFF3F3F46), // zinc-700
+                                color: isHighlighted ? const Color(0xFFA855F7) : const Color(0xFF3F3F46),
                                 width: 1,
                                 // Dashed effect visually isn't native to basic Border without custom painter, 
                                 // so we use a solid flat border with Vercel aesthetic
@@ -153,7 +153,7 @@ class _CloudPageState extends State<CloudPage> {
                                   Icon(
                                     Icons.cloud_upload_outlined,
                                     size: 32,
-                                    color: isHighlighted ? const Color(0xFF6366F1) : Colors.white38,
+                                    color: isHighlighted ? const Color(0xFFA855F7) : Colors.white38,
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
@@ -168,7 +168,7 @@ class _CloudPageState extends State<CloudPage> {
                                     const SizedBox(height: 12),
                                     Text(
                                       "$dropCount / $dropLimit uploaded",
-                                      style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w500, fontSize: 13),
+                                      style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w500, fontSize: 13),
                                     ),
                                   ]
                                 ],

@@ -22,8 +22,8 @@ class CobaltDevApp extends StatelessWidget {
       title: 'CobaltDev',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF6366F1), // Indigo instead of Emerald
-        scaffoldBackgroundColor: const Color(0xFF18181B), // Zinc 900
+        primaryColor: const Color(0xFFA855F7), // Purple 500
+        scaffoldBackgroundColor: const Color(0xFF07070F), // Dark slate/purple
         fontFamily: 'Inter',
         textTheme: const TextTheme(
           headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
@@ -65,13 +65,13 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: const Color(0xFF18181B),
+        backgroundColor: const Color(0xFF0B091C), // Deep purple-black
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Color(0xFF27272A))),
+                border: Border(bottom: BorderSide(color: Color(0x338B5CF6))),
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -105,7 +105,7 @@ class MainLayout extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        tileColor: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
+        tileColor: isActive ? const Color(0xFFA855F7).withOpacity(0.15) : Colors.transparent,
         title: Text(
           title,
           style: TextStyle(

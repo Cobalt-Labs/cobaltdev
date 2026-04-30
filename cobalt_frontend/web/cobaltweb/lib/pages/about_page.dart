@@ -12,7 +12,7 @@ class AboutPage extends StatelessWidget {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B), // zinc-900
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 40 : 80),
@@ -105,7 +105,7 @@ class AboutPage extends StatelessWidget {
           children: [
             Text(
               number,
-              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xFF6366F1), letterSpacing: -1), // Indigo
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xFFA855F7), letterSpacing: -1), // Purple
             ),
             const SizedBox(height: 8),
             Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: Colors.white70, fontWeight: FontWeight.w500)),

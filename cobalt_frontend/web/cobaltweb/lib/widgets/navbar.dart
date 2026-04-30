@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class Navbar extends StatefulWidget {
@@ -16,100 +17,162 @@ class _NavbarState extends State<Navbar> {
     currentRoute = ModalRoute.of(context)?.settings.name ?? '/';
   }
 
-  Widget navItem(String title, String route) {
-    final isActive = currentRoute == route;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          if (!isActive) {
-            setState(() => currentRoute = route);
-            Navigator.pushReplacementNamed(context, route);
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: isActive ? Colors.white.withOpacity(0.08) : Colors.transparent,
-          ),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-              color: isActive ? Colors.white : Colors.white70,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 900;
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 40,
-        vertical: 16,
-      ),
-      decoration: const BoxDecoration(
-        color: Color(0xFF18181B), // zinc-900
-        border: Border(bottom: BorderSide(color: Color(0xFF27272A))), // border-zinc-800
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Wordmark logo without emojis
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => Navigator.pushReplacementNamed(context, '/'),
-              child: const Text(
-                "Cobalt Cloud",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  letterSpacing: -0.3,
-                ),
-              ),
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 24 : 40,
+            vertical: 16,
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0B091C).withOpacity(0.62),
+            border: Border(
+              bottom: BorderSide(color: const Color(0xFFA855F7).withOpacity(0.1)),
             ),
           ),
-
-          if (!isMobile)
-            Row(
-              children: [
-                navItem("Home", "/"),
-                const SizedBox(width: 4),
-                navItem("Services", "/services"),
-                const SizedBox(width: 4),
-                navItem("Products", "/products"),
-                const SizedBox(width: 4),
-                navItem("Cloud", "/cloud"),
-                const SizedBox(width: 4),
-                navItem("Portfolio", "/portfolio"),
-                const SizedBox(width: 4),
-                navItem("About", "/about"),
-                const SizedBox(width: 4),
-                navItem("Contact", "/contact"),
-              ],
-            ),
-
-          // Mobile Menu Button
-          if (isMobile)
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu, color: Colors.white70),
-                onPressed: () => Scaffold.of(context).openDrawer(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Gradient Logo
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => Navigator.pushReplacementNamed(context, '/'),
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF818CF8)],
+                    ).createShader(bounds),
+                    child: const Text(
+                      "CobaltDev",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                  ),
+                ),
               ),
+
+              if (!isMobile)
+                Row(
+                  children: [
+                    NavItem(title: "Home", route: "/", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "Services", route: "/services", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "Products", route: "/products", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "Cloud", route: "/cloud", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "Portfolio", route: "/portfolio", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "About", route: "/about", currentRoute: currentRoute),
+                    const SizedBox(width: 8),
+                    NavItem(title: "Contact", route: "/contact", currentRoute: currentRoute),
+                    const SizedBox(width: 16),
+                    // Desktop CTA
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => Navigator.pushReplacementNamed(context, '/contact'),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF9333EA), Color(0xFF6D28D9)],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF9333EA).withOpacity(0.35),
+                                blurRadius: 16,
+                              )
+                            ],
+                          ),
+                          child: const Text(
+                            "Let's Talk ✦",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+              // Mobile Menu Button
+              if (isMobile)
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white70),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NavItem extends StatefulWidget {
+  final String title;
+  final String route;
+  final String currentRoute;
+
+  const NavItem({
+    super.key,
+    required this.title,
+    required this.route,
+    required this.currentRoute,
+  });
+
+  @override
+  State<NavItem> createState() => _NavItemState();
+}
+
+class _NavItemState extends State<NavItem> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isActive = widget.currentRoute == widget.route;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: GestureDetector(
+        onTap: () {
+          if (!isActive) {
+            Navigator.pushReplacementNamed(context, widget.route);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 200),
+            style: TextStyle(
+              fontSize: 15,
+              fontFamily: 'Inter',
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive || isHovered ? const Color(0xFFE9D5FF) : const Color(0xFF94A3B8), // purple-200 / slate-400
             ),
-        ],
+            child: Text(widget.title),
+          ),
+        ),
       ),
     );
   }

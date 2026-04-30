@@ -12,7 +12,7 @@ class ProductsPage extends StatelessWidget {
     final isMobile = width < 700;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF18181B), // zinc-900
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 40 : 80),
@@ -121,7 +121,7 @@ class ProductsPage extends StatelessWidget {
           children: [
             Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
-            Text(subtitle, style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w500, fontSize: 14)),
+            Text(subtitle, style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w500, fontSize: 14)),
             const SizedBox(height: 16),
             Text(desc, style: const TextStyle(color: Colors.white70, height: 1.6, fontSize: 15)),
             const SizedBox(height: 24),
@@ -129,14 +129,14 @@ class ProductsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: status.contains("Available") 
-                    ? const Color(0xFF6366F1).withOpacity(0.1) // Indigo light
+                    ? const Color(0xFFA855F7).withOpacity(0.1)
                     : const Color(0xFF27272A), // zinc-800
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
                 status,
                 style: TextStyle(
-                  color: status.contains("Available") ? const Color(0xFF6366F1) : Colors.white70,
+                  color: status.contains("Available") ? const Color(0xFFA855F7) : Colors.white70,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),

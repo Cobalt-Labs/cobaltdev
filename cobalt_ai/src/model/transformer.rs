@@ -73,7 +73,7 @@ pub struct TransformerBlock<B: Backend> {
 
 impl<B: Backend> TransformerBlock<B> {
     pub fn forward(&self, input: Tensor<B, 3>) -> Tensor<B, 3> {
-        let [batch_size, seq_len, _] = input.dims();
+        let [_batch_size, seq_len, _] = input.dims();
         let device = input.device();
 
         let mask = Tensor::<B, 2, Int>::ones([seq_len, seq_len], &device)

@@ -25,17 +25,26 @@ class _NavbarState extends State<Navbar> {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 24 : 40,
-            vertical: 16,
-          ),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0B091C).withOpacity(0.62),
-            border: Border(
-              bottom: BorderSide(color: const Color(0xFFA855F7).withOpacity(0.1)),
-            ),
-          ),
+          child: SafeArea(
+            bottom: false,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 24 : 40,
+                vertical: 24, // Balanced vertical padding
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B091C).withOpacity(0.8),
+                border: Border(
+                  bottom: BorderSide(color: const Color(0xFFA855F7).withOpacity(0.15)),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 25,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -132,7 +141,8 @@ class _NavbarState extends State<Navbar> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }
 

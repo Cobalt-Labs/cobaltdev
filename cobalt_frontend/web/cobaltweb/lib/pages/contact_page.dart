@@ -41,43 +41,24 @@ class _ContactPageState extends State<ContactPage> {
     });
 
     try {
-      final response = await http.post(
-        Uri.parse(backendUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "name": nameController.text.trim(),
-          "email": emailController.text.trim(),
-          "message": messageController.text.trim(),
-        }),
+      // Direct mailto link is more reliable for a portfolio site without a dedicated live backend
+      final String subject = Uri.encodeComponent("CobaltDev Inquiry from ${nameController.text.trim()}");
+      final String body = Uri.encodeComponent(
+          "${messageController.text.trim()}\n\n---\nSender Email: ${emailController.text.trim()}"
       );
+      
+      final Uri emailUri = Uri.parse("mailto:ibrahim.haji.3595@gmail.com?subject=$subject&body=$body");
 
-      if (response.statusCode == 200) {
-        setState(() => successMessage = "Message sent successfully!");
-        _showSuccessDialog();
-        _clearFields();
-      } else {
-        setState(() => errorMessage = "Failed to send message. Try again.");
-      }
+      // We use launchUrl directly and catch errors, as canLaunchUrl can be unreliable on some browsers/platforms
+      await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+      
+      setState(() => successMessage = "Opening email client...");
+      _clearFields();
     } catch (e) {
-      setState(() => errorMessage = "Connection error. Please check your internet.");
-      // Fallback to mailto
-      await _tryMailtoFallback();
+      setState(() => errorMessage = "Could not open email client. Please use the buttons below.");
     }
 
     setState(() => isLoading = false);
-  }
-
-  Future<void> _tryMailtoFallback() async {
-    final String subject = Uri.encodeComponent("CobaltDev Inquiry from ${nameController.text.trim()}");
-    final String body = Uri.encodeComponent(
-        "${messageController.text.trim()}\n\n---\nSender Email: ${emailController.text.trim()}"
-    );
-
-    final Uri emailUri = Uri.parse("mailto:ibrahim.haji.3595@gmail.com?subject=$subject&body=$body");
-
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    }
   }
 
   void _clearFields() {
@@ -236,8 +217,14 @@ class _ContactPageState extends State<ContactPage> {
 
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Could not launch $url")),
+        );
+      }
     }
   }
 

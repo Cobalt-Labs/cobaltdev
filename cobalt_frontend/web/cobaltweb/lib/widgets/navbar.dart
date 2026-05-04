@@ -67,7 +67,7 @@ class _NavbarState extends State<Navbar> {
                           colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF818CF8)],
                         ).createShader(bounds),
                         child: const Text(
-                          "CobaltDev",
+                          "Cobalt",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w900,

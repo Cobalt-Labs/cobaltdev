@@ -19,7 +19,7 @@ class CobaltDevApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CobaltDev',
+      title: 'Cobalt',
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: const Color(0xFFA855F7), // Purple 500
@@ -124,7 +124,7 @@ class _MainLayoutState extends State<MainLayout> {
                   children: [
                     Image.asset('assets/images/cobalt_logo.png', width: 24, height: 24),
                     const SizedBox(width: 12),
-                    const Text("CobaltDev", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
+                    const Text("Cobalt", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
                   ],
                 ),
               ),

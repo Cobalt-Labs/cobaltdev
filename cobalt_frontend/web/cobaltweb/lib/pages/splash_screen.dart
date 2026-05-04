@@ -119,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF818CF8)],
                       ).createShader(bounds),
                       child: const Text(
-                        "CobaltDev",
+                        "Cobalt",
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.w900,

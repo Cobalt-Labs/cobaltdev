@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // Added for kIsWeb
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:flutter_ui/bridge_generated.dart/frb_generated.dart';
@@ -8,28 +7,16 @@ import 'package:flutter_ui/ui/screens/bloc/notepad_bloc.dart';
 
 import 'package:flutter_ui/ui/screens/editor_screen.dart';
 import 'package:flutter_ui/ui/screens/home_screen.dart';
-
-String getRustLibPath() {
-  if (Platform.isAndroid) {
-    return "librust_lib_notepad.so"; 
-  } else if (Platform.isLinux) {
-    return "/home/ibrahim/code/Rust_lang/encrypt_notepad/notepad/native/target/x86_64-unknown-linux-gnu/release/librust_lib_notepad.so";
-  } else if (Platform.isMacOS) {
-    return "librust_lib_notepad.dylib";
-  } else {
-    throw UnsupportedError("Unsupported platform");
-  }
-}
+import 'dart:io' show Platform; // Moved here and only used when not on web
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await RustLib.init(externalLibrary: ExternalLibrary.open(getRustLibPath()));
-    print("Rust lib initialized successfully");
+    await RustLib.init();
+    debugPrint("Rust lib initialized successfully");
   } catch (e) {
-    print("Failed to initialize Rust lib: $e");
-    return;
+    debugPrint("Failed to initialize Rust lib: $e");
   }
 
   runApp(const EncryptedNotepadApp());

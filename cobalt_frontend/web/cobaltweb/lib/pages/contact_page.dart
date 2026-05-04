@@ -77,87 +77,92 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    messageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 700;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: AnimatedSection(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 40),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: GlassCard(
-                padding: EdgeInsets.all(isMobile ? 32 : 48),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Get In Touch",
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, letterSpacing: -0.5),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "Have a project or idea? Let's build something great together.",
-                      style: TextStyle(color: Colors.white70, fontSize: 16),
-                    ),
+    return Center(
+      child: AnimatedSection(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 40),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: GlassCard(
+              padding: EdgeInsets.all(isMobile ? 32 : 48),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Get In Touch",
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, letterSpacing: -0.5),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "Have a project or idea? Let's build something great together.",
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                  ),
 
-                    const SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                    if (errorMessage != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
-                        child: Text(
-                          errorMessage!,
-                          style: const TextStyle(color: Colors.redAccent, fontSize: 14),
-                        ),
-                      ),
-
-                    TextField(
-                      controller: nameController,
-                      decoration: _inputStyle("Your Name"),
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 20),
-
-                    TextField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: _inputStyle("Your Email"),
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 20),
-
-                    TextField(
-                      controller: messageController,
-                      maxLines: 5,
-                      decoration: _inputStyle("Your Message"),
-                      style: const TextStyle(fontSize: 15),
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        onPressed: isLoading ? null : sendMessage,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4F46E5), // Indigo 600
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          elevation: 0,
-                        ),
-                        child: isLoading
-                            ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                            : const Text("Send Message", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: Text(
+                        errorMessage!,
+                        style: const TextStyle(color: Colors.redAccent, fontSize: 14),
                       ),
                     ),
-                  ],
-                ),
+
+                  TextField(
+                    controller: nameController,
+                    decoration: _inputStyle("Your Name"),
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(height: 20),
+
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: _inputStyle("Your Email"),
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(height: 20),
+
+                  TextField(
+                    controller: messageController,
+                    maxLines: 5,
+                    decoration: _inputStyle("Your Message"),
+                    style: const TextStyle(fontSize: 15),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : sendMessage,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4F46E5), // Indigo 600
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        elevation: 0,
+                      ),
+                      child: isLoading
+                          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                          : const Text("Send Message", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

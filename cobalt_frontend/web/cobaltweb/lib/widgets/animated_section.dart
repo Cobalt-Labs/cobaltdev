@@ -33,7 +33,7 @@ class _AnimatedSectionState extends State<AnimatedSection>
 
   @override
   void dispose() {
-    _controller.dispose(); // ✅ THIS FIXES YOUR ERROR
+    _controller.dispose();
     super.dispose();
   }
 

@@ -88,17 +88,30 @@ class PortfolioPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton(
-                          onPressed: () => Navigator.pushReplacementNamed(context, '/contact'),
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            '/contact',
+                          ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4F46E5), // Indigo 600
+                            backgroundColor: const Color(
+                              0xFF4F46E5,
+                            ), // Indigo 600
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 18,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             elevation: 0,
                           ),
                           child: const Text(
                             "Let's Build Something Together",
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
@@ -116,22 +129,31 @@ class PortfolioPage extends StatelessWidget {
   Widget _sectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: -0.5),
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.5,
+      ),
     );
   }
 
-  Widget _projectGrid(BuildContext context, List<Map<String, dynamic>> projects) {
+  Widget _projectGrid(
+    BuildContext context,
+    List<Map<String, dynamic>> projects,
+  ) {
     return Wrap(
       spacing: 24,
       runSpacing: 24,
-      children: projects.map((project) => _projectCard(context, project)).toList(),
+      children: projects
+          .map((project) => _projectCard(context, project))
+          .toList(),
     );
   }
 
   Widget _projectCard(BuildContext context, Map<String, dynamic> project) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 48 : 360,
+      width: sw < 450 ? (sw - 48).clamp(0.0, double.infinity).toDouble() : 360.0,
       child: GlassCard(
         onTap: project['url'] != null ? () => _openLink(project['url']) : null,
         padding: const EdgeInsets.all(32),
@@ -145,12 +167,20 @@ class PortfolioPage extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               project['tech'],
-              style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w500, fontSize: 14),
+              style: const TextStyle(
+                color: Color(0xFFA855F7),
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
               project['desc'],
-              style: const TextStyle(color: Colors.white70, height: 1.6, fontSize: 15),
+              style: const TextStyle(
+                color: Colors.white70,
+                height: 1.6,
+                fontSize: 15,
+              ),
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
             ),
@@ -165,7 +195,10 @@ class PortfolioPage extends StatelessWidget {
                     label: const Text("View Project"),
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFFA855F7),
-                      textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
                     ),
@@ -191,13 +224,15 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Flutter + Rust Hybrid Apps",
         "tech": "Flutter • Rust • FFI",
-        "desc": "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
+        "desc":
+            "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
         "url": "https://github.com/ibrahim-3595",
       },
       {
         "title": "Secure Journal App",
         "tech": "Flutter • Rust • SQLx",
-        "desc": "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
+        "desc":
+            "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
         "url": "https://github.com/ibrahim-3595/Secure-Journal",
       },
     ];
@@ -208,13 +243,16 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Cobalt Cloud",
         "tech": "Rust • Axum • Dioxus",
-        "desc": "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
-        "url": "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
+        "desc":
+            "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
+        "url":
+            "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
       },
       {
         "title": "Axum Microservices",
         "tech": "Rust • Axum • SQLx",
-        "desc": "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
+        "desc":
+            "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
         "url": "https://github.com/ibrahim-3595",
       },
     ];
@@ -225,13 +263,15 @@ class PortfolioPage extends StatelessWidget {
       {
         "title": "Algorithms in Rust",
         "tech": "Rust • DSA",
-        "desc": "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
+        "desc":
+            "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
         "url": "https://github.com/ibrahim-3595",
       },
       {
         "title": "Rust CLI Tools",
         "tech": "Rust • CLI • SQLx",
-        "desc": "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
+        "desc":
+            "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
         "url": "https://github.com/ibrahim-3595",
       },
     ];

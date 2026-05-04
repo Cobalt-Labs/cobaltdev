@@ -98,7 +98,7 @@ class AboutPage extends StatelessWidget {
   Widget _statCard(BuildContext context, String number, String label) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 400 ? sw - 48 : 200,
+      width: sw < 400 ? (sw - 48).clamp(0.0, double.infinity).toDouble() : 200.0,
       child: GlassCard(
         padding: EdgeInsets.all(sw < 400 ? 24 : 32),
         child: Column(

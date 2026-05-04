@@ -352,7 +352,7 @@ class _HomePageState extends State<HomePage> {
   Widget _projectCard(BuildContext context, String title, String subtitle, String desc, String url, String number, String highlight) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 48 : 360,
+      width: sw < 450 ? (sw - 48).clamp(0.0, double.infinity).toDouble() : 360.0,
       child: GlassCard(
         onTap: () => _openLink(url),
         padding: const EdgeInsets.all(32),

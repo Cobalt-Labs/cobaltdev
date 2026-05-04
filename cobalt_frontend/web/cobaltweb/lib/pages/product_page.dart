@@ -112,7 +112,7 @@ class ProductsPage extends StatelessWidget {
   Widget _productCard(BuildContext context, String title, String subtitle, String desc, String status, {VoidCallback? onTap}) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 48 : 360,
+      width: sw < 450 ? (sw - 48).clamp(0.0, double.infinity).toDouble() : 360.0,
       child: GlassCard(
         onTap: onTap,
         padding: const EdgeInsets.all(32),

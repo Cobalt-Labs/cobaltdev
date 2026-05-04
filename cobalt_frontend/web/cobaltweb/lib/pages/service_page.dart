@@ -140,7 +140,7 @@ class ServicesPage extends StatelessWidget {
   Widget _serviceCard(BuildContext context, String title, String desc, String tech) {
     final sw = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sw < 450 ? sw - 48 : 360,
+      width: sw < 450 ? (sw - 48).clamp(0.0, double.infinity).toDouble() : 360.0,
       child: GlassCard(
         padding: const EdgeInsets.all(32),
         child: Column(

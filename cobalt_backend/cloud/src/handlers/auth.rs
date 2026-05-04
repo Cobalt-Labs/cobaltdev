@@ -5,11 +5,13 @@ use argon2::{
 };
 use rand::rngs::OsRng;
 use serde_json::json;
-use crate::models::{LoginRequest, LoginResponse, User, Claims};
-use crate::{ResponseMsg, Contact};
 use jsonwebtoken::{encode, Header, EncodingKey};
 use chrono::Utc;
 use sqlx::SqlitePool;
+
+use crate::models::{LoginRequest, LoginResponse, User, Claims};
+use crate::{ResponseMsg, Contact};
+use crate::email::ContactForm;
 
 pub async fn login(
     State(pool): State<SqlitePool>,
@@ -79,6 +81,12 @@ pub async fn create_contact(
     State(db): State<SqlitePool>,
     Json(payload): Json<Contact>,
 ) -> Result<Json<ResponseMsg>, (StatusCode, String)> {
+    let contact_form = ContactForm {
+        name: payload.name.clone(),
+        email: payload.email.clone(),
+        message: payload.message.clone(),
+    };
+    
     if payload.name.is_empty() || payload.email.is_empty() || payload.message.is_empty() {
         return Err((StatusCode::BAD_REQUEST, "All fields required".into()));
     }
@@ -91,8 +99,8 @@ pub async fn create_contact(
         .await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("DB error: {}", e)))?;
 
-    if let Err(e) = crate::email::send_email(payload.name, payload.email, payload.message).await {
-        eprintln!("Email sending failed: {}", e);
+    if let Err(e) = crate::email::send_email_handler(Json(contact_form)).await {
+        eprintln!("Email sending failed: {:?}", e);
     }
 
     Ok(Json(ResponseMsg {

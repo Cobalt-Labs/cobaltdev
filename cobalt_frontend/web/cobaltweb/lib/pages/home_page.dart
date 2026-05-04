@@ -27,297 +27,206 @@ class _HomePageState extends State<HomePage> {
     final isTablet = width > 700 && width <= 1100;
     final isMobile = width <= 700;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent, // Background handled by Container
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF07070F),
-              Color(0xFF0F0B1E),
-              Color(0xFF150D2E),
-              Color(0xFF1A0B33)
-            ],
-            stops: [0.0, 0.4, 0.7, 1.0],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF07070F),
+            Color(0xFF0F0B1E),
+            Color(0xFF150D2E),
+            Color(0xFF1A0B33)
+          ],
+          stops: [0.0, 0.4, 0.7, 1.0],
         ),
-        child: Stack(
-          children: [
-            // Ambient Blobs
-            Positioned(
-              top: -200,
-              left: -100,
-              child: Container(
-                width: width * 0.5,
-                height: width * 0.5,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      const Color(0xFF8B5CF6).withOpacity(0.18),
-                      Colors.transparent
-                    ],
-                    stops: const [0.0, 0.7],
-                  ),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 70, sigmaY: 70),
-                  child: Container(color: Colors.transparent),
+      ),
+      child: Stack(
+        children: [
+          // Ambient Blobs
+          Positioned(
+            top: -200,
+            left: -100,
+            child: Container(
+              width: width * 0.5,
+              height: width * 0.5,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFF8B5CF6).withOpacity(0.18),
+                    Colors.transparent
+                  ],
+                  stops: const [0.0, 0.7],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: -200,
-              right: -100,
-              child: Container(
-                width: width * 0.55,
-                height: width * 0.55,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      const Color(0xFFA855F7).withOpacity(0.22),
-                      const Color(0xFFA855F7).withOpacity(0.1),
-                      Colors.transparent
-                    ],
-                    stops: const [0.0, 0.4, 0.7],
-                  ),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-                  child: Container(color: Colors.transparent),
-                ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 70, sigmaY: 70),
+                child: Container(color: Colors.transparent),
               ),
             ),
+          ),
+          Positioned(
+            bottom: -200,
+            right: -100,
+            child: Container(
+              width: width * 0.55,
+              height: width * 0.55,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFFA855F7).withOpacity(0.22),
+                    const Color(0xFFA855F7).withOpacity(0.1),
+                    Colors.transparent
+                  ],
+                  stops: const [0.0, 0.4, 0.7],
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+          ),
 
-            // Main Content
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  // HERO SECTION
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 1200),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48),
-                          child: AnimatedSection(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Available Badge
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                  margin: const EdgeInsets.only(bottom: 16),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF8B5CF6).withOpacity(0.08),
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(color: const Color(0xFF8B5CF6).withOpacity(0.4)),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      _PulsingDot(),
-                                      const SizedBox(width: 8),
-                                      const Text(
-                                        "AVAILABLE FOR WORK",
-                                        style: TextStyle(
-                                          color: Color(0xFFC084FC),
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.2,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                ShaderMask(
-                                  shaderCallback: (bounds) => const LinearGradient(
-                                    colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF7C3AED), Color(0xFF818CF8)],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ).createShader(bounds),
-                                  child: Text(
-                                    "Ibrahim Haji",
-                                    style: TextStyle(
-                                      fontSize: isDesktop ? 64 : isTablet ? 48 : 40,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: -1,
-                                      height: 1.1,
-                                      color: Colors.white, // Required for ShaderMask
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                
-                                // Typing Text
-                                _TypingSubtitle(
-                                  titles: const [
-                                    "Flutter + Rust Developer",
-                                    "Creative Problem Solver",
-                                    "UI/UX Enthusiast",
-                                    "Systems Engineer"
-                                  ],
-                                  fontSize: isDesktop ? 28 : 22,
-                                ),
-                                const SizedBox(height: 24),
-
-                                const Text(
-                                  "Building production-grade mobile apps, high-performance backends, and private cloud infrastructure with Flutter & Rust.",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xFF64748B), // Slate 500
-                                    height: 1.6,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 48),
-
-                                Wrap(
-                                  spacing: 16,
-                                  runSpacing: 16,
-                                  children: [
-                                    // Primary Gradient Button
-                                    MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: GestureDetector(
-                                        onTap: () => Navigator.pushReplacementNamed(context, '/portfolio'),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [Color(0xFF9333EA), Color(0xFF7C3AED)],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                            borderRadius: BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: const Color(0xFF9333EA).withOpacity(0.42),
-                                                blurRadius: 22,
-                                                offset: const Offset(0, 4),
-                                              ),
-                                            ],
-                                          ),
-                                          child: const Text(
-                                            "View Projects",
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Outline Button
-                                    MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: GestureDetector(
-                                        onTap: () => Navigator.pushReplacementNamed(context, '/contact'),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF8B5CF6).withOpacity(0.07),
-                                            border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.4)),
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: const Text(
-                                            "Contact Me",
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFFC084FC)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // FEATURED WORK
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 60 : 100),
-                    // Transparent so stack gradient shows
-                    child: AnimatedSection(
-                      child: Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1200),
+          // Main Content
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // HERO SECTION
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1200),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48),
+                        child: AnimatedSection(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Section Heading
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 6,
-                                    height: 6,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFA855F7),
-                                      shape: BoxShape.circle,
-                                      boxShadow: [BoxShadow(color: Color(0xFFA855F7), blurRadius: 6)],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    "PORTFOLIO",
-                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: Color(0xFFC084FC)),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              RichText(
-                                text: const TextSpan(
-                                  text: "Featured ",
-                                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Inter'),
+                              // Available Badge
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                margin: const EdgeInsets.only(bottom: 16),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF8B5CF6).withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(color: const Color(0xFF8B5CF6).withOpacity(0.4)),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    TextSpan(
-                                      text: "Projects",
-                                      style: TextStyle(color: Color(0xFFA855F7)), // Solid purple for simplicity without shader mask inside rich text
+                                    _PulsingDot(),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      "AVAILABLE FOR WORK",
+                                      style: TextStyle(
+                                        color: Color(0xFFC084FC),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                "Real stuff I've built with passion and code.",
-                                style: TextStyle(fontSize: 18, color: Color(0xFF64748B)),
+
+                              ShaderMask(
+                                shaderCallback: (bounds) => const LinearGradient(
+                                  colors: [Color(0xFFC084FC), Color(0xFFA855F7), Color(0xFF7C3AED), Color(0xFF818CF8)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ).createShader(bounds),
+                                child: Text(
+                                  "Ibrahim Haji",
+                                  style: TextStyle(
+                                    fontSize: isDesktop ? 64 : isTablet ? 48 : 40,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -1,
+                                    height: 1.1,
+                                    color: Colors.white, // Required for ShaderMask
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 60),
+                              const SizedBox(height: 12),
+                              
+                              // Typing Text
+                              _TypingSubtitle(
+                                titles: const [
+                                  "Flutter + Rust Developer",
+                                  "Creative Problem Solver",
+                                  "UI/UX Enthusiast",
+                                  "Systems Engineer"
+                                ],
+                                fontSize: isDesktop ? 28 : 22,
+                              ),
+                              const SizedBox(height: 24),
+
+                              const Text(
+                                "Building production-grade mobile apps, high-performance backends, and private cloud infrastructure with Flutter & Rust.",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xFF64748B), // Slate 500
+                                  height: 1.6,
+                                ),
+                              ),
+
+                              const SizedBox(height: 48),
 
                               Wrap(
-                                spacing: 24,
-                                runSpacing: 24,
+                                spacing: 16,
+                                runSpacing: 16,
                                 children: [
-                                  _projectCard(context,
-                                    "Secure Journal",
-                                    "CLI + Dioxus + Axum + SQLx",
-                                    "A private journaling app with end-to-end encryption and Rust backend.",
-                                    "https://github.com/Cobalt-Labs/cobalt_journal",
-                                    "01",
-                                    "Private App"
+                                  // Primary Gradient Button
+                                  MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.pushReplacementNamed(context, '/portfolio'),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [Color(0xFF9333EA), Color(0xFF7C3AED)],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: const Color(0xFF9333EA).withOpacity(0.42),
+                                              blurRadius: 22,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Text(
+                                          "View Projects",
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  _projectCard(context,
-                                    "Cobalt Cloud",
-                                    "Rust Backend + Dioxus Frontend",
-                                    "Self-hosted private cloud running on my laptop HDD.",
-                                    "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
-                                    "02",
-                                    "Infrastructure"
-                                  ),
-                                  _projectCard(context,
-                                    "Encrypt Notepad",
-                                    "Hybrid Mobile + Desktop",
-                                    "Production apps using Flutter frontend + Rust core via FFI.",
-                                    "https://github.com/ibrahim-3595/Encrypt-Notepad",
-                                    "03",
-                                    "Production App"
+                                  // Outline Button
+                                  MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.pushReplacementNamed(context, '/contact'),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF8B5CF6).withOpacity(0.07),
+                                          border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.4)),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: const Text(
+                                          "Contact Me",
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFFC084FC)),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -327,24 +236,112 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                ),
 
-                  // FOOTER
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(60),
-                    color: const Color(0xFF07070F).withOpacity(0.5), // Semi-transparent over gradient
-                    child: const Center(
-                      child: Text(
-                        "© 2026 CobaltDev",
-                        style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+                // FEATURED WORK
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: isMobile ? 60 : 100),
+                  // Transparent so stack gradient shows
+                  child: AnimatedSection(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1200),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Section Heading
+                            Row(
+                              children: [
+                                Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFA855F7),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [BoxShadow(color: Color(0xFFA855F7), blurRadius: 6)],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  "PORTFOLIO",
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: Color(0xFFC084FC)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            RichText(
+                              text: const TextSpan(
+                                text: "Featured ",
+                                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Inter'),
+                                children: [
+                                  TextSpan(
+                                    text: "Projects",
+                                    style: TextStyle(color: Color(0xFFA855F7)), // Solid purple for simplicity without shader mask inside rich text
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              "Real stuff I've built with passion and code.",
+                              style: TextStyle(fontSize: 18, color: Color(0xFF64748B)),
+                            ),
+                            const SizedBox(height: 60),
+
+                            Wrap(
+                              spacing: 24,
+                              runSpacing: 24,
+                              children: [
+                                _projectCard(context,
+                                  "Secure Journal",
+                                  "CLI + Dioxus + Axum + SQLx",
+                                  "A private journaling app with end-to-end encryption and Rust backend.",
+                                  "https://github.com/Cobalt-Labs/cobalt_journal",
+                                  "01",
+                                  "Private App"
+                                ),
+                                _projectCard(context,
+                                  "Cobalt Cloud",
+                                  "Rust Backend + Dioxus Frontend",
+                                  "Self-hosted private cloud running on my laptop HDD.",
+                                  "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
+                                  "02",
+                                  "Infrastructure"
+                                ),
+                                _projectCard(context,
+                                  "Encrypt Notepad",
+                                  "Hybrid Mobile + Desktop",
+                                  "Production apps using Flutter frontend + Rust core via FFI.",
+                                  "https://github.com/ibrahim-3595/Encrypt-Notepad",
+                                  "03",
+                                  "Production App"
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+
+                // FOOTER
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(60),
+                  color: const Color(0xFF07070F).withOpacity(0.5), // Semi-transparent over gradient
+                  child: const Center(
+                    child: Text(
+                      "© 2026 CobaltDev",
+                      style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

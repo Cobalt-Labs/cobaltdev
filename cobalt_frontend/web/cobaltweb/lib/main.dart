@@ -55,15 +55,28 @@ class CobaltDevApp extends StatelessWidget {
   }
 }
 
-class MainLayout extends StatelessWidget {
+class MainLayout extends StatefulWidget {
   final Widget child;
   const MainLayout({super.key, required this.child});
+
+  @override
+  State<MainLayout> createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout> {
+  String currentRoute = '/';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    currentRoute = ModalRoute.of(context)?.settings.name ?? '/';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: const Color(0xFF0B091C), // Deep purple-black
+        backgroundColor: const Color(0xFF0B091C),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -83,26 +96,25 @@ class MainLayout extends StatelessWidget {
                 ),
               ),
             ),
-            _drawerItem(context, "Home", "/"),
-            _drawerItem(context, "Services", "/services"),
-            _drawerItem(context, "Products", "/products"),
-            _drawerItem(context, "Portfolio", "/portfolio"),
-            _drawerItem(context, "About", "/about"),
-            _drawerItem(context, "Contact", "/contact"),
+            _drawerItem("Home", "/"),
+            _drawerItem("Services", "/services"),
+            _drawerItem("Products", "/products"),
+            _drawerItem("Portfolio", "/portfolio"),
+            _drawerItem("About", "/about"),
+            _drawerItem("Contact", "/contact"),
           ],
         ),
       ),
       body: Column(
         children: [
           const Navbar(),
-          Expanded(child: child),
+          Expanded(child: widget.child),
         ],
       ),
     );
   }
 
-  Widget _drawerItem(BuildContext context, String title, String route) {
-    final currentRoute = ModalRoute.of(context)?.settings.name ?? '/';
+  Widget _drawerItem(String title, String route) {
     final isActive = currentRoute == route;
 
     return Padding(
@@ -120,7 +132,9 @@ class MainLayout extends StatelessWidget {
         ),
         onTap: () {
           Navigator.pop(context);
-          if (!isActive) Navigator.pushReplacementNamed(context, route);
+          if (!isActive) {
+            Navigator.pushReplacementNamed(context, route);
+          }
         },
       ),
     );

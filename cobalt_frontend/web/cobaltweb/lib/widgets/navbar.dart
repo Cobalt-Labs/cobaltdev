@@ -43,7 +43,7 @@ class _NavbarState extends State<Navbar> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/'),
+                  onTap: () => Navigator.of(context).pushReplacementNamed('/'),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -91,7 +91,7 @@ class _NavbarState extends State<Navbar> {
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () => Navigator.pushReplacementNamed(context, '/contact'),
+                        onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class _NavItemState extends State<NavItem> {
       child: GestureDetector(
         onTap: () {
           if (!isActive) {
-            Navigator.pushReplacementNamed(context, widget.route);
+            Navigator.of(context).pushReplacementNamed(widget.route);
           }
         },
         child: Container(

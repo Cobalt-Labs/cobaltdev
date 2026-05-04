@@ -3,6 +3,7 @@ use tower_http::cors::{CorsLayer, Any};
 
 use crate::handlers::{auth, files};
 use crate::middleware::auth::auth_middleware;
+use crate::email::send_email_handler;
 
 pub fn create_router() -> Router<sqlx::SqlitePool> {
     let cors = CorsLayer::new()
@@ -23,6 +24,7 @@ pub fn create_router() -> Router<sqlx::SqlitePool> {
         .route("/auth/login", post(auth::login))
         .route("/auth/register", post(auth::register))
         .route("/auth/forgot-password", post(auth::forgot_password))
+        .route("/api/send-email", post(send_email_handler))
         .nest("/api", protected_routes)
         .layer(cors)
 }

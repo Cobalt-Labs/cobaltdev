@@ -1,37 +1,82 @@
+# # # ── Rust ──────────────────────────────────────────
+# *.rs linguist-language=Rust
+# *.toml linguist-language=Rust
+# Cargo.lock linguist-language=Rust
+# Cargo.toml linguist-language=Rust
+
+# # ── Dart (Flutter) ────────────────────────────────
+# *.dart linguist-language=Dart
+# pubspec.yaml linguist-language=Dart
+# pubspec.lock linguist-language=Dart
+
+# # ── Vendor/Hide everything else ───────────────────
+# *.js linguist-vendored=true
+# *.mjs linguist-vendored=true
+# *.jsx linguist-vendored=true
+# *.ts linguist-vendored=true
+# *.tsx linguist-vendored=true
+# *.py linguist-vendored=true
+# *.html linguist-vendored=true
+# *.css linguist-vendored=true
+# *.json linguist-vendored=true
+# *.ipynb linguist-vendored=true
+
+# # ── Flutter build/web output (KEY FIX) ────────────
+# build/** linguist-vendored=true
+# web/** linguist-vendored=true
+# .dart_tool/** linguist-vendored=true
+# cobalt_web/build/** linguist-vendored=true
+# cobalt_frontend/** linguist-vendored=true
+# cobalt_backend/** linguist-vendored=true
+# cobalt_cloud/** linguist-vendored=true
+# cobalt_embedded/** linguist-vendored=true
+
+# # ── Docs / lock files ─────────────────────────────
+# *.lock linguist-vendored=true
+# README.md linguist-documentation=true
+# LICENSE linguist-documentation=true
+# 
 # # ── Rust ──────────────────────────────────────────
-*.rs linguist-language=Rust
-*.toml linguist-language=Rust
-Cargo.lock linguist-language=Rust
-Cargo.toml linguist-language=Rust
+*.rs                    linguist-language=Rust
+*.toml                  linguist-language=Rust
+Cargo.lock              linguist-language=Rust
+Cargo.toml              linguist-language=Rust
 
 # ── Dart (Flutter) ────────────────────────────────
-*.dart linguist-language=Dart
-pubspec.yaml linguist-language=Dart
-pubspec.lock linguist-language=Dart
+*.dart                  linguist-language=Dart
+pubspec.yaml            linguist-language=Dart
+pubspec.lock            linguist-language=Dart
 
-# ── Vendor/Hide everything else ───────────────────
-*.js linguist-vendored=true
-*.mjs linguist-vendored=true
-*.jsx linguist-vendored=true
-*.ts linguist-vendored=true
-*.tsx linguist-vendored=true
-*.py linguist-vendored=true
-*.html linguist-vendored=true
-*.css linguist-vendored=true
-*.json linguist-vendored=true
-*.ipynb linguist-vendored=true
+# ── Keep some JS/TS visible but reduce its weight ──
+# Only vendor heavy/generated JS, keep source JS visible but smaller
+**/build/**             linguist-vendored=true
+**/web/**               linguist-vendored=true
+**/*.min.js             linguist-vendored=true
+**/*.bundle.js          linguist-vendored=true
 
-# ── Flutter build/web output (KEY FIX) ────────────
-build/** linguist-vendored=true
-web/** linguist-vendored=true
-.dart_tool/** linguist-vendored=true
-cobalt_web/build/** linguist-vendored=true
-cobalt_frontend/** linguist-vendored=true
-cobalt_backend/** linguist-vendored=true
-cobalt_cloud/** linguist-vendored=true
-cobalt_embedded/** linguist-vendored=true
+# ── Vendor everything else that bloats stats ───────
+*.js                    linguist-vendored=true
+*.mjs                   linguist-vendored=true
+*.jsx                   linguist-vendored=true
+*.ts                    linguist-vendored=true
+*.tsx                   linguist-vendored=true
+*.py                    linguist-vendored=true
+*.html                  linguist-vendored=true
+*.css                   linguist-vendored=true
+*.json                  linguist-vendored=true
+*.ipynb                 linguist-vendored=true
+*.lock                  linguist-vendored=true
 
-# ── Docs / lock files ─────────────────────────────
-*.lock linguist-vendored=true
-README.md linguist-documentation=true
-LICENSE linguist-documentation=true
+# ── Flutter build artifacts ───────────────────────
+.dart_tool/**           linguist-vendored=true
+build/**                linguist-vendored=true
+web/**                  linguist-vendored=true
+cobalt_web/build/**     linguist-vendored=true
+cobalt_frontend/**      linguist-vendored=true
+cobalt_backend/**       linguist-vendored=true
+cobalt_cloud/**         linguist-vendored=true
+cobalt_embedded/**      linguist-vendored=true
+
+# ── Docs ──────────────────────────────────────────
+README.md               linguist-documentation=true
+LICENSE                 linguist-documentation=true

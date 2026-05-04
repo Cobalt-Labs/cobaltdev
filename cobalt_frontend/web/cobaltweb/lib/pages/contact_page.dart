@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../widgets/animated_section.dart';
 import '../widgets/glass_card.dart';
 
@@ -54,6 +52,7 @@ class _ContactPageState extends State<ContactPage> {
       
       setState(() => successMessage = "Opening email client...");
       _clearFields();
+      _showSuccessDialog();
     } catch (e) {
       setState(() => errorMessage = "Could not open email client. Please use the buttons below.");
     }

@@ -5,6 +5,7 @@ import 'pages/product_page.dart';
 import 'pages/portfolio_page.dart';
 import 'pages/about_page.dart';
 import 'pages/contact_page.dart';
+import 'pages/splash_screen.dart';
 import 'widgets/navbar.dart';
 
 void main() {
@@ -31,24 +32,56 @@ class CobaltDevApp extends StatelessWidget {
         ),
         fontFamilyFallback: const ['Noto Color Emoji'],
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       onGenerateRoute: (settings) {
         Widget page;
+        bool useLayout = true;
+
         switch (settings.name) {
-          case '/': page = const HomePage(); break;
-          case '/about': page = const AboutPage(); break;
-          case '/services': page = const ServicesPage(); break;
-          case '/products': page = const ProductsPage(); break;
-          case '/portfolio': page = const PortfolioPage(); break;
-          case '/contact': page = const ContactPage(); break;
-          default: page = const HomePage(); break;
+          case '/splash':
+            page = const SplashScreen();
+            useLayout = false;
+            break;
+          case '/':
+            page = const HomePage();
+            break;
+          case '/about':
+            page = const AboutPage();
+            break;
+          case '/services':
+            page = const ServicesPage();
+            break;
+          case '/products':
+            page = const ProductsPage();
+            break;
+          case '/portfolio':
+            page = const PortfolioPage();
+            break;
+          case '/contact':
+            page = const ContactPage();
+            break;
+          default:
+            page = const HomePage();
+            break;
         }
-        
+
+        if (!useLayout) {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => page,
+          );
+        }
+
         return PageRouteBuilder(
           settings: settings,
-          pageBuilder: (_, __, ___) => MainLayout(child: page),
-          transitionDuration: Duration.zero,
-          reverseTransitionDuration: Duration.zero,
+          pageBuilder: (context, animation, secondaryAnimation) => MainLayout(child: page),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 600),
         );
       },
     );

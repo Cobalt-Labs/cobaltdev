@@ -67,8 +67,8 @@ pub fn use_provide_files_context(mut auth: Signal<crate::hooks::use_auth::AuthSt
                     eprintln!("Failed to fetch files: {}", msg);
                     // If we get a 401, the token is expired — clear auth and force re-login
                     if msg.contains("401") || msg.contains("Unauthorized") || msg.contains("expired") {
-                        auth.write().token = None;
-                        auth.write().username = None;
+                        // Single write = single rerender (avoids a double-fetch cascade)
+                        *auth.write() = crate::hooks::use_auth::AuthState::default();
                     }
                 }
             }

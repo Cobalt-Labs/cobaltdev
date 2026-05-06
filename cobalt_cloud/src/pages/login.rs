@@ -77,6 +77,7 @@ pub fn LoginPage() -> Element {
                                     match crate::services::api::login(user, pass).await {
                                         Ok(state) => {
                                             auth.set(state);
+                                            is_loading.set(false);
                                             nav.push(crate::Route::HomePage {});
                                         }
                                         Err(e) => {

@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-// use dioxus_router::prelude::*;
 
 /// Tasks for upcoming days..
 /// enhance drag and drop feature and add upload from Finder for Cloud-GUI-done
@@ -29,14 +28,19 @@ enum Route {
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
-    dioxus::launch(app);
+    dioxus::launch(App);
 }
 
-fn app() -> Element {
+#[component]
+fn App() -> Element {
     let mut auth_state = crate::hooks::use_auth::use_provide_auth_context();
     crate::hooks::use_files::use_provide_files_context(auth_state);
 
-    // PERSISTENCE: Load from localStorage on startup
+    // Guards against the save effect overwriting localStorage before the load
+    // effect has had a chance to restore the session from a previous run.
+    let mut initialized = use_signal(|| false);
+
+    // PERSISTENCE: Load from localStorage on startup (runs once).
     use_effect(move || {
         spawn(async move {
             let res = document::eval(r#"
@@ -44,7 +48,7 @@ fn app() -> Element {
                 if (data) return data;
                 return null;
             "#).await;
-            
+
             if let Ok(data_val) = res {
                 if let Some(data_str) = data_val.as_str() {
                     if let Ok(state) = serde_json::from_str::<crate::hooks::use_auth::AuthState>(data_str) {
@@ -52,22 +56,27 @@ fn app() -> Element {
                     }
                 }
             }
+            // Mark init complete — the save effect may now run freely.
+            initialized.set(true);
         });
     });
 
-    // PERSISTENCE: Save to localStorage whenever auth_state changes
+    // PERSISTENCE: Save to localStorage whenever auth_state changes.
+    // Skip early renders before the load completes to avoid clobbering saved data.
     use_effect(move || {
+        if !initialized() {
+            return;
+        }
         let auth = auth_state.read().clone();
         spawn(async move {
             if let Ok(json) = serde_json::to_string(&auth) {
-                // Escape single quotes for JS compatibility
                 let escaped_json = json.replace("'", "\\'");
                 let js = format!("localStorage.setItem('cobalt_auth', '{}')", escaped_json);
                 let _ = document::eval(&js).await;
             }
         });
     });
-    
+
     rsx! {
         document::Link {
             href: "https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap",

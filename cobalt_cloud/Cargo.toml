@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-dioxus-router = "0.7"
 tracing = "0.1"
 chrono = { version = "0.4", features = ["serde"] }
 dioxus = { version = "0.7", features = ["web", "router", "signals", "asset"] }

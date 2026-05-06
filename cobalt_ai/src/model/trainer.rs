@@ -12,14 +12,14 @@ pub fn train<B: AutodiffBackend>(device: B::Device) {
     let mut dataset = TextDataset::new("data/input.txt");
 
     let batch_size = 12;
-    let num_epochs = 8; //max10
-    let iterations_per_epoch = 150; //200-350
+    let num_epochs = 12; //max15
+    let iterations_per_epoch = 200; //200-350
 
     let d_model = 192;
     let seq_len = 64;
     let n_heads = 4;
     let n_layers = 3;
-    let learning_rate = 4e-4;
+    let learning_rate = 3e-4;
 
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
     let mut model: crate::model::transformer::CobaltModel<B> = config.init(&device);

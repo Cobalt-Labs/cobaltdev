@@ -2,9 +2,7 @@ use burn::prelude::*;
 use burn::record::{CompactRecorder, Recorder};
 use burn::tensor::backend::Backend;
 use burn::tensor::{Int, Tensor, TensorData};
-
 use std::io::Write;
-
 use crate::data::loader::TextDataset;
 use crate::model::transformer::{CobaltModel, CobaltModelConfig};
 
@@ -54,9 +52,29 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
         let logits = output.reshape([seq_dim, vocab_dim]);
         let last_token_logits = logits.slice([seq_dim - 1..seq_dim]);
 
-        let temperature = 0.85;
+        let temperature = 0.95;
+
         let scaled_logits = last_token_logits / temperature;
-        let probs = burn::tensor::activation::softmax(scaled_logits, 1);
+        
+        let repetition_penalty = 1.25;
+
+        let mut logits_vec: Vec<f32> = scaled_logits.to_data().to_vec().unwrap();
+
+        let recent_tokens: Vec<i32> = tokens.iter().rev().take(20).cloned().collect();
+        
+        for (i, &token_id) in recent_tokens.iter().enumerate() {
+            let idx = token_id as usize;
+            if idx < logits_vec.len() {
+                logits_vec[idx] -= repetition_penalty * (1.0 / (i as f32 + 1.0));
+            }
+        }
+
+        let penalized_logits = Tensor::<B, 2>::from_data(
+            TensorData::new(logits_vec, [1, vocab_dim]), 
+            &device
+        );
+
+        let probs = burn::tensor::activation::softmax(penalized_logits, 1);
 
         let next_token_tensor = probs.argmax(1);
         let next_token_id: i32 = next_token_tensor.into_scalar();

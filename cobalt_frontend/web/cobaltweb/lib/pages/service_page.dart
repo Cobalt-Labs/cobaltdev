@@ -136,7 +136,7 @@ class ServicesPage extends StatelessWidget {
                                 boxShadow: [
                                   BoxShadow(
                                     color:
-                                        const Color(0xFF9333EA).withOpacity(0.35),
+                                        const Color(0xFF9333EA).withValues(alpha: 0.35),
                                     blurRadius: 20,
                                     offset: const Offset(0, 4),
                                   ),
@@ -185,10 +185,10 @@ class ServicesPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFA855F7).withOpacity(0.1),
+                color: const Color(0xFFA855F7).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: const Color(0xFFA855F7).withOpacity(0.2),
+                  color: const Color(0xFFA855F7).withValues(alpha: 0.2),
                 ),
               ),
               child: Icon(icon, color: const Color(0xFFA855F7), size: 22),

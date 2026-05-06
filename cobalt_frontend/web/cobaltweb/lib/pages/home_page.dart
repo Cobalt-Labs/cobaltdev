@@ -70,10 +70,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                             margin: const EdgeInsets.only(bottom: 20),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF8B5CF6).withOpacity(0.08),
+                              color: const Color(0xFF8B5CF6).withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
-                                color: const Color(0xFF8B5CF6).withOpacity(0.4),
+                                color: const Color(0xFF8B5CF6).withValues(alpha: 0.4),
                               ),
                             ),
                             child: Row(
@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w900,
-                    color: const Color(0xFFA855F7).withOpacity(0.45),
+                    color: const Color(0xFFA855F7).withValues(alpha: 0.45),
                     letterSpacing: 2,
                   ),
                 ),
@@ -354,9 +354,9 @@ class _HomePageState extends State<HomePage> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA855F7).withOpacity(0.1),
+                    color: const Color(0xFFA855F7).withValues(alpha: 0.1),
                     border: Border.all(
-                      color: const Color(0xFFA855F7).withOpacity(0.25),
+                      color: const Color(0xFFA855F7).withValues(alpha: 0.25),
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -404,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
+                        color: Colors.white.withValues(alpha: 0.05),
                         border: Border.all(color: Colors.white10),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -429,7 +429,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9333EA).withOpacity(0.3),
+                    color: const Color(0xFF9333EA).withValues(alpha: 0.3),
                     blurRadius: 16,
                   ),
                 ],
@@ -489,7 +489,7 @@ class _HoverButtonState extends State<_HoverButton> {
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
           transform: Matrix4.identity()
-            ..translate(0.0, _hovered ? -2.0 : 0.0),
+            ..setTranslationRaw(0.0, _hovered ? -2.0 : 0.0, 0.0),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
           decoration: widget.isPrimary
               ? BoxDecoration(
@@ -502,7 +502,7 @@ class _HoverButtonState extends State<_HoverButton> {
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0xFF9333EA)
-                          .withOpacity(_hovered ? 0.55 : 0.35),
+                          .withValues(alpha: _hovered ? 0.55 : 0.35),
                       blurRadius: _hovered ? 28 : 18,
                       offset: const Offset(0, 4),
                     ),
@@ -510,11 +510,11 @@ class _HoverButtonState extends State<_HoverButton> {
                 )
               : BoxDecoration(
                   color: _hovered
-                      ? const Color(0xFF8B5CF6).withOpacity(0.12)
-                      : const Color(0xFF8B5CF6).withOpacity(0.06),
+                      ? const Color(0xFF8B5CF6).withValues(alpha: 0.12)
+                      : const Color(0xFF8B5CF6).withValues(alpha: 0.06),
                   border: Border.all(
                     color: const Color(0xFFA855F7)
-                        .withOpacity(_hovered ? 0.6 : 0.35),
+                        .withValues(alpha: _hovered ? 0.6 : 0.35),
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),

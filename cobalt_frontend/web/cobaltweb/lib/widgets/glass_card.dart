@@ -41,7 +41,7 @@ class _GlassCardState extends State<GlassCard> {
           width: widget.width,
           padding: widget.padding ?? const EdgeInsets.all(24),
           transform: Matrix4.identity()
-            ..translate(0.0, _hovered && widget.onTap != null ? -4.0 : 0.0),
+            ..setTranslationRaw(0.0, _hovered && widget.onTap != null ? -4.0 : 0.0, 0.0),
           decoration: BoxDecoration(
             // Simulated glass: dark translucent bg + border — no BackdropFilter needed
             color: _hovered && widget.onTap != null
@@ -50,21 +50,21 @@ class _GlassCardState extends State<GlassCard> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: _hovered && widget.onTap != null
-                  ? const Color(0xFFA855F7).withOpacity(0.45)
-                  : const Color(0xFFA855F7).withOpacity(0.18),
+                  ? const Color(0xFFA855F7).withValues(alpha: 0.45)
+                  : const Color(0xFFA855F7).withValues(alpha: 0.18),
               width: 1,
             ),
             boxShadow: _hovered && widget.onTap != null
                 ? [
                     BoxShadow(
-                      color: const Color(0xFFA855F7).withOpacity(0.12),
+                      color: const Color(0xFFA855F7).withValues(alpha: 0.12),
                       blurRadius: 40,
                       spreadRadius: 1,
                     ),
                   ]
                 : [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 16,
                       offset: const Offset(0, 4),
                     ),

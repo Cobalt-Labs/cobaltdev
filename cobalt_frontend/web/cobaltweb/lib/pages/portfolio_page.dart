@@ -124,7 +124,7 @@ class PortfolioPage extends StatelessWidget {
                                 boxShadow: [
                                   BoxShadow(
                                     color: const Color(0xFF9333EA)
-                                        .withOpacity(0.35),
+                                        .withValues(alpha: 0.35),
                                     blurRadius: 20,
                                     offset: const Offset(0, 4),
                                   ),

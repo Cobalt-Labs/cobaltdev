@@ -258,7 +258,7 @@ class _ContactPageState extends State<ContactPage> {
                                   : [
                                       BoxShadow(
                                         color: const Color(0xFF9333EA)
-                                            .withOpacity(0.4),
+                                            .withValues(alpha: 0.4),
                                         blurRadius: 20,
                                         offset: const Offset(0, 4),
                                       ),
@@ -351,9 +351,9 @@ class _ContactPageState extends State<ContactPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -383,9 +383,9 @@ class _ContactPageState extends State<ContactPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.07),
+          color: color.withValues(alpha: 0.07),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

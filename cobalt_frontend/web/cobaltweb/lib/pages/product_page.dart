@@ -160,15 +160,15 @@ class ProductsPage extends StatelessWidget {
     switch (status) {
       case "Live":
         statusColor = const Color(0xFF4ADE80);
-        statusBg = const Color(0xFF4ADE80).withOpacity(0.1);
+        statusBg = const Color(0xFF4ADE80).withValues(alpha: 0.1);
         break;
       case "Available":
         statusColor = const Color(0xFFA855F7);
-        statusBg = const Color(0xFFA855F7).withOpacity(0.1);
+        statusBg = const Color(0xFFA855F7).withValues(alpha: 0.1);
         break;
       default: // Open Source
         statusColor = const Color(0xFF94A3B8);
-        statusBg = Colors.white.withOpacity(0.04);
+        statusBg = Colors.white.withValues(alpha: 0.04);
     }
 
     return SizedBox(
@@ -219,7 +219,7 @@ class ProductsPage extends StatelessWidget {
                     color: statusBg,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: statusColor.withOpacity(0.3),
+                      color: statusColor.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Text(
@@ -235,7 +235,7 @@ class ProductsPage extends StatelessWidget {
                   Icon(
                     Icons.arrow_forward_rounded,
                     size: 18,
-                    color: const Color(0xFFA855F7).withOpacity(0.7),
+                    color: const Color(0xFFA855F7).withValues(alpha: 0.7),
                   ),
               ],
             ),

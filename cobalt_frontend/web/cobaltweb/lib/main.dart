@@ -200,7 +200,7 @@ class _MainLayoutState extends State<MainLayout> {
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         tileColor: isActive
-            ? const Color(0xFFA855F7).withOpacity(0.15)
+            ? const Color(0xFFA855F7).withValues(alpha: 0.15)
             : Colors.transparent,
         title: Text(
           title,

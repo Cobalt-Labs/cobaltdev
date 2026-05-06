@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        const Color(0xFF8B5CF6).withOpacity(0.15 * _fadeAnimation.value),
+                        const Color(0xFF8B5CF6).withValues(alpha: 0.15 * _fadeAnimation.value),
                         Colors.transparent,
                       ],
                     ),
@@ -93,10 +93,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
+                        color: Colors.white.withValues(alpha: 0.05),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: const Color(0xFFA855F7).withOpacity(0.2),
+                          color: const Color(0xFFA855F7).withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),

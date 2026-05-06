@@ -1,6 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
+/// A premium card widget with hover effects.
+/// [BackdropFilter] removed from here to eliminate GPU overdraw/scroll lag.
+/// Uses a subtle border + background color approach instead.
 class GlassCard extends StatefulWidget {
   final Widget child;
   final double? height;
@@ -27,48 +29,48 @@ class _GlassCardState extends State<GlassCard> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: widget.onTap != null
-          ? SystemMouseCursors.click
-          : MouseCursor.defer,
+      cursor: widget.onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-              height: widget.height,
-              width: widget.width,
-              padding: widget.padding ?? const EdgeInsets.all(24),
-              transform: Matrix4.identity()..translate(0.0, _hovered ? -4.0 : 0.0),
-              decoration: BoxDecoration(
-                color: _hovered && widget.onTap != null
-                    ? Colors.white.withOpacity(0.04)
-                    : Colors.white.withOpacity(0.025),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: _hovered && widget.onTap != null
-                      ? const Color(0xFFA855F7).withOpacity(0.35)
-                      : const Color(0xFFA855F7).withOpacity(0.15),
-                  width: 1,
-                ),
-                boxShadow: _hovered && widget.onTap != null
-                    ? [
-                        BoxShadow(
-                          color: const Color(0xFFA855F7).withOpacity(0.1),
-                          blurRadius: 50,
-                          spreadRadius: 2,
-                        )
-                      ]
-                    : [],
-              ),
-              child: widget.child,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          height: widget.height,
+          width: widget.width,
+          padding: widget.padding ?? const EdgeInsets.all(24),
+          transform: Matrix4.identity()
+            ..translate(0.0, _hovered && widget.onTap != null ? -4.0 : 0.0),
+          decoration: BoxDecoration(
+            // Simulated glass: dark translucent bg + border — no BackdropFilter needed
+            color: _hovered && widget.onTap != null
+                ? const Color(0xFF16122A)
+                : const Color(0xFF100E22),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _hovered && widget.onTap != null
+                  ? const Color(0xFFA855F7).withOpacity(0.45)
+                  : const Color(0xFFA855F7).withOpacity(0.18),
+              width: 1,
             ),
+            boxShadow: _hovered && widget.onTap != null
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFFA855F7).withOpacity(0.12),
+                      blurRadius: 40,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
           ),
+          child: widget.child,
         ),
       ),
     );

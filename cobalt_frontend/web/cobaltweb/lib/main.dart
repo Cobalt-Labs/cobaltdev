@@ -20,17 +20,32 @@ class CobaltDevApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cobalt',
+      // Smooth scrolling on web — removes the rubber-band/glow overscroll effect
+      scrollBehavior: _SmoothScrollBehavior(),
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFFA855F7), // Purple 500
-        scaffoldBackgroundColor: const Color(0xFF07070F), // Dark slate/purple
+        primaryColor: const Color(0xFFA855F7),
+        scaffoldBackgroundColor: const Color(0xFF07070F),
         fontFamily: 'Inter',
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
-          headlineMedium: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
+          headlineLarge: TextStyle(
+            fontSize: 48,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: -0.5,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: -0.5,
+          ),
           bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
         ),
         fontFamilyFallback: const ['Noto Color Emoji'],
+        // Remove splash/highlight on taps — feels more premium
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
       ),
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
@@ -74,17 +89,33 @@ class CobaltDevApp extends StatelessWidget {
 
         return PageRouteBuilder(
           settings: settings,
-          pageBuilder: (context, animation, secondaryAnimation) => MainLayout(child: page),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              MainLayout(child: page),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
-          transitionDuration: const Duration(milliseconds: 600),
+          // Snappy 300ms transition — 600ms felt sluggish
+          transitionDuration: const Duration(milliseconds: 300),
         );
       },
     );
+  }
+}
+
+/// Removes the overscroll glow/rubber-band effect for a clean web feel.
+class _SmoothScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child; // No glow indicator
+  }
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const ClampingScrollPhysics();
   }
 }
 
@@ -108,6 +139,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF07070F),
       drawer: Drawer(
         backgroundColor: const Color(0xFF0B091C),
         child: ListView(
@@ -115,16 +147,29 @@ class _MainLayoutState extends State<MainLayout> {
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Color(0x338B5CF6))),
+                border: Border(
+                  bottom: BorderSide(color: Color(0x33A855F7)),
+                ),
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset('assets/images/cobalt_logo.png', width: 24, height: 24),
+                    Image.asset(
+                      'assets/images/cobalt_logo.png',
+                      width: 24,
+                      height: 24,
+                    ),
                     const SizedBox(width: 12),
-                    const Text("Cobalt", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
+                    const Text(
+                      "Cobalt",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -154,7 +199,9 @@ class _MainLayoutState extends State<MainLayout> {
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        tileColor: isActive ? const Color(0xFFA855F7).withOpacity(0.15) : Colors.transparent,
+        tileColor: isActive
+            ? const Color(0xFFA855F7).withOpacity(0.15)
+            : Colors.transparent,
         title: Text(
           title,
           style: TextStyle(
@@ -163,6 +210,16 @@ class _MainLayoutState extends State<MainLayout> {
             fontSize: 15,
           ),
         ),
+        trailing: isActive
+            ? Container(
+                width: 4,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFA855F7),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              )
+            : null,
         onTap: () {
           Navigator.pop(context);
           if (!isActive) {

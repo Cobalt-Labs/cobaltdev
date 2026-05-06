@@ -12,65 +12,82 @@ class PortfolioPage extends StatelessWidget {
     final isDesktop = width > 1100;
     final isMobile = width < 700;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 24 : 48,
-            vertical: isMobile ? 40 : 80,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              AnimatedSection(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "My Portfolio",
-                      style: TextStyle(
-                        fontSize: isDesktop ? 48 : 36,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -1,
-                        color: Colors.white,
-                      ),
+    // No inner Scaffold — MainLayout already provides one
+    return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 24 : 48,
+          vertical: isMobile ? 40 : 80,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            AnimatedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "My Portfolio",
+                    style: TextStyle(
+                      fontSize: isDesktop ? 48 : 36,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -1,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      "A collection of apps, backends, and systems I've built over the last 7 years.",
-                      style: TextStyle(fontSize: 18, color: Colors.white70),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "A collection of apps, backends, and systems I've built over the last 7 years.",
+                    style: TextStyle(fontSize: 18, color: Colors.white70),
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 80),
+            const SizedBox(height: 80),
 
-              // Apps Section
-              _sectionTitle("Mobile & Desktop Apps"),
-              const SizedBox(height: 24),
-              _projectGrid(context, _appProjects()),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 80),
+              child: _sectionTitle("Mobile & Desktop Apps"),
+            ),
+            const SizedBox(height: 24),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 120),
+              child: _projectGrid(context, _appProjects()),
+            ),
 
-              const SizedBox(height: 80),
+            const SizedBox(height: 80),
 
-              // Backend Section
-              _sectionTitle("Rust Backend Systems"),
-              const SizedBox(height: 24),
-              _projectGrid(context, _backendProjects()),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 160),
+              child: _sectionTitle("Rust Backend Systems"),
+            ),
+            const SizedBox(height: 24),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 200),
+              child: _projectGrid(context, _backendProjects()),
+            ),
 
-              const SizedBox(height: 80),
+            const SizedBox(height: 80),
 
-              // Systems & Experiments
-              _sectionTitle("Systems & Experiments"),
-              const SizedBox(height: 24),
-              _projectGrid(context, _systemProjects()),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 240),
+              child: _sectionTitle("Systems & Experiments"),
+            ),
+            const SizedBox(height: 24),
+            AnimatedSection(
+              delay: const Duration(milliseconds: 280),
+              child: _projectGrid(context, _systemProjects()),
+            ),
 
-              const SizedBox(height: 100),
+            const SizedBox(height: 100),
 
-              // CTA
-              Center(
+            // CTA
+            AnimatedSection(
+              delay: const Duration(milliseconds: 300),
+              child: Center(
                 child: SizedBox(
                   width: isMobile ? double.infinity : null,
                   child: GlassCard(
@@ -87,30 +104,40 @@ class PortfolioPage extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pushReplacementNamed(
-                            context,
-                            '/contact',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFF4F46E5,
-                            ), // Indigo 600
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 40,
-                              vertical: 18,
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () => Navigator.pushReplacementNamed(
+                              context,
+                              '/contact',
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: const Text(
-                            "Let's Build Something Together",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 18,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF9333EA), Color(0xFF6D28D9)],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF9333EA)
+                                        .withOpacity(0.35),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Text(
+                                "Let's Build Something Together",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -119,21 +146,37 @@ class PortfolioPage extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 60),
+          ],
         ),
       ),
     );
   }
 
   Widget _sectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.5,
-      ),
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 20,
+          decoration: BoxDecoration(
+            color: const Color(0xFFA855F7),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 
@@ -144,9 +187,7 @@ class PortfolioPage extends StatelessWidget {
     return Wrap(
       spacing: 24,
       runSpacing: 24,
-      children: projects
-          .map((project) => _projectCard(context, project))
-          .toList(),
+      children: projects.map((p) => _projectCard(context, p)).toList(),
     );
   }
 
@@ -191,7 +232,7 @@ class PortfolioPage extends StatelessWidget {
                 if (project['url'] != null)
                   TextButton.icon(
                     onPressed: () => _openLink(project['url']),
-                    icon: const Icon(Icons.arrow_forward, size: 16),
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 16),
                     label: const Text("View Project"),
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFFA855F7),
@@ -214,66 +255,59 @@ class PortfolioPage extends StatelessWidget {
   Future<void> _openLink(String url) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $url';
+      debugPrint('Could not launch $url');
     }
   }
 
-  // PROJECT DATA
-  List<Map<String, dynamic>> _appProjects() {
-    return [
-      {
-        "title": "Flutter + Rust Hybrid Apps",
-        "tech": "Flutter • Rust • FFI",
-        "desc":
-            "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
-        "url": "https://github.com/ibrahim-3595",
-      },
-      {
-        "title": "Secure Journal App",
-        "tech": "Flutter • Rust • SQLx",
-        "desc":
-            "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
-        "url": "https://github.com/ibrahim-3595/Secure-Journal",
-      },
-    ];
-  }
+  List<Map<String, dynamic>> _appProjects() => [
+        {
+          "title": "Flutter + Rust Hybrid Apps",
+          "tech": "Flutter • Rust • FFI",
+          "desc":
+              "Multiple production apps using Flutter for beautiful UI and Rust for high-performance core logic via FFI.",
+          "url": "https://github.com/ibrahim-3595",
+        },
+        {
+          "title": "Secure Journal App",
+          "tech": "Flutter • Rust • SQLx",
+          "desc":
+              "Private journaling app with end-to-end encryption, Rust backend, and clean cross-platform UI.",
+          "url": "https://github.com/ibrahim-3595/Secure-Journal",
+        },
+      ];
 
-  List<Map<String, dynamic>> _backendProjects() {
-    return [
-      {
-        "title": "Cobalt Cloud",
-        "tech": "Rust • Axum • Dioxus",
-        "desc":
-            "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
-        "url":
-            "https://github.com/ibrahim-3595/cobaltdev/tree/main/cobalt_cloud",
-      },
-      {
-        "title": "Axum Microservices",
-        "tech": "Rust • Axum • SQLx",
-        "desc":
-            "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
-        "url": "https://github.com/ibrahim-3595",
-      },
-    ];
-  }
+  List<Map<String, dynamic>> _backendProjects() => [
+        {
+          "title": "Cobalt Cloud",
+          "tech": "Rust • Axum • Dioxus",
+          "desc":
+              "Self-hosted private cloud infrastructure with Dioxus frontend and Rust backend in cobalt_backend.",
+          "url":
+              "https://github.com/Cobalt-Labs/cobaltdev/tree/main/cobalt_cloud",
+        },
+        {
+          "title": "Axum Microservices",
+          "tech": "Rust • Axum • SQLx",
+          "desc":
+              "Scalable backend APIs and microservices built with Axum framework and SQLx for database operations.",
+          "url": "https://github.com/ibrahim-3595",
+        },
+      ];
 
-  List<Map<String, dynamic>> _systemProjects() {
-    return [
-      {
-        "title": "Algorithms in Rust",
-        "tech": "Rust • DSA",
-        "desc":
-            "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
-        "url": "https://github.com/ibrahim-3595",
-      },
-      {
-        "title": "Rust CLI Tools",
-        "tech": "Rust • CLI • SQLx",
-        "desc":
-            "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
-        "url": "https://github.com/ibrahim-3595",
-      },
-    ];
-  }
+  List<Map<String, dynamic>> _systemProjects() => [
+        {
+          "title": "Algorithms in Rust",
+          "tech": "Rust • DSA",
+          "desc":
+              "Collection of data structures and algorithms implemented in Rust for learning and performance testing.",
+          "url": "https://github.com/ibrahim-3595",
+        },
+        {
+          "title": "Rust CLI Tools",
+          "tech": "Rust • CLI • SQLx",
+          "desc":
+              "Command-line tools and utilities built with pure Rust for maximum performance and reliability.",
+          "url": "https://github.com/ibrahim-3595",
+        },
+      ];
 }

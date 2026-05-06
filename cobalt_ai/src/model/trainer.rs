@@ -1,63 +1,72 @@
-use burn::optim::{AdamConfig, Optimizer, GradientsParams};
-use burn::tensor::backend::AutodiffBackend;
-use burn::prelude::*;
 use burn::nn::loss::CrossEntropyLoss;
-use burn::record::{CompactRecorder};
+use burn::optim::decay::WeightDecayConfig;
+use burn::optim::{AdamConfig, GradientsParams, Optimizer};
+use burn::prelude::*;
+use burn::record::CompactRecorder;
+use burn::tensor::backend::AutodiffBackend;
 
-use crate::model::transformer::CobaltModelConfig;
 use crate::data::loader::TextDataset;
+use crate::model::transformer::CobaltModelConfig;
 
 pub fn train<B: AutodiffBackend>(device: B::Device) {
     let mut dataset = TextDataset::new("data/input.txt");
-    
-    // Hyperparameters
-    let batch_size = 32;
-    let seq_len = 128;
-    let num_epochs = 20; //5
-    let d_model = 256;
-    let n_layers = 4;
+
+    let batch_size = 12;
+    let num_epochs = 8; //max10
+    let iterations_per_epoch = 150; //200-350
+
+    let d_model = 192;
+    let seq_len = 64;
     let n_heads = 4;
-    let learning_rate = 1e-3;
-    let iterations_per_epoch = 500; //50
+    let n_layers = 3;
+    let learning_rate = 4e-4;
 
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
     let mut model: crate::model::transformer::CobaltModel<B> = config.init(&device);
-    let mut optimizer = AdamConfig::new().init();
+
+    let optimizer_config =
+        AdamConfig::new().with_weight_decay(Some(WeightDecayConfig { penalty: 1e-5 }));
+    let mut optimizer = optimizer_config.init();
 
     let loss_fn = CrossEntropyLoss::new(None, &device);
 
-    println!("Training on device: {:?}", device);
-    println!("Dataset size: {} chars, Vocab size: {}", dataset.tokens.len(), dataset.vocab_size);
+    println!("Training started on {:?}", device);
+    println!(
+        "Vocab size: {} | Dataset chars: {}",
+        dataset.vocab_size,
+        dataset.tokens.len()
+    );
 
     for epoch in 0..num_epochs {
         for i in 0..iterations_per_epoch {
             let batch = dataset.get_batch(batch_size, seq_len, &device);
-            
-            let outputs = model.forward(batch.tokens);
-            
-            let [batch_dim, seq_dim, vocab_dim] = outputs.dims();
 
-            let logits = outputs.reshape([batch_dim * seq_dim, vocab_dim]);
-            let targets = batch.targets.reshape([batch_dim * seq_dim]);
+            let (loss, grads) = {
+                let outputs = model.forward(batch.tokens);
+                let [b, s, v] = outputs.dims();
 
-            let loss = loss_fn.forward(logits, targets);
+                let logits = outputs.reshape([b * s, v]);
+                let targets = batch.targets.reshape([b * s]);
 
-            let grads = loss.backward();
-            let grads = GradientsParams::from_grads(grads, &model);
-            
+                let loss = loss_fn.forward(logits, targets);
+
+                let grads = loss.backward();
+                let grads = GradientsParams::from_grads(grads, &model);
+
+                (loss, grads)
+            };
+
             model = optimizer.step(learning_rate, model, grads);
 
-            // if i == iterations_per_epoch - 1 {
-            //     println!("Epoch {} completed - Final Batch Loss: {}", epoch, loss);
-            // }
-            if i % 10 == 0 {
+            if i % 20 == 0 || i == iterations_per_epoch - 1 {
                 println!("Epoch {:>2} | Iter {:>4} | Loss: {:.4}", epoch, i, loss);
             }
         }
     }
-    
-    std::fs::create_dir_all("models").unwrap();
-    let recorder = CompactRecorder::new();
-    model.save_file("models/cobalt_model", &recorder).expect("Failed to save model");
-    println!("Saved model to models/cobalt_model");
+
+    model
+        .clone()
+        .save_file("models/cobalt_model", &CompactRecorder::new())
+        .expect("Failed to save final model");
+    println!("Training finished! Final model saved.");
 }

@@ -11,7 +11,7 @@ pub struct CobaltModelConfig {
     pub d_model: usize,
     pub vocab_size: usize,
     pub max_seq_len: usize,
-    #[config(default = "1024")] //256
+    #[config(default = "1024")]
     pub d_ff: usize,
 }
 
@@ -82,7 +82,7 @@ impl<B: Backend> TransformerBlock<B> {
             .unsqueeze::<3>();
 
         let norm_x = self.norm1.forward(input.clone());
-        let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x).mask_attn(mask); // ← causal mask applied here
+        let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x).mask_attn(mask);
         let attn_out = self.attention.forward(mha_input);
         let x = input + attn_out.context;
 
@@ -92,7 +92,7 @@ impl<B: Backend> TransformerBlock<B> {
             .forward(self.gelu.forward(self.ff1.forward(norm_x2)));
         x + ff_out
 
-        // // Pre-norm formulation: x = x + Attention(NormX)
+        // Pre-norm formulation: x = x + Attention(NormX)
         // let norm_x = self.norm1.forward(input.clone());
         // let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x);
         // let attn_out = self.attention.forward(mha_input);
@@ -108,7 +108,6 @@ impl<B: Backend> CobaltModel<B> {
         let [batch_size, seq_len] = input.dims();
         let device = input.device();
 
-        // Ensure positional vector is max seq_len.
         let positions = Tensor::<B, 1, Int>::arange(0..seq_len as i64, &device)
             .reshape([1, seq_len])
             .repeat_dim(0, batch_size);

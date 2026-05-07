@@ -12,18 +12,14 @@ fn panic(_info: &PanicInfo) -> ! {
     }
 }
 
-#[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! {
-    let vga_buffer = 0xb8000 as *mut u8;
+mod vga_buffer;
 
-    let message = b"Hello";
+use bootloader::{entry_point, BootInfo};
 
-    for (i, &byte) in message.iter().enumerate() {
-        unsafe {
-            *vga_buffer.offset(i as isize * 2) = byte;
-            *vga_buffer.offset(i as isize * 2 + 1) = 0x07;
-        }
-    }
+entry_point!(kernel_main);
+
+fn kernel_main(_boot_info: &'static BootInfo) -> ! {
+    vga_buffer::print_something();
 
     loop {}
 }

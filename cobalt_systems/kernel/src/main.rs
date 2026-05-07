@@ -3,7 +3,7 @@
 #![forbid(unsafe_op_in_unsafe_fn)]
 
 use core::panic::PanicInfo;
-use bootloader::{entry_point, BootInfo};
+use bootloader_api::{entry_point, BootInfo};
 
 mod vga_buffer;
 
@@ -18,7 +18,7 @@ fn panic(_info: &PanicInfo) -> ! {
     }
 }
 
-fn kernel_main(_boot_info: &'static BootInfo) -> ! {
+fn kernel_main(_boot_info: &'static mut BootInfo) -> ! {
     vga_buffer::print_something();
 
     loop {

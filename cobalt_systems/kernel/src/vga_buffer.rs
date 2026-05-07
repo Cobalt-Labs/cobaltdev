@@ -1,6 +1,7 @@
 use core::fmt;
 use core::fmt::Write;
 use spin::Mutex;
+use spin::Lazy;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -157,7 +158,7 @@ impl fmt::Write for Writer {
     }
 }
 
-pub static WRITER: Mutex<Writer> = Mutex::new(Writer::new());
+pub static WRITER: Lazy<Mutex<Writer>> = Lazy::new(|| Mutex::new(Writer::new()));
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {

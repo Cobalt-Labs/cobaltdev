@@ -2,6 +2,12 @@ use anyhow::Result;
 use reqwest::multipart::{Form, Part};
 use reqwest::{Client, Response};
 
+// On Android emulator, 10.0.2.2 points to the host machine (your Mac)
+// On a physical phone, you should replace this with your Mac's local IP address
+#[cfg(target_os = "android")]
+const BACKEND_URL: &str = "http://10.0.2.2:8001"; 
+
+#[cfg(not(target_os = "android"))]
 const BACKEND_URL: &str = "http://localhost:8001";
 
 pub async fn upload_file_bytes(filename: String, file_bytes: Vec<u8>, token: Option<String>) -> Result<()> {

@@ -28,6 +28,9 @@ enum Route {
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
+    // Initialize logging to catch panics and see logs via adb logcat
+    dioxus_logger::init(tracing::Level::INFO).expect("failed to init logger");
+    
     dioxus::launch(App);
 }
 

@@ -7,7 +7,7 @@ use serde_json::json;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
-pub enum AppError {
+pub enum _AppError {
     #[error("Not found: {0}")]
     NotFound(String),
 
@@ -24,17 +24,17 @@ pub enum AppError {
     Database(#[from] sqlx::Error),
 }
 
-impl IntoResponse for AppError {
+impl IntoResponse for _AppError {
     fn into_response(self) -> Response {
         let (status, message) = match &self {
-            AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
-            AppError::Unauthorized(msg) => (StatusCode::UNAUTHORIZED, msg.clone()),
-            AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg.clone()),
-            AppError::Internal(_) => (
+            _AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
+            _AppError::Unauthorized(msg) => (StatusCode::UNAUTHORIZED, msg.clone()),
+            _AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg.clone()),
+            _AppError::Internal(_) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Internal server error".to_string(),
             ),
-            AppError::Database(_) => (
+            _AppError::Database(_) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Database error".to_string(),
             ),
@@ -45,4 +45,4 @@ impl IntoResponse for AppError {
 }
 
 // Convenience alias — your handlers return this
-pub type AppResult<T> = Result<T, AppError>;
+pub type _AppResult<T> = Result<T, _AppError>;

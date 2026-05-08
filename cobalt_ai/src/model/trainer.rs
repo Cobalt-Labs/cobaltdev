@@ -13,7 +13,7 @@ pub fn train<B: AutodiffBackend>(device: B::Device) {
 
     let batch_size = 12;
     let num_epochs = 14; //max15
-    let iterations_per_epoch = 210; //200-350
+    let iterations_per_epoch = 250; //200-350
 
     let d_model = 192;
     let seq_len = 64;

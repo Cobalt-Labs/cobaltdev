@@ -1,4 +1,5 @@
 use std::fs;
+use std::env;
 
 pub fn cmd_pwd() {
     match env::current_dir() {

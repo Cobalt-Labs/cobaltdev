@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 #![forbid(unsafe_op_in_unsafe_fn)]
+#![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
 use bootloader_api::{entry_point, BootInfo};

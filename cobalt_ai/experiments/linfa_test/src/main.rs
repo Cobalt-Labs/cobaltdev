@@ -45,9 +45,11 @@ fn main() -> anyhow::Result<()> {
         .map_targets(|x| categorize_happiness(x.to_owned() as i32))
         .with_feature_names(feature_names);
 
+    let (train, test) = linfa_dataset.split_with_ratio(0.8);
+
     let model = DecisionTree::params()
         .split_quality(SplitQuality::Gini)
-        .fit(&linfa_dataset)?;
+        .fit(&train)?;
 
     File::create("dt.tex")?
         .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())?;

@@ -31,7 +31,8 @@ pub fn handle_char(c: char) {
             shell.len = 0;
             print_prompt();
         }
-        '\x08' => { // Backspace
+        '\x08' => {
+            // Backspace
             if shell.len > 0 {
                 shell.len -= 1;
                 print!("\x08 \x08"); // Erase character from screen
@@ -53,8 +54,10 @@ pub fn handle_raw_key(_key: pc_keyboard::KeyCode) {
 }
 
 fn execute_command(buffer: &[char]) {
-    if buffer.is_empty() { return; }
-    
+    if buffer.is_empty() {
+        return;
+    }
+
     if compare_cmd(buffer, "help") {
         println!("Available commands: help, echo, clear, version");
     } else if compare_cmd(buffer, "clear") {

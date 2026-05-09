@@ -1,7 +1,7 @@
+use spin::Lazy;
 use x86_64::structures::gdt::{Descriptor, GlobalDescriptorTable, SegmentSelector};
 use x86_64::structures::tss::TaskStateSegment;
 use x86_64::VirtAddr;
-use spin::Lazy;
 
 pub const DOUBLE_FAULT_IST_INDEX: u16 = 0;
 
@@ -11,8 +11,8 @@ static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
         const STACK_SIZE: usize = 4096 * 5;
         static mut STACK: [u8; STACK_SIZE] = [0; STACK_SIZE];
 
-        // SAFETY: We take a pointer to the static mutable STACK. This is safe as it's only done once during initialization.
-        let stack_start = VirtAddr::from_ptr(unsafe { &STACK });
+        // SAFETY: We take a raw pointer to the static mutable STACK. This is safe as it's only done once during initialization.
+        let stack_start = VirtAddr::from_ptr(core::ptr::addr_of!(STACK));
         let stack_end = stack_start + STACK_SIZE.try_into().unwrap();
         stack_end
     };
@@ -21,8 +21,8 @@ static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
 
 static GDT: Lazy<(GlobalDescriptorTable, Selectors)> = Lazy::new(|| {
     let mut gdt = GlobalDescriptorTable::new();
-    let code_selector = gdt.push(Descriptor::kernel_code_segment());
-    let tss_selector = gdt.push(Descriptor::tss_segment(&TSS));
+    let code_selector = gdt.append(Descriptor::kernel_code_segment());
+    let tss_selector = gdt.append(Descriptor::tss_segment(&TSS));
     (
         gdt,
         Selectors {
@@ -38,8 +38,8 @@ struct Selectors {
 }
 
 pub fn init() {
+    use x86_64::instructions::segmentation::{Segment, CS};
     use x86_64::instructions::tables::load_tss;
-    use x86_64::instructions::segmentation::{CS, Segment};
 
     GDT.0.load();
     // SAFETY: We are loading valid segment selectors created from our GDT.

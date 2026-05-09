@@ -3,14 +3,14 @@
 #![forbid(unsafe_op_in_unsafe_fn)]
 #![feature(abi_x86_interrupt)]
 
-use core::panic::PanicInfo;
 use bootloader_api::{entry_point, BootInfo};
+use core::panic::PanicInfo;
 
-mod vga_buffer;
 mod gdt;
 mod interrupts;
 mod keyboard;
 mod shell;
+mod vga_buffer;
 
 entry_point!(kernel_main);
 
@@ -27,7 +27,7 @@ fn panic(info: &PanicInfo) -> ! {
 
 fn kernel_main(_boot_info: &'static mut BootInfo) -> ! {
     println!("Initializing Cobalt Kernel...");
-    
+
     gdt::init();
     interrupts::init_idt();
     // SAFETY: Initializing the PICs is safe as long as the offsets don't conflict with exceptions.

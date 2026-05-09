@@ -1,6 +1,6 @@
 use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
-use spin::Mutex;
 use spin::Lazy;
+use spin::Mutex;
 
 pub static KEYBOARD: Lazy<Mutex<Keyboard<layouts::Us104Key, ScancodeSet1>>> = Lazy::new(|| {
     Mutex::new(Keyboard::new(

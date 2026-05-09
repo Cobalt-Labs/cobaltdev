@@ -1,9 +1,9 @@
-use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
-use crate::println;
 use crate::gdt;
-use spin::Lazy;
+use crate::println;
 use pic8259::ChainedPics;
+use spin::Lazy;
 use spin::Mutex;
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
@@ -22,10 +22,6 @@ pub enum InterruptIndex {
 impl InterruptIndex {
     fn as_u8(self) -> u8 {
         self as u8
-    }
-
-    fn as_usize(self) -> usize {
-        usize::from(self.as_u8())
     }
 }
 

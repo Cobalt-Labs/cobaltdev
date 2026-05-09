@@ -1,7 +1,7 @@
 use core::fmt;
 use core::fmt::Write;
-use spin::Mutex;
 use spin::Lazy;
+use spin::Mutex;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -65,10 +65,6 @@ impl Writer {
         }
     }
 
-    pub fn set_color(&mut self, foreground: Color, background: Color) {
-        self.color_code = ColorCode::new(foreground, background);
-    }
-
     pub fn clear_screen(&mut self) {
         for row in 0..BUFFER_HEIGHT {
             self.clear_row(row);
@@ -120,10 +116,7 @@ impl Writer {
 
         for col in 0..BUFFER_WIDTH {
             unsafe {
-                core::ptr::write_volatile(
-                    &mut self.buffer.chars[row][col],
-                    blank,
-                );
+                core::ptr::write_volatile(&mut self.buffer.chars[row][col], blank);
             }
         }
     }
@@ -131,17 +124,10 @@ impl Writer {
     fn new_line(&mut self) {
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
-                let character = unsafe {
-                    core::ptr::read_volatile(
-                        &self.buffer.chars[row][col]
-                    )
-                };
+                let character = unsafe { core::ptr::read_volatile(&self.buffer.chars[row][col]) };
 
                 unsafe {
-                    core::ptr::write_volatile(
-                        &mut self.buffer.chars[row - 1][col],
-                        character,
-                    );
+                    core::ptr::write_volatile(&mut self.buffer.chars[row - 1][col], character);
                 }
             }
         }
@@ -188,24 +174,4 @@ macro_rules! println {
             $($arg)*
         );
     });
-}
-
-// Example usage
-pub fn print_something() {
-    let mut writer = WRITER.lock();
-
-    writer.clear_screen();
-
-    writer.set_color(Color::LightGreen, Color::Black);
-    writeln!(writer, "Hello, World!").unwrap();
-
-    writeln!(
-        writer,
-        "VGA Buffer driver initialized successfully."
-    )
-    .unwrap();
-
-    writer.set_color(Color::Pink, Color::Black);
-
-    writeln!(writer, "Color support works!").unwrap();
 }

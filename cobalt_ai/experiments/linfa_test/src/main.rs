@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Write;
 
 use clap::Parser;
+use tracing::{info, debug};
 
 use linfa::prelude::*;
 use linfa_trees::{DecisionTree, SplitQuality};
@@ -52,7 +53,10 @@ fn train_model<R: ndarray::Data<Elem = f32>, S: ndarray::Data<Elem = &'static st
 }
 
 fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt::init();
+
     let cli = Cli::parse();
+    info!("Starting Linfa Decision Tree test model...");
 
     let original_data: Array2<f32> = get_mock_data();
 
@@ -64,17 +68,21 @@ fn main() -> anyhow::Result<()> {
 
     let linfa_dataset = Dataset::new(features, labels)
         .map_targets(|x| categorize_happiness(x.to_owned() as i32))
-        .with_feature_names(feature_names);
+        .with_feature_names(feature_names.clone());
+    info!("Dataset loaded. Total features: {}", feature_names.len());
 
     let (train, test) = linfa_dataset.split_with_ratio(0.8);
+    info!("Split dataset into train ({} samples) and test ({} samples)", train.records().nrows(), test.records().nrows());
 
     let model = train_model(&train)?;
+    info!("Model trained successfully.");
 
     let predictions = model.predict(&test);
     let cm = predictions.confusion_matrix(&test)?;
-    println!("{:?}", cm);
-    println!("Test accuracy: {:.2}%", 100.0 * cm.accuracy());
+    debug!("Confusion Matrix:\n{:?}", cm);
+    info!("Test accuracy: {:.2}%", 100.0 * cm.accuracy());
 
+    info!("Exporting model to {}", cli.output);
     File::create(&cli.output)?
         .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())?;
 

@@ -14,8 +14,8 @@ fn categorize_happiness(score: i32) -> &'static str {
     }
 }
 
-fn main() -> anyhow::Result<()> {
-    let original_data: Array2<f32> = array!(
+fn get_mock_data() -> Array2<f32> {
+    array!(
         [1., 1., 1000., 1., 10.],
         [1., 1., 0., 1., 6.],
         [1., 0., 0., 1., 6.],
@@ -29,7 +29,11 @@ fn main() -> anyhow::Result<()> {
         [1., 0., 0., 0., 0.],
         [1., 1., 0., 0., 0.],
         [1., 1., 0., 0., 0.],
-    );
+    )
+}
+
+fn main() -> anyhow::Result<()> {
+    let original_data: Array2<f32> = get_mock_data();
 
     let feature_names = vec!["watched tv", "pet cat", "rust LOC", "ate pizza"];
 

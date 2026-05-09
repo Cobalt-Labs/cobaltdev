@@ -14,7 +14,7 @@ fn categorize_happiness(score: i32) -> &'static str {
     }
 }
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let original_data: Array2<f32> = array!(
         [1., 1., 1000., 1., 10.],
         [1., 1., 0., 1., 6.],
@@ -43,13 +43,12 @@ fn main() {
 
     let model = DecisionTree::params()
         .split_quality(SplitQuality::Gini)
-        .fit(&linfa_dataset)
-        .unwrap();
+        .fit(&linfa_dataset)?;
 
-    File::create("dt.tex")
-        .unwrap()
-        .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())
-        .unwrap();
+    File::create("dt.tex")?
+        .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())?;
+
+    Ok(())
 }
 
 #[cfg(test)]

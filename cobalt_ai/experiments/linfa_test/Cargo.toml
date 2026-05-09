@@ -6,6 +6,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.102"
 linfa = "0.8.0"
 linfa-trees = "0.8.0"
 ndarray = "0.16.1"

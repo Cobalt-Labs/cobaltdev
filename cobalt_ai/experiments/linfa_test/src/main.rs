@@ -51,3 +51,18 @@ fn main() {
         .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())
         .unwrap();
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_categorize_happiness() {
+        assert_eq!(categorize_happiness(4), "sad");
+        assert_eq!(categorize_happiness(-10), "sad");
+        assert_eq!(categorize_happiness(5), "ok");
+        assert_eq!(categorize_happiness(7), "ok");
+        assert_eq!(categorize_happiness(8), "happy");
+        assert_eq!(categorize_happiness(100), "happy");
+    }
+}

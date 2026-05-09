@@ -96,3 +96,6 @@ tmp/
 temp/
 out/
 dist/
+
+# examples
+/examples

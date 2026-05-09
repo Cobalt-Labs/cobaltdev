@@ -6,6 +6,14 @@ use linfa_trees::{DecisionTree, SplitQuality};
 use ndarray::prelude::*;
 use ndarray::{Array2, array};
 
+fn categorize_happiness(score: i32) -> &'static str {
+    match score {
+        i32::MIN..=4 => "sad",
+        5..=7 => "ok",
+        8_i32..=i32::MAX => "happy",
+    }
+}
+
 fn main() {
     let original_data: Array2<f32> = array!(
         [1., 1., 1000., 1., 10.],
@@ -30,11 +38,7 @@ fn main() {
     let labels = original_data.column(num_features).to_owned();
 
     let linfa_dataset = Dataset::new(features, labels)
-        .map_targets(|x| match x.to_owned() as i32 {
-            i32::MIN..=4 => "sad",
-            5..=7 => "ok",
-            8_i32..=i32::MAX => "happy",
-        })
+        .map_targets(|x| categorize_happiness(x.to_owned() as i32))
         .with_feature_names(feature_names);
 
     let model = DecisionTree::params()

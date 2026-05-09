@@ -39,7 +39,8 @@ pub fn handle_char(c: char) {
         }
         _ => {
             if shell.len < MAX_COMMAND_LEN {
-                shell.buffer[shell.len] = c;
+                let len = shell.len;
+                shell.buffer[len] = c;
                 shell.len += 1;
                 print!("{}", c);
             }

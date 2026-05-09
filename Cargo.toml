@@ -4,7 +4,7 @@ members = [
     "cobalt_backend/cloud",
     "cobalt_cloud",
     "cobalt_ai", "cobalt_ai/experiments/scratch_model",
-    "cobalt_systems/kernel", "cobalt_systems/userland/minigrep", "cobalt_embedded",
+    "cobalt_systems/userland/minigrep", "cobalt_embedded",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", "examples/test_code_rust",
 ]
 

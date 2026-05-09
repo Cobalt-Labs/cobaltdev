@@ -42,6 +42,15 @@ struct Cli {
     output: String,
 }
 
+fn train_model<R: ndarray::Data<Elem = f32>, S: ndarray::Data<Elem = &'static str>>(
+    dataset: &DatasetBase<ArrayBase<R, ndarray::Ix2>, ArrayBase<S, ndarray::Ix1>>,
+) -> anyhow::Result<DecisionTree<f32, &'static str>> {
+    let model = DecisionTree::params()
+        .split_quality(SplitQuality::Gini)
+        .fit(dataset)?;
+    Ok(model)
+}
+
 fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
@@ -59,9 +68,7 @@ fn main() -> anyhow::Result<()> {
 
     let (train, test) = linfa_dataset.split_with_ratio(0.8);
 
-    let model = DecisionTree::params()
-        .split_quality(SplitQuality::Gini)
-        .fit(&train)?;
+    let model = train_model(&train)?;
 
     let predictions = model.predict(&test);
     let cm = predictions.confusion_matrix(&test)?;

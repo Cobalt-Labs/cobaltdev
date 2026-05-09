@@ -51,6 +51,11 @@ fn main() -> anyhow::Result<()> {
         .split_quality(SplitQuality::Gini)
         .fit(&train)?;
 
+    let predictions = model.predict(&test);
+    let cm = predictions.confusion_matrix(&test)?;
+    println!("{:?}", cm);
+    println!("Test accuracy: {:.2}%", 100.0 * cm.accuracy());
+
     File::create("dt.tex")?
         .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())?;
 

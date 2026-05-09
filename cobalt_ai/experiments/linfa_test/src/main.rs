@@ -1,5 +1,4 @@
 use std::fs::File;
-use std::i32;
 use std::io::Write;
 
 use linfa::prelude::*;

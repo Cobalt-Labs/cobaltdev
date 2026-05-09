@@ -7,6 +7,7 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.102"
+clap = { version = "4.6.1", features = ["derive"] }
 linfa = "0.8.0"
 linfa-trees = "0.8.0"
 ndarray = "0.16.1"

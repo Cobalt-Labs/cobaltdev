@@ -1,6 +1,8 @@
 use std::fs::File;
 use std::io::Write;
 
+use clap::Parser;
+
 use linfa::prelude::*;
 use linfa_trees::{DecisionTree, SplitQuality};
 use ndarray::prelude::*;
@@ -32,7 +34,17 @@ fn get_mock_data() -> Array2<f32> {
     )
 }
 
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+struct Cli {
+    /// Output path for the generated TikZ file
+    #[arg(short, long, default_value = "dt.tex")]
+    output: String,
+}
+
 fn main() -> anyhow::Result<()> {
+    let cli = Cli::parse();
+
     let original_data: Array2<f32> = get_mock_data();
 
     let feature_names = vec!["watched tv", "pet cat", "rust LOC", "ate pizza"];
@@ -56,7 +68,7 @@ fn main() -> anyhow::Result<()> {
     println!("{:?}", cm);
     println!("Test accuracy: {:.2}%", 100.0 * cm.accuracy());
 
-    File::create("dt.tex")?
+    File::create(&cli.output)?
         .write_all(model.export_to_tikz().with_legend().to_string().as_bytes())?;
 
     Ok(())

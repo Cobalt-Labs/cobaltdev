@@ -11,6 +11,7 @@ static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
         const STACK_SIZE: usize = 4096 * 5;
         static mut STACK: [u8; STACK_SIZE] = [0; STACK_SIZE];
 
+        // SAFETY: We take a pointer to the static mutable STACK. This is safe as it's only done once during initialization.
         let stack_start = VirtAddr::from_ptr(unsafe { &STACK });
         let stack_end = stack_start + STACK_SIZE.try_into().unwrap();
         stack_end
@@ -41,6 +42,7 @@ pub fn init() {
     use x86_64::instructions::segmentation::{CS, Segment};
 
     GDT.0.load();
+    // SAFETY: We are loading valid segment selectors created from our GDT.
     unsafe {
         CS::set_reg(GDT.1.code_selector);
         load_tss(GDT.1.tss_selector);

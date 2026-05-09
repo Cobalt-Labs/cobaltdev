@@ -9,6 +9,7 @@ pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
 pub static PICS: Mutex<ChainedPics> =
+    // SAFETY: The PIC offsets 32 and 40 are standard and don't conflict with exceptions.
     Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) });
 
 #[derive(Debug, Clone, Copy)]
@@ -31,6 +32,7 @@ impl InterruptIndex {
 static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
     let mut idt = InterruptDescriptorTable::new();
     idt.breakpoint.set_handler_fn(breakpoint_handler);
+    // SAFETY: The IST index 0 is valid and points to the double fault stack.
     unsafe {
         idt.double_fault
             .set_handler_fn(double_fault_handler)
@@ -57,6 +59,7 @@ extern "x86-interrupt" fn double_fault_handler(
 }
 
 extern "x86-interrupt" fn timer_interrupt_handler(_stack_frame: InterruptStackFrame) {
+    // SAFETY: Notifying the PIC that the interrupt is handled is required to continue receiving interrupts.
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer.as_u8());
@@ -67,9 +70,11 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
     use x86_64::instructions::port::Port;
 
     let mut port = Port::new(0x60);
+    // SAFETY: Port 0x60 is the standard PS/2 keyboard controller data port.
     let scancode: u8 = unsafe { port.read() };
     crate::keyboard::add_scancode(scancode);
 
+    // SAFETY: Notifying the PIC that the interrupt is handled is required to continue receiving interrupts.
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Keyboard.as_u8());

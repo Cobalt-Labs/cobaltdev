@@ -12,7 +12,7 @@ static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
         static mut STACK: [u8; STACK_SIZE] = [0; STACK_SIZE];
 
         let stack_start = VirtAddr::from_ptr(unsafe { &STACK });
-        let stack_end = stack_start + STACK_SIZE;
+        let stack_end = stack_start + STACK_SIZE.try_into().unwrap();
         stack_end
     };
     tss
@@ -20,8 +20,8 @@ static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
 
 static GDT: Lazy<(GlobalDescriptorTable, Selectors)> = Lazy::new(|| {
     let mut gdt = GlobalDescriptorTable::new();
-    let code_selector = gdt.add_entry(Descriptor::kernel_code_segment());
-    let tss_selector = gdt.add_entry(Descriptor::tss_segment(&TSS));
+    let code_selector = gdt.push(Descriptor::kernel_code_segment());
+    let tss_selector = gdt.push(Descriptor::tss_segment(&TSS));
     (
         gdt,
         Selectors {

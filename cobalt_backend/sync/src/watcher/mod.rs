@@ -2,7 +2,6 @@ use crate::Config;
 use crate::models::SyncEvent;
 use anyhow::Result;
 use notify::{RecursiveMode, Watcher};
-use std::path::Path;
 use tokio::sync::mpsc::Sender;
 use tracing::{error, info};
 
@@ -32,11 +31,11 @@ pub async fn start_watcher(config: Config, tx: Sender<SyncEvent>) -> Result<()> 
     while let Some(event) = sync_rx.recv().await {
         for path in event.paths {
             if event.kind.is_modify() {
-                tx.send(SyncEvent::Modified(path)).await?;
+                let _ = tx.send(SyncEvent::Modified(path)).await;
             } else if event.kind.is_create() {
-                tx.send(SyncEvent::Created(path)).await?;
+                let _ = tx.send(SyncEvent::Created(path)).await;
             } else if event.kind.is_remove() {
-                tx.send(SyncEvent::Deleted(path)).await?;
+                let _ = tx.send(SyncEvent::Deleted(path)).await;
             }
         }
     }

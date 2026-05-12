@@ -9,12 +9,12 @@ use tracing::{info, error};
 pub async fn start_uploader(config: Config, mut rx: Receiver<SyncEvent>) -> Result<()> {
     info!("Starting uploader for bucket: {}", config.s3_bucket);
 
-    let mut builder = S3::default();
-    builder.bucket(&config.s3_bucket);
-    builder.endpoint(&config.s3_endpoint);
-    builder.region(&config.s3_region);
-    builder.access_key_id(&config.access_key);
-    builder.secret_access_key(&config.secret_key);
+    let builder = S3::default()
+        .bucket(&config.s3_bucket)
+        .endpoint(&config.s3_endpoint)
+        .region(&config.s3_region)
+        .access_key_id(&config.access_key)
+        .secret_access_key(&config.secret_key);
 
     let op: Operator = Operator::new(builder)?.finish();
 

@@ -1,0 +1,31 @@
+# ============================================================
+#  Cobalt AI — Notebook Environment Requirements
+#  Install with: pip install -r requirements.txt
+# ============================================================
+
+# Core scientific stack
+numpy>=1.26.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+pandas>=2.1.0
+
+# Deep learning (PyTorch — CPU or CUDA)
+torch>=2.2.0
+torchvision>=0.17.0
+
+# Notebook environment
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipywidgets>=8.1.0
+
+# Utilities
+rich>=13.7.0
+tqdm>=4.66.0
+Pillow>=10.2.0
+scipy>=1.12.0
+
+# Optional: PyO3/Maturin for calling Rust directly from Python
+# maturin>=1.4.0
+
+# Optional: HuggingFace tokenizers (compatible with cobalt tokenizer format)
+# tokenizers>=0.15.0

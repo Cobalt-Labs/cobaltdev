@@ -1,0 +1,16 @@
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Generated dashboard assets
+training_dashboard.png
+
+# Local environment (if any)
+.venv/
+env/
+venv/

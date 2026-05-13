@@ -15,10 +15,26 @@ pub struct SyncConfig {
 
 impl SyncConfig {
     pub fn load() -> Result<Self> {
-        // In a real app, this would load from a file.
-        // For now, we'll return a default/stub or try to load from environment.
+        // Resolve the workspace root relative to this binary's manifest directory.
+        // Falls back to an absolute path pointing at cobalt_backend/cloud/storage.
+        let workspace_root = std::env::var("COBALT_ROOT")
+            .map(PathBuf::from)
+            .unwrap_or_else(|_| {
+                // Walk up from the binary location to find the workspace root
+                // (3 levels: target/debug/<bin> → workspace root)
+                std::env::current_exe()
+                    .ok()
+                    .and_then(|p| {
+                        // target/debug → target → workspace root
+                        p.ancestors().nth(3).map(|a| a.to_path_buf())
+                    })
+                    .unwrap_or_else(|| PathBuf::from("/Users/ibrahimhaji/code/cobaltdev"))
+            });
+
+        let storage_path = workspace_root.join("cobalt_backend/cloud/storage");
+
         Ok(Self {
-            watch_paths: vec![PathBuf::from("./test_sync")],
+            watch_paths: vec![storage_path],
             storage_backend: "s3".to_string(),
             s3_bucket: "cobalt-sync".to_string(),
             s3_endpoint: "http://localhost:9000".to_string(),

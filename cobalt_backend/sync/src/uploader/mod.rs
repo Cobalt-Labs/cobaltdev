@@ -4,7 +4,7 @@ use anyhow::Result;
 use opendal::Operator;
 use opendal::services::S3;
 use tokio::sync::mpsc::Receiver;
-use tracing::{info, error};
+use tracing::{error, info};
 
 pub async fn start_uploader(config: Config, mut rx: Receiver<SyncEvent>) -> Result<()> {
     info!("Starting uploader for bucket: {}", config.s3_bucket);
@@ -22,9 +22,12 @@ pub async fn start_uploader(config: Config, mut rx: Receiver<SyncEvent>) -> Resu
         match event {
             SyncEvent::Created(path) | SyncEvent::Modified(path) => {
                 if path.is_file() {
-                    let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("unknown");
+                    let file_name = path
+                        .file_name()
+                        .and_then(|n| n.to_str())
+                        .unwrap_or("unknown");
                     info!("Uploading file: {}", file_name);
-                    
+
                     match tokio::fs::read(&path).await {
                         Ok(content) => {
                             if let Err(e) = op.write(file_name, content).await {
@@ -38,7 +41,10 @@ pub async fn start_uploader(config: Config, mut rx: Receiver<SyncEvent>) -> Resu
                 }
             }
             SyncEvent::Deleted(path) => {
-                let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("unknown");
+                let file_name = path
+                    .file_name()
+                    .and_then(|n| n.to_str())
+                    .unwrap_or("unknown");
                 info!("Deleting file from S3: {}", file_name);
                 if let Err(e) = op.delete(file_name).await {
                     error!("Failed to delete {}: {:?}", file_name, e);

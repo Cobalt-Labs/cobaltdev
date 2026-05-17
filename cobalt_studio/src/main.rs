@@ -2,12 +2,9 @@ use dioxus::prelude::*;
 use cobalt_shared::ai::OllamaClient;
 
 fn main() {
-    // Initialize logging
     dioxus_logger::init(tracing::Level::INFO).expect("failed to init logger");
+    println!("Cobalt Studio starting...");
     
-    println!("🚀 Cobalt Studio starting...");
-    
-    // Launch desktop app
     dioxus::launch(App);
 }
 
@@ -18,7 +15,6 @@ fn App() -> Element {
     let mut is_loading = use_signal(|| false);
     let model_name = use_signal(|| "deepseek-coder:6.7b".to_string());
     
-    // Create Ollama client
     let client = use_signal(|| OllamaClient::new(model_name()));
     
     // Send message handler
@@ -28,14 +24,12 @@ fn App() -> Element {
             return;
         }
         
-        // Add user message
         chat_messages.write().push(("user".to_string(), msg.clone()));
         
         input_message.set(String::new());
         is_loading.set(true);
         
         spawn(async move {
-            // Get AI response
             let response = client().generate(&msg).await;
             
             if let Ok(response_text) = response {

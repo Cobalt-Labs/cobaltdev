@@ -19,7 +19,7 @@ impl OllamaClient {
     }
     
     pub async fn generate(&self, prompt: &str) -> Result<String> {
-        println!("📤 Sending prompt to Ollama...");
+        println!("Sending prompt to Ollama...");
         
         let response = self.client
             .post(format!("{}/api/generate", self.base_url))
@@ -43,7 +43,7 @@ impl OllamaClient {
         let result: serde_json::Value = response.json().await?;
         let text = result["response"].as_str().unwrap_or("").to_string();
         
-        println!("📥 Received response ({} chars)", text.len());
+        println!("Received response ({} chars)", text.len());
         Ok(text)
     }
 }

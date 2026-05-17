@@ -5,9 +5,9 @@ edition = "2021"
 
 [dependencies]
 # GUI Framework
-dioxus = { version = "0.5", features = ["desktop"] }
-dioxus-desktop = "0.5"
-dioxus-std = "0.5"
+dioxus = { version = "0.7", features = ["desktop"] }
+dioxus-logger = "0.6"
+tracing = "0.1"
 
 # Our shared library
 cobalt_shared = { path = "../cobalt_shared" }

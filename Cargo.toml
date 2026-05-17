@@ -17,7 +17,7 @@ members = [
 # Unified workspace dependencies
 [workspace.dependencies]
 # Use the same version across all crates
-sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "any"] }
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "any", "chrono", "uuid"] }
 tokio = { version = "1", features = ["full"] }
 axum = { version = "0.8.8", features = ["multipart", "tracing"] }
 

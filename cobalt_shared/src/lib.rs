@@ -4,10 +4,7 @@ pub mod editor;
 pub mod project;
 
 // Re-export commonly used types
-pub use ai::{LocalLLM, ChatMessage, ChatSession};
-pub use filesystem::{FileIndexer, RAGEngine, SearchResult};
-pub use editor::{SyntaxHighlighter, CodeEditor};
-pub use project::{Workspace, ProjectFile};
+pub use ai::OllamaClient;
 
 use anyhow::Result;
 
@@ -30,7 +27,7 @@ impl Default for CobaltStudioConfig {
     }
 }
 
-pub fn init(config: CobaltStudioConfig) -> Result<()> {
+pub fn init(_config: CobaltStudioConfig) -> Result<()> {
     // Initialize logging
     tracing_subscriber::fmt()
         .with_target(false)

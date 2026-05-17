@@ -1,74 +1,54 @@
 use dioxus::prelude::*;
 use cobalt_shared::ai::OllamaClient;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 fn main() {
     // Initialize logging
-    tracing_subscriber::fmt()
-        .with_target(false)
-        .init();
+    dioxus_logger::init(tracing::Level::INFO).expect("failed to init logger");
     
     println!("🚀 Cobalt Studio starting...");
     
     // Launch desktop app
-    dioxus::desktop::launch(app);
+    dioxus::launch(App);
 }
 
-fn app(cx: Scope) -> Element {
-    let chat_messages = use_state(cx, || Vec::<(String, String)>::new());
-    let input_message = use_state(cx, || String::new());
-    let is_loading = use_state(cx, || false);
-    let model_name = use_state(cx, || "deepseek-coder:6.7b-instruct-q4_K_M".to_string());
+#[component]
+fn App() -> Element {
+    let mut chat_messages = use_signal(|| Vec::<(String, String)>::new());
+    let mut input_message = use_signal(|| String::new());
+    let mut is_loading = use_signal(|| false);
+    let model_name = use_signal(|| "deepseek-coder:6.7b".to_string());
     
     // Create Ollama client
-    let client = use_state(cx, || OllamaClient::new(model_name.current().clone()));
+    let client = use_signal(|| OllamaClient::new(model_name()));
     
     // Send message handler
-    let send_message = {
-        let chat_messages = chat_messages.clone();
-        let input_message = input_message.clone();
-        let is_loading = is_loading.clone();
-        let client = client.clone();
+    let mut send_message = move || {
+        let msg = input_message();
+        if msg.is_empty() {
+            return;
+        }
         
-        cx.spawn(async move {
-            let msg = input_message.current().clone();
-            if msg.is_empty() {
-                return;
-            }
-            
-            // Add user message
-            chat_messages.modify(|msgs| {
-                let mut new = msgs.clone();
-                new.push(("user".to_string(), msg.clone()));
-                new
-            });
-            
-            input_message.set(String::new());
-            is_loading.set(true);
-            
+        // Add user message
+        chat_messages.write().push(("user".to_string(), msg.clone()));
+        
+        input_message.set(String::new());
+        is_loading.set(true);
+        
+        spawn(async move {
             // Get AI response
-            let response = client.current().generate(&msg).await;
+            let response = client().generate(&msg).await;
             
             if let Ok(response_text) = response {
-                chat_messages.modify(|msgs| {
-                    let mut new = msgs.clone();
-                    new.push(("assistant".to_string(), response_text));
-                    new
-                });
+                chat_messages.write().push(("assistant".to_string(), response_text));
             } else {
-                chat_messages.modify(|msgs| {
-                    let mut new = msgs.clone();
-                    new.push(("assistant".to_string(), "Error: Could not get response".to_string()));
-                    new
-                });
+                chat_messages.write().push(("assistant".to_string(), "Error: Could not get response".to_string()));
             }
             
             is_loading.set(false);
         });
     };
     
-    cx.render(rsx! {
+    rsx! {
         div {
             style: "
                 display: flex;
@@ -88,7 +68,7 @@ fn app(cx: Scope) -> Element {
                 ",
                 h1 { style: "margin: 0; font-size: 1.5rem;", "🟢 Cobalt Studio" }
                 p { style: "margin: 0; font-size: 0.8rem; opacity: 0.8;", 
-                    format!("Model: {}", model_name.current())
+                    "Model: {model_name()}"
                 }
             }
             
@@ -102,49 +82,59 @@ fn app(cx: Scope) -> Element {
                     flex-direction: column;
                     gap: 0.5rem;
                 ",
-                chat_messages.current().iter().map(|(role, content)| {
-                    let is_user = role == "user";
-                    let align = if is_user { "flex-end" } else { "flex-start" };
-                    let bg = if is_user { "#89b4fa" } else { "#313244" };
-                    
-                    rsx! {
+                for (role, content) in chat_messages() {
+                    if role == "user" {
                         div {
-                            style: format!("
+                            style: "
                                 display: flex;
-                                justify-content: {};
+                                justify-content: flex-end;
                                 margin: 0.5rem 0;
-                            ", align),
+                            ",
                             div {
-                                style: format!("
-                                    background: {};
+                                style: "
+                                    background: #89b4fa;
                                     padding: 0.5rem 1rem;
                                     border-radius: 12px;
                                     max-width: 70%;
                                     white-space: pre-wrap;
-                                ", bg),
-                                if is_user {
-                                    rsx! { strong { "You: " } }
-                                } else {
-                                    rsx! { strong { "🤖 AI: " } }
-                                }
+                                    color: #1e1e2e;
+                                ",
+                                strong { "You: " }
+                                span { "{content}" }
+                            }
+                        }
+                    } else {
+                        div {
+                            style: "
+                                display: flex;
+                                justify-content: flex-start;
+                                margin: 0.5rem 0;
+                            ",
+                            div {
+                                style: "
+                                    background: #313244;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 12px;
+                                    max-width: 70%;
+                                    white-space: pre-wrap;
+                                ",
+                                strong { "🤖 AI: " }
                                 span { "{content}" }
                             }
                         }
                     }
-                })
+                }
             }
             
             // Loading indicator
-            if *is_loading.current() {
-                rsx! {
-                    div {
-                        style: "
-                            text-align: center;
-                            padding: 0.5rem;
-                            color: #89b4fa;
-                        ",
-                        "Thinking... 🤔"
-                    }
+            if is_loading() {
+                div {
+                    style: "
+                        text-align: center;
+                        padding: 0.5rem;
+                        color: #89b4fa;
+                    ",
+                    "Thinking... 🤔"
                 }
             }
             
@@ -168,7 +158,7 @@ fn app(cx: Scope) -> Element {
                     ",
                     placeholder: "Ask about code, write Rust functions, or get help...",
                     value: "{input_message}",
-                    oninput: move |e| input_message.set(e.value.clone()),
+                    oninput: move |e| input_message.set(e.value()),
                     onkeypress: move |e| {
                         if e.key() == Key::Enter {
                             send_message();
@@ -190,5 +180,5 @@ fn app(cx: Scope) -> Element {
                 }
             }
         }
-    })
+    }
 }

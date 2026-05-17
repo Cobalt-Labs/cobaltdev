@@ -1,0 +1,10 @@
+[package]
+name = "cobalt_studio"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+burn = "0.21.0"
+dioxus = "0.7.9"
+rig = "0.37.0"
+tokio.workspace = true

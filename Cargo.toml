@@ -5,7 +5,7 @@ members = [
     "cobalt_cloud",
     "cobalt_ai", "cobalt_ai/experiments/scratch_model",
     "cobalt_systems/userland/minigrep", "cobalt_embedded",
-    "cobalt_frontend/app/encrypt_notepad/notepad/native", "examples/test_code_rust", "cobalt_backend/sync",
+    "cobalt_frontend/app/encrypt_notepad/notepad/native", "examples/test_code_rust", "cobalt_backend/sync", "cobalt_studio", "cobalt_shared",
 ]
 
 [workspace.dependencies.axum]

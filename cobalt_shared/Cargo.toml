@@ -1,6 +1,40 @@
 [package]
 name = "cobalt_shared"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+# Use workspace dependencies
+sqlx = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# HTTP client for Ollama
+reqwest = { version = "0.11", features = ["json", "stream"] }
+futures-util = "0.3"
+
+# File system
+walkdir = "2.5"
+ignore = "0.4"
+rayon = "1.7"
+
+# Code parsing (use older stable versions)
+tree-sitter = "0.20"
+tree-sitter-rust = "0.20"
+tree-sitter-python = "0.20"
+
+# Syntax highlighting
+syntect = "5.0"
+
+# AI - comment out problematic ones
+# candle-core = { git = "https://github.com/huggingface/candle" }
+# candle-nn = { git = "https://github.com/huggingface/candle" }
+# rig-core = { git = "https://github.com/0xPlaygrounds/rig" }
+# tokenizers = "0.23"
+
+# Optional: Add ollama client directly
+ollama-rs = "0.2"

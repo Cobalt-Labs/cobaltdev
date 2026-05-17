@@ -1,10 +1,25 @@
 [package]
 name = "cobalt_studio"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
-burn = "0.21.0"
-dioxus = "0.7.9"
-rig = "0.37.0"
-tokio.workspace = true
+# GUI Framework
+dioxus = { version = "0.5", features = ["desktop"] }
+dioxus-desktop = "0.5"
+dioxus-std = "0.5"
+
+# Our shared library
+cobalt_shared = { path = "../cobalt_shared" }
+
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+
+# File watching for live reload
+notify = "6.1"
+
+# Terminal colors
+console = "0.15"
+
+[build-dependencies]
+# Only needed if using Tauri, but we're using Dioxus

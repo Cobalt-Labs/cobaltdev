@@ -82,13 +82,11 @@ impl<B: Backend> TransformerBlock<B> {
         let [_batch_size, seq_len, _] = input.dims();
         let device = input.device();
 
-        // Create causal mask (upper triangular)
         let mask = Tensor::<B, 2, Int>::ones([seq_len, seq_len], &device)
-            .triu(1)  // Upper triangular with 1 above diagonal
+            .triu(1)
             .equal_elem(1)
-            .unsqueeze::<3>();  // Add head dimension
+            .unsqueeze::<3>();
 
-        // Pre-norm architecture (more stable)
         let norm_x = self.norm1.forward(input.clone());
         let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x).mask_attn(mask);
         let attn_out = self.attention.forward(mha_input);

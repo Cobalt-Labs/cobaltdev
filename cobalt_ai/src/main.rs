@@ -10,6 +10,8 @@ use burn::record::CompactRecorder;
 use burn::tensor::Int;
 use burn::tensor::Tensor;
 use burn::tensor::TensorData;
+use burn::record::Recorder; 
+use burn::prelude::Module;
 
 use crate::model::transformer::{CobaltModel, CobaltModelConfig};
 
@@ -80,7 +82,7 @@ fn interactive_chat() {
     use burn::backend::Wgpu;
     use std::io::{self, Write};
 
-    let device = WgpuDevice::default();
+    let device = burn::backend::wgpu::WgpuDevice::default();
     let dataset = TextDataset::new("data/input.txt");
 
     let d_model = 192;
@@ -93,7 +95,7 @@ fn interactive_chat() {
 
     let record = match recorder.load("models/cobalt_model".into(), &device) {
         Ok(r) => r,
-        Err(e) => {
+        Err(_e) => {
             eprintln!("❌ No trained model found! Run 'cargo run -- train' first.");
             return;
         }
@@ -158,9 +160,9 @@ fn interactive_chat() {
 
                     let max_logit = logits_vec.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
                     let exp_sum: f32 = logits_vec.iter().map(|&x| (x - max_logit).exp()).sum();
-                    let mut probs: Vec<f32> = logits_vec
+                    let probs: Vec<f32> = logits_vec
                         .iter()
-                        .map(|&x| ((x - max_logit).exp() / exp_sum))
+                        .map(|&x| (x - max_logit).exp() / exp_sum)
                         .collect();
 
                     let next_token_id = probs

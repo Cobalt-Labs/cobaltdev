@@ -1,8 +1,10 @@
 use burn::nn::attention::{MhaInput, MultiHeadAttention, MultiHeadAttentionConfig};
 use burn::nn::{
-    Embedding, EmbeddingConfig, Gelu, LayerNorm, LayerNormConfig, Linear, LinearConfig,
+    Dropout, DropoutConfig, Embedding, EmbeddingConfig, Gelu, LayerNorm, LayerNormConfig,
+    Linear, LinearConfig,
 };
 use burn::prelude::*;
+use burn::prelude::Module;
 
 #[derive(Config, Debug)]
 pub struct CobaltModelConfig {

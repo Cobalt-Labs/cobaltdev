@@ -4,7 +4,7 @@ use burn::optim::{AdamConfig, GradientsParams, Optimizer};
 use burn::prelude::*;
 use burn::record::CompactRecorder;
 use burn::tensor::backend::AutodiffBackend;
-use burn::tensor::Tensor;
+use burn::tensor::ElementConversion;
 
 use crate::data::loader::TextDataset;
 use crate::model::transformer::CobaltModelConfig;
@@ -92,8 +92,8 @@ where
                 // ========== SIMPLIFIED GRADIENT CLIPPING ==========
                 // Note: Full gradient clipping requires accessing gradient tensors
                 // For now, we use a simpler approach - adaptive learning rate
-                let loss_val = loss.clone().into_scalar();
-                if loss_val.is_nan() || loss_val.is_infinite() {
+                let loss_f32: f32 = loss.clone().into_scalar().elem();
+                if loss_f32.is_nan() || loss_f32.is_infinite() {
                     println!("⚠️ NaN/Inf loss detected! Skipping update...");
                     return;
                 }
@@ -103,9 +103,9 @@ where
             };
 
             let grads = GradientsParams::from_grads(grads, &model);
-            model = optimizer.step(current_lr, model, grads);
+            model = optimizer.step(current_lr.into(), model, grads);
 
-            let loss_val = loss.into_scalar();
+            let loss_val: f32 = loss.into_scalar().elem();
             epoch_loss += loss_val;
 
             if i % 20 == 0 || i == iterations_per_epoch - 1 {
@@ -129,7 +129,7 @@ where
                 let [b, s, v] = val_outputs.dims();
                 let val_logits = val_outputs.reshape([b * s, v]);
                 let val_targets = val_batch.targets.reshape([b * s]);
-                let val_loss = loss_fn.forward(val_logits, val_targets).into_scalar();
+                let val_loss: f32 = loss_fn.forward(val_logits, val_targets).into_scalar().elem();
 
                 if val_loss < best_loss {
                     best_loss = val_loss;

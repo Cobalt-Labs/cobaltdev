@@ -75,7 +75,7 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
         let exp_sum: f32 = logits_vec.iter().map(|&x| (x - max_logit).exp()).sum();
         let mut probs: Vec<f32> = logits_vec
             .iter()
-            .map(|&x| ((x - max_logit).exp() / exp_sum))
+            .map(|&x| (x - max_logit).exp() / exp_sum)
             .collect();
 
         if top_k > 0 && top_k < probs.len() {

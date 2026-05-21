@@ -16,9 +16,9 @@ where
     let mut dataset = TextDataset::new("data/input.txt");
     let mut valid_dataset = TextDataset::new("data/input.txt");
 
-    let batch_size = 12;
-    let num_epochs = 14;
-    let iterations_per_epoch = 250;
+    let batch_size = 8; //dec 12
+    let num_epochs = 20; //inc 14
+    let iterations_per_epoch = 150; //dec 250
     let eval_every = 50;
 
     let d_model = 192;

@@ -1,12 +1,12 @@
+use crate::data::loader::TextDataset;
+use crate::model::transformer::{CobaltModel, CobaltModelConfig};
 use burn::prelude::*;
 use burn::record::{CompactRecorder, Recorder};
 use burn::tensor::backend::Backend;
 use burn::tensor::{Int, Tensor, TensorData};
-use std::io::Write;
 use rand::distributions::{Distribution, WeightedIndex};
-use rand::thread_rng;
-use crate::data::loader::TextDataset;
-use crate::model::transformer::{CobaltModel, CobaltModelConfig};
+use rand::prelude::*;
+use std::io::Write;
 
 pub fn generate_text<B: Backend<IntElem = i32>>(
     device: B::Device,
@@ -41,6 +41,8 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
     print!("{}", prompt);
     std::io::stdout().flush().unwrap();
 
+    let mut rng = thread_rng();
+
     for step in 0..num_tokens {
         let (context_start, actual_seq_len) = if tokens.len() > seq_len {
             (tokens.len() - seq_len, seq_len)
@@ -60,51 +62,58 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
 
         let logits = output.reshape([seq_dim, vocab_dim]);
         let last_token_logits = logits.slice([seq_dim - 1..seq_dim]);
-        
+
         let mut logits_vec: Vec<f32> = last_token_logits.to_data().to_vec().unwrap();
-        
+
         if temperature > 0.0 {
             for logit in logits_vec.iter_mut() {
                 *logit = *logit / temperature;
             }
         }
-        
+
         let max_logit = logits_vec.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
-        let exp_sum: f32 = logits_vec.iter()
-            .map(|&x| (x - max_logit).exp())
-            .sum();
-        let mut probs: Vec<f32> = logits_vec.iter()
+        let exp_sum: f32 = logits_vec.iter().map(|&x| (x - max_logit).exp()).sum();
+        let mut probs: Vec<f32> = logits_vec
+            .iter()
             .map(|&x| ((x - max_logit).exp() / exp_sum))
             .collect();
-        
+
         if top_k > 0 && top_k < probs.len() {
             let mut indices: Vec<usize> = (0..probs.len()).collect();
             indices.sort_by(|&a, &b| probs[b].partial_cmp(&probs[a]).unwrap());
-            
+
             for &idx in &indices[top_k..] {
                 probs[idx] = 0.0;
             }
-            
+
             let sum: f32 = probs.iter().sum();
             for prob in probs.iter_mut() {
                 *prob /= sum;
             }
         }
-        
-        let valid_indices: Vec<usize> = (0..probs.len())
-            .filter(|&i| probs[i] > 0.0)
-            .collect();
-        
+
+        let valid_indices: Vec<usize> = (0..probs.len()).filter(|&i| probs[i] > 0.0).collect();
+
         let next_token_id = if valid_indices.is_empty() || temperature == 0.0 {
-            probs.iter()
+            probs
+                .iter()
                 .enumerate()
                 .max_by(|a, b| a.1.partial_cmp(b.1).unwrap())
                 .map(|(idx, _)| idx as i32)
                 .unwrap_or(0)
         } else {
-            let dist = WeightedIndex::new(&probs).unwrap();
-            let mut rng = thread_rng();
-            dist.sample(&mut rng) as i32
+            match WeightedIndex::new(&probs) {
+                Ok(dist) => dist.sample(&mut rng) as i32,
+                Err(_) => {
+                    // Fallback to argmax if distribution is invalid
+                    probs
+                        .iter()
+                        .enumerate()
+                        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap())
+                        .map(|(idx, _)| idx as i32)
+                        .unwrap_or(0)
+                }
+            }
         };
 
         tokens.push(next_token_id);
@@ -112,7 +121,7 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
         let next_char = dataset.tokenizer.decode(&[next_token_id]);
         print!("{}", next_char);
         std::io::stdout().flush().unwrap();
-        
+
         if step > 20 && next_char == "\n" && tokens.len() > 50 {
             break;
         }

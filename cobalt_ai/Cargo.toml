@@ -19,3 +19,14 @@ tokenizers = "0.22.2"
 
 # run this cmd to run the ai
 # cargo run --manifest-path cobalt_ai/Cargo.toml
+# 
+# burn = { version = "0.12", features = ["wgpu", "train", "autodiff"] }
+rand = "0.8"
+rand_xoshiro = "0.6"
+ndarray = "0.15"
+ndarray-rand = "0.14"
+linfa = "0.7"
+linfa-trees = "0.7"
+
+# Add these for random sampling
+rand = "0.8"

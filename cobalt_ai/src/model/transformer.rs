@@ -29,7 +29,7 @@ impl CobaltModelConfig {
             position_embedding: EmbeddingConfig::new(self.max_seq_len, self.d_model).init(device),
             blocks,
             output_layer: LinearConfig::new(self.d_model, self.vocab_size).init(device),
-            dropout: nn::DropoutConfig::new(0.1).init(),
+            dropout: DropoutConfig::new(0.1).init(),
         }
     }
 }
@@ -40,7 +40,7 @@ pub struct CobaltModel<B: Backend> {
     position_embedding: Embedding<B>,
     blocks: Vec<TransformerBlock<B>>,
     output_layer: Linear<B>,
-    dropout: nn::Dropout<B>,
+    dropout: Dropout,
 }
 
 #[derive(Config, Debug)]
@@ -60,7 +60,7 @@ impl TransformerBlockConfig {
             norm2: LayerNormConfig::new(self.d_model).init(device),
             ff1: LinearConfig::new(self.d_model, self.d_ff).init(device),
             ff2: LinearConfig::new(self.d_ff, self.d_model).init(device),
-            dropout: nn::DropoutConfig::new(0.1).init(),
+            dropout: DropoutConfig::new(0.1).init(),
             gelu: Gelu::new(),
         }
     }
@@ -73,7 +73,7 @@ pub struct TransformerBlock<B: Backend> {
     norm2: LayerNorm<B>,
     ff1: Linear<B>,
     ff2: Linear<B>,
-    dropout: nn::Dropout<B>,
+    dropout: Dropout,
     gelu: Gelu,
 }
 

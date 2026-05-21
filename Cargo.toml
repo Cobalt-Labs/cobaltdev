@@ -10,8 +10,6 @@ members = [
     "cobalt_embedded",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", 
     "examples/test_code_rust", 
-    "cobalt_studio", 
-    "cobalt_shared",
 ]
 
 # Unified workspace dependencies

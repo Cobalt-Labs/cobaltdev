@@ -114,7 +114,6 @@ fn interactive_chat() {
             _ => {
                 conversation.push_str(&format!("Human: {}\nAI:", input));
                 
-                // Generate response
                 let prompt = &conversation;
                 let tokens = dataset.tokenizer.encode(prompt);
                 let seq_len = 64;

@@ -17,8 +17,8 @@ where
     let mut valid_dataset = TextDataset::new("data/input.txt");
 
     let batch_size = 8; //dec 12
-    let num_epochs = 20; //inc 14
-    let iterations_per_epoch = 150; //dec 250
+    let num_epochs = 50; //inc 14
+    let iterations_per_epoch = 200; //dec 250
     let eval_every = 50;
 
     let d_model = 192;
@@ -26,7 +26,7 @@ where
     let n_heads = 4;
     let n_layers = 3;
     let base_lr = 2.5e-4;
-    let warmup_epochs = 2;
+    let warmup_epochs = 5;
 
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
     let mut model: crate::model::transformer::CobaltModel<B> = config.init(&device);

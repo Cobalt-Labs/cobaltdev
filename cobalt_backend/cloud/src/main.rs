@@ -14,8 +14,6 @@ mod routes;
 mod services;
 mod utils;
 
-use crate::middleware::security::add_security_layers;
-
 #[derive(Serialize)]
 struct ResponseMsg {
     status: String,
@@ -72,8 +70,6 @@ async fn main() -> Result<()> {
             );
 
             let app = routes::create_router().with_state(db_pool);
-
-            let app = add_security_layers(app);
 
             let addr = SocketAddr::from(([0, 0, 0, 0], config.server_port));
             println!("Server listening on {}", addr);

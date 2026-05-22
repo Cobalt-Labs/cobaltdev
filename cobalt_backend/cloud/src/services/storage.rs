@@ -1,21 +1,29 @@
 use anyhow::Result;
-use object_store::{local::LocalFileSystem, ObjectStoreExt, path::Path as ObjectPath, PutPayload};
-use std::sync::Arc;
 use blake3::Hasher;
+use bytes::Bytes;
+use object_store::{local::LocalFileSystem, path::Path as ObjectPath, ObjectStoreExt, PutPayload};
+use std::{sync::Arc, path::PathBuf};
 use tokio::fs::File;
 use tokio::io::AsyncReadExt;
-use bytes::Bytes;
 
 pub struct StorageService {
-    store: Arc<LocalFileSystem>,
-    _base_path: String,
+    pub store: Arc<LocalFileSystem>,
+    pub base_path: String,
 }
 
 impl StorageService {
-    pub fn new(_base_path: String) -> Self {
-        let store = Arc::new(LocalFileSystem::new_with_prefix(&_base_path)
-            .expect("Failed to create local store"));
-        Self { store, _base_path }
+    pub fn new(base_path: String) -> Self {
+        let store = Arc::new(
+            LocalFileSystem::new_with_prefix(&base_path).expect("Failed to create local store"),
+        );
+        Self { store, base_path }
+    }
+
+    pub fn get_user_dir(&self, username: &str) -> PathBuf {
+        let mut path = PathBuf::from(&self.base_path);
+        path.push("users");
+        path.push(username);
+        path
     }
 
     pub async fn upload_file(

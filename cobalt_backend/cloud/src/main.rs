@@ -4,15 +4,17 @@ use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 use tracing_subscriber;
 
-mod routes;
 mod cli;
 mod config;
 mod email;
-mod models;
-mod services;
 mod handlers;
 mod middleware;
+mod models;
+mod routes;
+mod services;
 mod utils;
+
+use crate::middleware::security::add_security_layers;
 
 #[derive(Serialize)]
 struct ResponseMsg {
@@ -49,7 +51,12 @@ pub enum Commands {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt()
+        .with_target(false)
+        .with_thread_ids(true)
+        .with_level(true)
+        .init();
+
     dotenvy::dotenv().ok();
 
     let cli = Cli::parse();
@@ -59,13 +66,18 @@ async fn main() -> Result<()> {
 
     match cli.command {
         Commands::Server => {
-            println!("Starting Secure Cobalt Backend on http://0.0.0.0:{}", config.server_port);
-        
+            println!(
+                "Starting Cobalt Backend on http://0.0.0.0:{}",
+                config.server_port
+            );
+
             let app = routes::create_router().with_state(db_pool);
-        
+
+            let app = add_security_layers(app);
+
             let addr = SocketAddr::from(([0, 0, 0, 0], config.server_port));
             println!("Server listening on {}", addr);
-        
+
             axum::serve(tokio::net::TcpListener::bind(addr).await?, app).await?;
         }
 
@@ -91,7 +103,24 @@ async fn main() -> Result<()> {
 
         Commands::List { user } => {
             println!("Listing files for user: {}", user);
-            println!("(DB list feature coming soon)");
+
+            let storage = services::storage::StorageService::new(config.storage_base_path.clone());
+            let user_dir = storage.get_user_dir(&user);
+
+            if !user_dir.exists() {
+                println!("No files found for user: {}", user);
+            } else {
+                let mut entries = tokio::fs::read_dir(user_dir).await?;
+                println!("Files:");
+                while let Some(entry) = entries.next_entry().await? {
+                    let metadata = entry.metadata().await?;
+                    if metadata.is_file() {
+                        let file_name = entry.file_name();
+                        let size = metadata.len();
+                        println!("  - {} ({} bytes)", file_name.to_string_lossy(), size);
+                    }
+                }
+            }
         }
     }
 

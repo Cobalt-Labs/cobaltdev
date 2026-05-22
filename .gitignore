@@ -15,7 +15,6 @@ build/
 .pub-cache/
 .pub/
 **/pubspec.lock
-# (Keep root pubspec.lock if it's the main project, but usually ignored in libs)
 
 # Node.js
 node_modules/
@@ -47,55 +46,59 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# --- Environment & Secrets ---
-
-# All .env files (security)
-.env
-.env.*
-**/.env
-**/.env.*
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.pyc
+*.pyo
 
 # Databases
 *.db
-*.db-shm
+*.db-journal
 *.db-wal
+*.db-shm
 *.sqlite
 *.sqlite3
 
-# --- OS Specific ---
+# Environment files
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.cert
 
+# Build artifacts
+/target
+**/target/
+**/*.rs.bk
+**/*.swp
+
+# IDE files
+.vscode/
+.idea/
+*.code-workspace
+
+# OS files
 .DS_Store
-.DS_Store?
+Thumbs.db
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
-Thumbs.db
 
-# --- IDEs & Editors ---
-
-.vscode/
-!.vscode/extensions.json
-.idea/
-*.swp
-*.swo
-*~
-.project
-.settings/
-.classpath
-
-# --- Miscellaneous ---
-
+# Logs
 *.log
-tmp/
-temp/
-out/
-dist/
+logs/
+**/logs/
 
-# examples
-/examples
+# Model files (too large)
+models/*.mpk
+*.mpk
+
+# Test outputs
+*.aux
+*.pdf
+*.tex
+!Cargo.toml  # Don't ignore Cargo.toml
+
+# Secret detection
+**/secrets.yml
+**/secrets.yaml
+**/credentials.json

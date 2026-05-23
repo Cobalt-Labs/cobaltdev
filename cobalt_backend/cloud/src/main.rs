@@ -3,20 +3,7 @@ use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 use tracing_subscriber;
-
-// commit msgs for tomorrow
-// git add cobalt_backend/cloud/src/config.rs
-// git add cobalt_backend/cloud/src/routes.rs
-// git add cobalt_backend/cloud/src/handlers/files.rs
-// git add cobalt_backend/cloud/.env
-// git add cobalt_backend/cloud/.gitignore
-// git commit -m "fix: Resolve port conflict and upload API errors
-// cd /Users/ibrahimhaji/code/cobaltdev
-// git add cobalt_backend/cloud/src/middleware/auth.rs
-// git add cobalt_backend/cloud/src/middleware/mod.rs
-// git add cobalt_backend/cloud/src/routes.rs
-
-
+//test 
 mod cli;
 mod config;
 mod email;

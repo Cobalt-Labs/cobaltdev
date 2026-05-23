@@ -37,14 +37,16 @@ impl Config {
             println!("Created user directory for ibrahim3595");
         }
 
+        let port = env::var("SERVER_PORT")
+            .unwrap_or("8080".to_string())
+            .parse()
+            .unwrap_or(8080);
+
         let config = Self {
             storage_base_path,
             db_path: env::var("DATABASE_URL")
                 .unwrap_or_else(|_| "sqlite://cobalt.db?mode=rwc".to_string()),
-            server_port: env::var("SERVER_PORT")
-                .unwrap_or("8080".to_string())
-                .parse()
-                .map_err(|e| anyhow::anyhow!("Invalid SERVER_PORT: {}", e))?,
+            server_port: port,
             _default_user: "ibrahim3595".to_string(),
             jwt_secret: env::var("JWT_SECRET").unwrap_or_else(|_| {
                 eprintln!(

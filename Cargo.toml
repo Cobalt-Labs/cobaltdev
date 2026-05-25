@@ -5,6 +5,7 @@ members = [
     "cobalt_backend/sync", 
     "cobalt_cloud",
     "cobalt_ai", 
+    "cobalt_ai/rig_agent", 
     "cobalt_ai/experiments/scratch_model",
     "cobalt_systems/userland/minigrep", 
     "cobalt_embedded",

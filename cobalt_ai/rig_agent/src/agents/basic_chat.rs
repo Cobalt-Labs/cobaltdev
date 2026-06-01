@@ -1,24 +1,22 @@
 // src/agents/basic_chat.rs
-use anyhow::{Ok, Result};
-use rig_core::client::CompletionClient;
-use rig_core::completion::Prompt;
-use rig_core::providers::openai;
+use anyhow::Result;
+use crate::providers::ProviderClient;
 
 #[derive(Clone)]
 pub struct BasicAgent {
-    client: openai::Client,
+    client: ProviderClient,
     model: String,
     system_prompt: Option<String>,
 }
 
 impl BasicAgent {
-    pub fn new(api_key: String) -> Result<Self> {
-        let client = openai::Client::new(&api_key)?;
-        Ok(Self {
+    pub fn new(client: ProviderClient) -> Self {
+        let model = client.default_model().to_string();
+        Self {
             client,
-            model: "gpt-4o-mini".to_string(),
+            model,
             system_prompt: None,
-        })
+        }
     }
 
     pub fn with_model(mut self, model: &str) -> Self {
@@ -32,12 +30,7 @@ impl BasicAgent {
     }
 
     pub async fn chat(&self, user_input: &str) -> Result<String> {
-        let agent = if let Some(sys_prompt) = &self.system_prompt {
-            self.client.agent(&self.model).preamble(sys_prompt).build()
-        } else {
-            self.client.agent(&self.model).build()
-        };
-
+        let agent = self.client.build_agent(&self.model, self.system_prompt.as_deref());
         let response = agent.prompt(user_input).await?;
         Ok(response)
     }

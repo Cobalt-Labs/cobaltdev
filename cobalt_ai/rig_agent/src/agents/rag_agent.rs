@@ -1,22 +1,26 @@
+// src/agents/rag_agent.rs
 use anyhow::Result;
-use rig_core::providers::openai;
-use rig_core::completion::Prompt;
-use rig::client::CompletionClient;
+use crate::providers::ProviderClient;
 
 pub struct RAGAgent {
-    client: openai::Client,
+    client: ProviderClient,
     model: String,
     context: Vec<String>,
 }
 
 impl RAGAgent {
-    pub fn new(api_key: String) -> Result<Self> {
-        let client = openai::Client::new(&api_key)?;
-        Ok(Self {
+    pub fn new(client: ProviderClient) -> Self {
+        let model = client.default_model().to_string();
+        Self {
             client,
-            model: "gpt-4o-mini".to_string(),
+            model,
             context: Vec::new(),
-        })
+        }
+    }
+
+    pub fn with_model(mut self, model: &str) -> Self {
+        self.model = model.to_string();
+        self
     }
 
     pub fn add_context(&mut self, context: &str) {
@@ -31,7 +35,7 @@ impl RAGAgent {
              If the answer cannot be found in the context, say 'I don't have that information.'"
         );
         
-        let agent = self.client.agent(&self.model).build();
+        let agent = self.client.build_agent(&self.model, None);
         let response = agent.prompt(&prompt).await?;
         Ok(response)
     }

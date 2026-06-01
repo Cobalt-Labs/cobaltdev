@@ -1,20 +1,19 @@
-use rig_core::completion::Prompt;
-use rig_core::providers::openai;
+// src/agents/tool_agent.rs
+use crate::providers::ProviderClient;
 use anyhow::Result;
-use rig::client::CompletionClient;
 
 pub struct ToolAgent {
-    client: openai::Client,
+    client: ProviderClient,
     model: String,
 }
 
 impl ToolAgent {
-    pub fn new(api_key: String) -> Result<Self> {
-        let client = openai::Client::new(&api_key)?;
-        Ok(Self {
+    pub fn new(client: ProviderClient) -> Self {
+        let model = client.default_model().to_string();
+        Self {
             client,
-            model: "gpt-4o-mini".to_string(),
-        })
+            model,
+        }
     }
 
     pub fn with_model(mut self, model: &str) -> Self {
@@ -23,7 +22,7 @@ impl ToolAgent {
     }
 
     pub async fn run(&self, user_input: &str) -> Result<String> {
-        let agent = self.client.agent(&self.model).build();
+        let agent = self.client.build_agent(&self.model, None);
         let response = agent.prompt(user_input).await?;
         Ok(response)
     }

@@ -1,0 +1,4 @@
+[app]
+log_level = "info"
+environment = "development"
+timeout_seconds = 30

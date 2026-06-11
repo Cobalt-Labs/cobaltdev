@@ -22,7 +22,8 @@ impl ToolAgent {
     }
 
     pub async fn run(&self, user_input: &str) -> Result<String> {
-        let agent = self.client.build_agent(&self.model, None);
+        let preamble = "You are a helpful assistant with access to tools. Use the calculator tool for math, file_reader to read files, and web_search to query the web.";
+        let agent = self.client.build_tool_agent(&self.model, Some(preamble));
         let response = agent.prompt(user_input).await?;
         Ok(response)
     }

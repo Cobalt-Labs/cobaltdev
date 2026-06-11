@@ -2,17 +2,17 @@
 use dotenv::dotenv;
 use rig_agent::agents::basic_chat::BasicAgent;
 use rig_agent::agents::tool_agent::ToolAgent;
+use rig_agent::providers::ProviderClient;
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-    let api_key = std::env::var("OPENAI_API_KEY").unwrap();
+    let api_key = std::env::var("OPENAI_API_KEY").expect("OPENAI_API_KEY must be set");
     
     println!("=== Basic Agent Demo ===\n");
     
-    // FIXED: Use ? or unwrap() after new()
-    let basic_agent = BasicAgent::new(api_key.clone())
-        .unwrap()
+    let client = ProviderClient::new_openai(&api_key).unwrap();
+    let basic_agent = BasicAgent::new(client.clone())
         .with_system_prompt("You are a concise, helpful assistant.");
     
     match basic_agent.chat("Explain async Rust in one sentence").await {
@@ -22,8 +22,7 @@ async fn main() {
     
     println!("=== Tool Agent Demo ===\n");
     
-    // FIXED: Use run() instead of add_tool/run_with_tools
-    let tool_agent = ToolAgent::new(api_key).unwrap();
+    let tool_agent = ToolAgent::new(client);
     
     match tool_agent.run("What is 42 * 3?").await {
         Ok(response) => println!("Tool Agent: {}", response),

@@ -1,6 +1,7 @@
 // src/agents/rag_agent.rs
 use anyhow::Result;
 use crate::providers::ProviderClient;
+use std::fs;
 
 pub struct RAGAgent {
     client: ProviderClient,
@@ -25,6 +26,22 @@ impl RAGAgent {
 
     pub fn add_context(&mut self, context: &str) {
         self.context.push(context.to_string());
+    }
+
+    pub fn load_directory_context(&mut self, dir_path: &str) -> Result<()> {
+        if let Ok(entries) = fs::read_dir(dir_path) {
+            for entry in entries {
+                let entry = entry?;
+                let path = entry.path();
+                if path.is_file() {
+                    if let Ok(content) = fs::read_to_string(&path) {
+                        let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("unknown");
+                        self.add_context(&format!("File: {}\nContents:\n{}", filename, content));
+                    }
+                }
+            }
+        }
+        Ok(())
     }
 
     pub async fn ask_with_context(&self, question: &str) -> Result<String> {

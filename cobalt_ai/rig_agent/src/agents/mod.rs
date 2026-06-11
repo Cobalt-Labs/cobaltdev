@@ -5,3 +5,4 @@ pub mod rag_agent;
 
 pub use basic_chat::BasicAgent;
 pub use tool_agent::ToolAgent;
+pub use rag_agent::RAGAgent;

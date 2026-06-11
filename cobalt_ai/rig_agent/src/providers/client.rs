@@ -89,4 +89,49 @@ impl ProviderClient {
             }
         }
     }
+
+    pub fn build_tool_agent(&self, model: &str, preamble: Option<&str>) -> BuiltAgent {
+        match self {
+            ProviderClient::OpenAI(client) => {
+                let mut builder = client.agent(model)
+                    .tool(crate::tools::Calculator)
+                    .tool(crate::tools::FileReader)
+                    .tool(crate::tools::WebSearch);
+                if let Some(p) = preamble {
+                    builder = builder.preamble(p);
+                }
+                BuiltAgent::OpenAI(builder.build())
+            }
+            ProviderClient::Gemini(client) => {
+                let mut builder = client.agent(model)
+                    .tool(crate::tools::Calculator)
+                    .tool(crate::tools::FileReader)
+                    .tool(crate::tools::WebSearch);
+                if let Some(p) = preamble {
+                    builder = builder.preamble(p);
+                }
+                BuiltAgent::Gemini(builder.build())
+            }
+            ProviderClient::Cohere(client) => {
+                let mut builder = client.agent(model)
+                    .tool(crate::tools::Calculator)
+                    .tool(crate::tools::FileReader)
+                    .tool(crate::tools::WebSearch);
+                if let Some(p) = preamble {
+                    builder = builder.preamble(p);
+                }
+                BuiltAgent::Cohere(builder.build())
+            }
+            ProviderClient::Anthropic(client) => {
+                let mut builder = client.agent(model).max_tokens(1024)
+                    .tool(crate::tools::Calculator)
+                    .tool(crate::tools::FileReader)
+                    .tool(crate::tools::WebSearch);
+                if let Some(p) = preamble {
+                    builder = builder.preamble(p);
+                }
+                BuiltAgent::Anthropic(builder.build())
+            }
+        }
+    }
 }

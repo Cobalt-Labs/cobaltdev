@@ -2,16 +2,34 @@ use anyhow::Result;
 use dotenv::dotenv;
 use rig_agent::agents::basic_chat::BasicAgent;
 use rig_agent::agents::tool_agent::ToolAgent;
+use rig_agent::agents::rag_agent::RAGAgent;
 use rig_agent::providers::ProviderClient;
+use rig_agent::utils::config::Settings;
+use rig_agent::utils::logger;
 use std::io::{self, Write};
-use std::fs::OpenOptions;
-use tracing_subscriber;
+use std::fs::{self, OpenOptions};
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
 
-    tracing_subscriber::fmt().init();
+    // Initialize structured logging
+    logger::init_logger();
+    logger::log_info("Starting Rig Agent Lab demo application");
+
+    // Load configurations
+    let config_settings = Settings::load().unwrap_or_else(|e| {
+        eprintln!("Error loading configurations: {}. Using defaults.", e);
+        Settings {
+            app: None,
+            basic_agent: None,
+            tool_agent: None,
+            openai: None,
+            gemini: None,
+            cohere: None,
+            anthropic: None,
+        }
+    });
 
     let mut provider_client = select_and_initialize_provider()?;
 
@@ -19,7 +37,9 @@ async fn main() -> Result<()> {
     let mut stdout = io::stdout();
 
     loop {
-        println!("\n Rig Agent Lab - Multiple AI Agents Demo\n");
+        println!("\n=============================================");
+        println!(" Rig Agent Lab - Multiple AI Agents Demo");
+        println!("=============================================");
         println!("Active Provider: {}", match &provider_client {
             ProviderClient::OpenAI(_) => "OpenAI",
             ProviderClient::Gemini(_) => "Gemini",
@@ -28,11 +48,12 @@ async fn main() -> Result<()> {
         });
         println!("Select an agent to chat with:");
         println!("1. Basic Chat Agent (Simple conversation)");
-        println!("2. Tool-Using Agent (With calculator tool)");
-        println!("3. Switch LLM Provider");
-        println!("4. Exit\n");
+        println!("2. Tool-Using Agent (With calculator, file reader, & web search)");
+        println!("3. RAG Agent (Retrieval-Augmented Generation)");
+        println!("4. Switch LLM Provider");
+        println!("5. Exit\n");
 
-        print!("Choice (1-4): ");
+        print!("Choice (1-5): ");
         stdout.flush()?;
 
         let mut choice = String::new();
@@ -40,7 +61,10 @@ async fn main() -> Result<()> {
 
         match choice.trim() {
             "1" => {
-                if run_basic_agent(provider_client.clone()).await? {
+                let system_prompt = config_settings.basic_agent.as_ref()
+                    .map(|ba| ba.system_prompt.as_str())
+                    .unwrap_or("You are a helpful Rust programming assistant. Be concise and practical.");
+                if run_basic_agent(provider_client.clone(), system_prompt).await? {
                     if let Ok(new_client) = select_and_initialize_provider() {
                         provider_client = new_client;
                     }
@@ -54,11 +78,19 @@ async fn main() -> Result<()> {
                 }
             }
             "3" => {
+                if run_rag_agent(provider_client.clone()).await? {
+                    if let Ok(new_client) = select_and_initialize_provider() {
+                        provider_client = new_client;
+                    }
+                }
+            }
+            "4" => {
                 if let Ok(new_client) = select_and_initialize_provider() {
                     provider_client = new_client;
                 }
             }
-            "4" => {
+            "5" => {
+                logger::log_info("Exiting application");
                 println!("Goodbye!");
                 break;
             }
@@ -189,10 +221,8 @@ fn is_quota_error(err: &anyhow::Error) -> bool {
         || err_str.contains("too many requests")
 }
 
-async fn run_basic_agent(provider_client: ProviderClient) -> Result<bool> {
-    let agent = BasicAgent::new(provider_client).with_system_prompt(
-        "You are a helpful Rust programming assistant. Be concise and practical.",
-    );
+async fn run_basic_agent(provider_client: ProviderClient, system_prompt: &str) -> Result<bool> {
+    let agent = BasicAgent::new(provider_client).with_system_prompt(system_prompt);
 
     println!("\nBasic Chat Agent Started!");
     println!("Ask me anything about Rust or programming. Type 'back' to return to menu.\n");
@@ -212,9 +242,14 @@ async fn run_basic_agent(provider_client: ProviderClient) -> Result<bool> {
             break;
         }
 
+        logger::log_agent_prompt("BasicAgent", input);
         match agent.chat(input).await {
-            Ok(response) => println!("\nAgent > {}\n", response),
+            Ok(response) => {
+                logger::log_agent_response("BasicAgent", &response);
+                println!("\nAgent > {}\n", response);
+            }
             Err(e) => {
+                logger::log_error(&format!("Agent error: {}", e));
                 eprintln!("Error: {}", e);
                 if is_quota_error(&e) {
                     println!("\n⚠️  Detected Quota/Rate Limit error from the current provider.");
@@ -237,7 +272,7 @@ async fn run_tool_agent(provider_client: ProviderClient) -> Result<bool> {
     let agent = ToolAgent::new(provider_client);
 
     println!("\nTool-Using Agent Started!");
-    println!("I have a calculator tool! Try: 'What is 15 + 27?' or 'Calculate 100 / 4'");
+    println!("I have tools! Try: 'What is 15 + 27?', 'Read Cargo.toml', or 'Search for Rig Agent'.");
     println!("Type 'back' to return to menu.\n");
 
     let stdin = io::stdin();
@@ -255,9 +290,76 @@ async fn run_tool_agent(provider_client: ProviderClient) -> Result<bool> {
             break;
         }
 
+        logger::log_agent_prompt("ToolAgent", input);
         match agent.run(input).await {
-            Ok(response) => println!("\nAgent > {}\n", response),
+            Ok(response) => {
+                logger::log_agent_response("ToolAgent", &response);
+                println!("\nAgent > {}\n", response);
+            }
             Err(e) => {
+                logger::log_error(&format!("Agent error: {}", e));
+                eprintln!("Error: {}", e);
+                if is_quota_error(&e) {
+                    println!("\n⚠️  Detected Quota/Rate Limit error from the current provider.");
+                    println!("Would you like to switch to or configure another provider now? (y/n)");
+                    stdout.flush()?;
+                    let mut ans = String::new();
+                    stdin.read_line(&mut ans)?;
+                    if ans.trim().to_lowercase().starts_with('y') {
+                        return Ok(true);
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(false)
+}
+
+async fn run_rag_agent(provider_client: ProviderClient) -> Result<bool> {
+    let mut agent = RAGAgent::new(provider_client);
+
+    let doc_dir = "data/documents";
+    let _ = fs::create_dir_all(doc_dir);
+
+    let paths = fs::read_dir(doc_dir)?;
+    let mut count = 0;
+    for _ in paths {
+        count += 1;
+    }
+    if count == 0 {
+        let default_doc = format!("{}/about_cobalt.txt", doc_dir);
+        let _ = fs::write(&default_doc, "Cobalt AI features state-of-the-art LLM capabilities using the Rig framework. The project allows developerPairings, tool orchestrations, and advanced RAG processing.");
+    }
+
+    println!("\nRAG Agent Started!");
+    println!("Scanning and loading files from '{}' into context...", doc_dir);
+    agent.load_directory_context(doc_dir)?;
+    println!("Loaded. Ask me questions about the documents. Type 'back' to return to menu.\n");
+
+    let stdin = io::stdin();
+    let mut stdout = io::stdout();
+
+    loop {
+        print!("You > ");
+        stdout.flush()?;
+
+        let mut input = String::new();
+        stdin.read_line(&mut input)?;
+
+        let input = input.trim();
+        if input == "back" {
+            break;
+        }
+
+        logger::log_agent_prompt("RAGAgent", input);
+        match agent.ask_with_context(input).await {
+            Ok(response) => {
+                logger::log_agent_response("RAGAgent", &response);
+                println!("\nAgent > {}\n", response);
+            }
+            Err(e) => {
+                logger::log_error(&format!("Agent error: {}", e));
                 eprintln!("Error: {}", e);
                 if is_quota_error(&e) {
                     println!("\n⚠️  Detected Quota/Rate Limit error from the current provider.");

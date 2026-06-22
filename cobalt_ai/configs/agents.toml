@@ -1,0 +1,7 @@
+[basic_agent]
+system_prompt = "You are a helpful Rust programming assistant. Be concise and practical."
+default_model = "gpt-4o-mini"
+
+[tool_agent]
+preamble = "You are an assistant with access to arithmetic and search tools. Choose tools appropriately."
+default_model = "gpt-4o-mini"

@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-mod prompt;
-mod parser;
-mod executor;
-=======
 pub mod prompt;
 pub mod parser;
 pub mod executor;
->>>>>>> 18ecb77
 
 pub use prompt::prompt;
 pub use parser::parse_input;

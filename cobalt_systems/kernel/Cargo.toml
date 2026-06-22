@@ -1,14 +1,19 @@
 [package]
 name = "kernel"
-version = "0.1.0"
-edition = "2024"
+version = "1.1.0"
+edition = "2021"
 
-[dependencies]
-bootloader_api = "0.11.15"
-spin = { version = "0.10.0", features = ["mutex", "lazy"] }
+[workspace]
 
 [profile.dev]
 panic = "abort"
 
 [profile.release]
 panic = "abort"
+
+[dependencies]
+bootloader_api = "0.11.15"
+spin = { version = "0.10.0", features = ["mutex", "lazy"] }
+x86_64 = "0.15.2"
+pc-keyboard = "0.7.0"
+pic8259 = "0.10.1"

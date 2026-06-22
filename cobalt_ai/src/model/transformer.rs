@@ -1,8 +1,10 @@
 use burn::nn::attention::{MhaInput, MultiHeadAttention, MultiHeadAttentionConfig};
 use burn::nn::{
-    Embedding, EmbeddingConfig, Gelu, LayerNorm, LayerNormConfig, Linear, LinearConfig,
+    Dropout, DropoutConfig, Embedding, EmbeddingConfig, Gelu, LayerNorm, LayerNormConfig,
+    Linear, LinearConfig,
 };
 use burn::prelude::*;
+use burn::prelude::Module;
 
 #[derive(Config, Debug)]
 pub struct CobaltModelConfig {
@@ -29,6 +31,7 @@ impl CobaltModelConfig {
             position_embedding: EmbeddingConfig::new(self.max_seq_len, self.d_model).init(device),
             blocks,
             output_layer: LinearConfig::new(self.d_model, self.vocab_size).init(device),
+            dropout: DropoutConfig::new(0.1).init(),
         }
     }
 }
@@ -39,6 +42,7 @@ pub struct CobaltModel<B: Backend> {
     position_embedding: Embedding<B>,
     blocks: Vec<TransformerBlock<B>>,
     output_layer: Linear<B>,
+    dropout: Dropout,
 }
 
 #[derive(Config, Debug)]
@@ -51,11 +55,14 @@ pub struct TransformerBlockConfig {
 impl TransformerBlockConfig {
     pub fn init<B: Backend>(&self, device: &B::Device) -> TransformerBlock<B> {
         TransformerBlock {
-            attention: MultiHeadAttentionConfig::new(self.d_model, self.n_heads).init(device),
+            attention: MultiHeadAttentionConfig::new(self.d_model, self.n_heads)
+                .with_dropout(0.1)
+                .init(device),
             norm1: LayerNormConfig::new(self.d_model).init(device),
             norm2: LayerNormConfig::new(self.d_model).init(device),
             ff1: LinearConfig::new(self.d_model, self.d_ff).init(device),
             ff2: LinearConfig::new(self.d_ff, self.d_model).init(device),
+            dropout: DropoutConfig::new(0.1).init(),
             gelu: Gelu::new(),
         }
     }
@@ -68,6 +75,7 @@ pub struct TransformerBlock<B: Backend> {
     norm2: LayerNorm<B>,
     ff1: Linear<B>,
     ff2: Linear<B>,
+    dropout: Dropout,
     gelu: Gelu,
 }
 
@@ -84,22 +92,11 @@ impl<B: Backend> TransformerBlock<B> {
         let norm_x = self.norm1.forward(input.clone());
         let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x).mask_attn(mask);
         let attn_out = self.attention.forward(mha_input);
-        let x = input + attn_out.context;
+        let x = input + self.dropout.forward(attn_out.context);
 
         let norm_x2 = self.norm2.forward(x.clone());
-        let ff_out = self
-            .ff2
-            .forward(self.gelu.forward(self.ff1.forward(norm_x2)));
-        x + ff_out
-
-        // Pre-norm formulation: x = x + Attention(NormX)
-        // let norm_x = self.norm1.forward(input.clone());
-        // let mha_input = MhaInput::new(norm_x.clone(), norm_x.clone(), norm_x);
-        // let attn_out = self.attention.forward(mha_input);
-        // let x = input + attn_out.context;
-        // let norm_x2 = self.norm2.forward(x.clone());
-        // let ff_out = self.ff2.forward(self.gelu.forward(self.ff1.forward(norm_x2)));
-        // x + ff_out
+        let ff_out = self.ff2.forward(self.gelu.forward(self.ff1.forward(norm_x2)));
+        x + self.dropout.forward(ff_out)
     }
 }
 
@@ -112,8 +109,8 @@ impl<B: Backend> CobaltModel<B> {
             .reshape([1, seq_len])
             .repeat_dim(0, batch_size);
 
-        let mut x =
-            self.token_embedding.forward(input) + self.position_embedding.forward(positions);
+        let mut x = self.token_embedding.forward(input) + self.position_embedding.forward(positions);
+        x = self.dropout.forward(x);
 
         for block in &self.blocks {
             x = block.forward(x);

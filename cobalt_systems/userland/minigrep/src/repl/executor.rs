@@ -19,8 +19,6 @@ pub fn execute(cmd: Command) -> Result<(), String> {
                 Ok(cmd_cat(&cmd.args[0]))
             }
         }
-<<<<<<< HEAD
-=======
         "edit" => {
             if cmd.args.is_empty() {
                 Err("Usage: edit <file>".into())
@@ -28,11 +26,32 @@ pub fn execute(cmd: Command) -> Result<(), String> {
                 crate::editor::open_editor(&cmd.args[0])
             }
         }
->>>>>>> 18ecb77
-        "touch" => Ok(cmd_touch(&cmd.args[0])),
-        "mkdir" => Ok(cmd_mkdir(&cmd.args[0])),
-        "rm" => Ok(cmd_rm(&cmd.args[0])),
+        "touch" => {
+            if cmd.args.is_empty() {
+                Err("Usage: touch <file>".into())
+            } else {
+                Ok(cmd_touch(&cmd.args[0]))
+            }
+        }
+        "mkdir" => {
+            if cmd.args.is_empty() {
+                Err("Usage: mkdir <dir>".into())
+            } else {
+                Ok(cmd_mkdir(&cmd.args[0]))
+            }
+        }
+        "rm" => {
+            if cmd.args.is_empty() {
+                Err("Usage: rm <path>".into())
+            } else {
+                Ok(cmd_rm(&cmd.args[0]))
+            }
+        }
         "clear" => Ok(cmd_clear()),
+        "date" => Ok(cmd_date()),
+        "whoami" => Ok(cmd_whoami()),
+        "uname" => Ok(cmd_uname()),
+        "echo" => Ok(cmd_echo(&cmd.args)),
         "exit" => cmd_exit(),
         _ => Err(format!("Unknown command: {}", cmd.name)),
     }

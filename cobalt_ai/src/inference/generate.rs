@@ -1,15 +1,19 @@
+use crate::data::loader::TextDataset;
+use crate::model::transformer::{CobaltModel, CobaltModelConfig};
 use burn::prelude::*;
 use burn::record::{CompactRecorder, Recorder};
 use burn::tensor::backend::Backend;
 use burn::tensor::{Int, Tensor, TensorData};
+use rand::distributions::{Distribution, WeightedIndex};
+use rand::prelude::*;
 use std::io::Write;
-use crate::data::loader::TextDataset;
-use crate::model::transformer::{CobaltModel, CobaltModelConfig};
 
 pub fn generate_text<B: Backend<IntElem = i32>>(
     device: B::Device,
     prompt: &str,
     num_tokens: usize,
+    temperature: f32,
+    top_k: usize,
 ) {
     let dataset = TextDataset::new("data/input.txt");
 
@@ -21,9 +25,14 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
     let config = CobaltModelConfig::new(n_heads, n_layers, d_model, dataset.vocab_size, seq_len);
 
     let recorder = CompactRecorder::new();
-    let record = recorder
-        .load("models/cobalt_model".into(), &device)
-        .expect("Failed to load model weights. Train first!");
+    let record = match recorder.load("models/cobalt_model".into(), &device) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("❌ Failed to load model: {}", e);
+            eprintln!("💡 Run 'cargo run -- train' first to train the model!");
+            return;
+        }
+    };
 
     let model: CobaltModel<B> = config.init(&device).load_record(record);
 
@@ -32,7 +41,9 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
     print!("{}", prompt);
     std::io::stdout().flush().unwrap();
 
-    for _ in 0..num_tokens {
+    let mut rng = thread_rng();
+
+    for step in 0..num_tokens {
         let (context_start, actual_seq_len) = if tokens.len() > seq_len {
             (tokens.len() - seq_len, seq_len)
         } else {
@@ -52,38 +63,68 @@ pub fn generate_text<B: Backend<IntElem = i32>>(
         let logits = output.reshape([seq_dim, vocab_dim]);
         let last_token_logits = logits.slice([seq_dim - 1..seq_dim]);
 
-        let temperature = 0.95;
+        let mut logits_vec: Vec<f32> = last_token_logits.to_data().to_vec().unwrap();
 
-        let scaled_logits = last_token_logits / temperature;
-        
-        let repetition_penalty = 1.25;
-
-        let mut logits_vec: Vec<f32> = scaled_logits.to_data().to_vec().unwrap();
-
-        let recent_tokens: Vec<i32> = tokens.iter().rev().take(20).cloned().collect();
-        
-        for (i, &token_id) in recent_tokens.iter().enumerate() {
-            let idx = token_id as usize;
-            if idx < logits_vec.len() {
-                logits_vec[idx] -= repetition_penalty * (1.0 / (i as f32 + 1.0));
+        if temperature > 0.0 {
+            for logit in logits_vec.iter_mut() {
+                *logit = *logit / temperature;
             }
         }
 
-        let penalized_logits = Tensor::<B, 2>::from_data(
-            TensorData::new(logits_vec, [1, vocab_dim]), 
-            &device
-        );
+        let max_logit = logits_vec.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+        let exp_sum: f32 = logits_vec.iter().map(|&x| (x - max_logit).exp()).sum();
+        let mut probs: Vec<f32> = logits_vec
+            .iter()
+            .map(|&x| (x - max_logit).exp() / exp_sum)
+            .collect();
 
-        let probs = burn::tensor::activation::softmax(penalized_logits, 1);
+        if top_k > 0 && top_k < probs.len() {
+            let mut indices: Vec<usize> = (0..probs.len()).collect();
+            indices.sort_by(|&a, &b| probs[b].partial_cmp(&probs[a]).unwrap());
 
-        let next_token_tensor = probs.argmax(1);
-        let next_token_id: i32 = next_token_tensor.into_scalar();
+            for &idx in &indices[top_k..] {
+                probs[idx] = 0.0;
+            }
+
+            let sum: f32 = probs.iter().sum();
+            for prob in probs.iter_mut() {
+                *prob /= sum;
+            }
+        }
+
+        let valid_indices: Vec<usize> = (0..probs.len()).filter(|&i| probs[i] > 0.0).collect();
+
+        let next_token_id = if valid_indices.is_empty() || temperature == 0.0 {
+            probs
+                .iter()
+                .enumerate()
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap())
+                .map(|(idx, _)| idx as i32)
+                .unwrap_or(0)
+        } else {
+            match WeightedIndex::new(&probs) {
+                Ok(dist) => dist.sample(&mut rng) as i32,
+                Err(_) => {
+                    // Fallback to argmax if distribution is invalid
+                    probs
+                        .iter()
+                        .enumerate()
+                        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap())
+                        .map(|(idx, _)| idx as i32)
+                        .unwrap_or(0)
+                }
+            }
+        };
 
         tokens.push(next_token_id);
 
         let next_char = dataset.tokenizer.decode(&[next_token_id]);
         print!("{}", next_char);
         std::io::stdout().flush().unwrap();
+
+        if step > 20 && next_char == "\n" && tokens.len() > 50 {
+            break;
+        }
     }
-    println!();
+    println!("\n");
 }

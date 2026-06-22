@@ -25,7 +25,6 @@ fn calculate_checksum(data: &[u8]) -> String {
     format!("{:x}", hasher.finalize())
 }
 
-static ENCRYPTION_KEY: &[u8] = b"NOTEPAD_SECRET_KEY_2025";
 static INIT: Once = Once::new();
 
 fn initialize() {
@@ -57,8 +56,9 @@ fn ensure_directory_exists() -> io::Result<PathBuf> {
 }
 
 fn xor_encrypt_decrypt(data: &[u8]) -> Vec<u8> {
+    let key = get_encryption_key();
     data.iter()
-        .zip(ENCRYPTION_KEY.iter().cycle())
+        .zip(key.iter().cycle())
         .map(|(&b, &k)| b ^ k)
         .collect()
 }
@@ -136,9 +136,10 @@ pub fn save_note_to_disk(title: String, content: String) -> bool {
     }
     
     let encrypted = xor_encrypt_decrypt(content.as_bytes());
+    let checksum = calculate_checksum(&encrypted);
     match File::create(&path).and_then(|mut f| f.write_all(&encrypted)) {
         Ok(_) => {
-            println!("[Rust] Saved note to {:?}", path);
+            println!("[Rust] Saved note to {:?} (Checksum: {})", path, checksum);
             true
         }
         Err(e) => {
@@ -168,6 +169,8 @@ pub fn load_note_from_disk(title: String) -> String {
     
     match fs::read(&path) {
         Ok(encrypted_bytes) => {
+            let checksum = calculate_checksum(&encrypted_bytes);
+            println!("[Rust] Loaded encrypted note (Checksum: {})", checksum);
             let decrypted_bytes = xor_encrypt_decrypt(&encrypted_bytes);
             match String::from_utf8(decrypted_bytes) {
                 Ok(content) => {

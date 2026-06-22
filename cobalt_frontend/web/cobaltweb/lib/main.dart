@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
-import 'pages/service_page.dart';
-import 'pages/product_page.dart';
-import 'pages/portfolio_page.dart';
-import 'pages/about_page.dart';
-import 'pages/contact_page.dart';
+import 'pages/home_page.dart' deferred as home_page;
+import 'pages/service_page.dart' deferred as service_page;
+import 'pages/product_page.dart' deferred as product_page;
+import 'pages/portfolio_page.dart' deferred as portfolio_page;
+import 'pages/about_page.dart' deferred as about_page;
+import 'pages/contact_page.dart' deferred as contact_page;
 import 'pages/splash_screen.dart';
 import 'widgets/navbar.dart';
 
@@ -49,48 +49,65 @@ class CobaltDevApp extends StatelessWidget {
       ),
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
-        Widget page;
+        Widget pageBuilder;
         bool useLayout = true;
+
+        // Code Splitting Strategy: Load chunk dynamically
+        Widget deferredLoader(Future<void> Function() loadLibrary, Widget Function() buildPage) {
+          return FutureBuilder(
+            future: loadLibrary(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return buildPage();
+              }
+              // Lightweight indicator while downloading the JS chunk
+              return const Scaffold(
+                backgroundColor: Color(0xFF07070F),
+                body: Center(child: CircularProgressIndicator(color: Color(0xFFA855F7))),
+              );
+            },
+          );
+        }
 
         switch (settings.name) {
           case '/splash':
-            page = const SplashScreen();
+            pageBuilder = const SplashScreen(); // Critical path, no defer
             useLayout = false;
             break;
           case '/':
-            page = const HomePage();
+            pageBuilder = deferredLoader(home_page.loadLibrary, () => home_page.HomePage());
             break;
           case '/about':
-            page = const AboutPage();
+            pageBuilder = deferredLoader(about_page.loadLibrary, () => about_page.AboutPage());
             break;
           case '/services':
-            page = const ServicesPage();
+            pageBuilder = deferredLoader(service_page.loadLibrary, () => service_page.ServicesPage());
             break;
           case '/products':
-            page = const ProductsPage();
+            pageBuilder = deferredLoader(product_page.loadLibrary, () => product_page.ProductsPage());
             break;
           case '/portfolio':
-            page = const PortfolioPage();
+            pageBuilder = deferredLoader(portfolio_page.loadLibrary, () => portfolio_page.PortfolioPage());
             break;
           case '/contact':
-            page = const ContactPage();
+            pageBuilder = deferredLoader(contact_page.loadLibrary, () => contact_page.ContactPage());
             break;
           default:
-            page = const HomePage();
+            pageBuilder = deferredLoader(home_page.loadLibrary, () => home_page.HomePage());
             break;
         }
 
         if (!useLayout) {
           return MaterialPageRoute(
             settings: settings,
-            builder: (context) => page,
+            builder: (context) => pageBuilder,
           );
         }
 
         return PageRouteBuilder(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              MainLayout(child: page),
+              MainLayout(child: pageBuilder),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },

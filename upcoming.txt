@@ -1,0 +1,15 @@
+Why this fits your stack perfectly:
+1. You already have cobalt_ai/ with transformer code
+2. You're building a cloud backend anyway
+3. Dioxus matches your "runs everywhere" ethos
+
+Suggested project: "Cobalt Studio" - Local-first AI IDE
+- Burn for inference (runs on CPU/CUDA/WASM)
+- Rig for agent workflows (task decomposition)
+- Dioxus for desktop/web/mobile UI
+- Your cobalt_cloud for sync/backup
+
+Features:
+1. Chat with local LLM (using Burn + Candle)
+2. File system RAG (search your own codebase)
+3. Live code editing with syntax highlighting

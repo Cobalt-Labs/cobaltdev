@@ -8,7 +8,7 @@ axum-extra = "0.12.6"
 dotenvy = "0.15.7"
 mysql = "28.0.0"
 tower = "0.5.3"
-tower-http = "0.7.0"
+tower-http = { version = "0.7", features = ["cors"] }
 
 anyhow.workspace = true
 axum.workspace = true

@@ -14,6 +14,7 @@ pub enum DatabaseType {
     None, 
 }
 
+#[derive(Clone)]
 pub struct DatabaseManager {
     pub sqlite: Option<SqliteDatabase>,
     pub mysql: Option<MySqlDatabase>,

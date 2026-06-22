@@ -2,6 +2,7 @@ use sqlx::{SqlitePool, sqlite::SqlitePoolOptions};
 use anyhow::Result;
 use crate::models::user::User;
 
+#[derive(Clone)]
 pub struct SqliteDatabase {
     pool: SqlitePool,
 }

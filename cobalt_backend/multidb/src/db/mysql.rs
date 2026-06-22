@@ -2,6 +2,7 @@ use crate::models::user::User;
 use anyhow::Result;
 use sqlx::{MySqlPool, mysql::MySqlPoolOptions};
 
+#[derive(Clone)]
 pub struct MySqlDatabase {
     pool: MySqlPool,
 }

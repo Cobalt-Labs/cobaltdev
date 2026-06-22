@@ -1,0 +1,22 @@
+[package]
+name = "multidb"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum-extra = "0.12.6"
+dotenvy = "0.15.7"
+surrealdb = "3.1.5"
+mysql = "28.0.0"
+tower = "0.5.3"
+tower-http = "0.7.0"
+
+anyhow.workspace = true
+axum.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "cobalt_backend/cloud", 
+    "cobalt_backend/multidb",
     "cobalt_backend/sync", 
     "cobalt_cloud",
     "cobalt_ai", 
@@ -9,14 +10,15 @@ members = [
     "cobalt_ai/experiments/scratch_model",
     "cobalt_systems/userland/minigrep", 
     "cobalt_embedded",
+    "cobalt_frontend/web/fullstack_app",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", 
-    "examples/test_code_rust", 
+    "examples/test_code_rust", "cobalt_backend/multidb", "cobalt_frontend/web/fullstack_app/dioxus", 
 ]
 
 # Unified workspace dependencies
 [workspace.dependencies]
 # Use the same version across all crates
-sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "any", "chrono", "uuid"] }
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "any", "chrono", "uuid", "migrate", "mysql"] }
 tokio = { version = "1", features = ["full"] }
 axum = { version = "0.8.8", features = ["multipart", "tracing"] }
 

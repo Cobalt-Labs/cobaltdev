@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vanilla + Rust Multi-DB</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Vanilla + Rust</h1>
+            <p>HTML · CSS · JS &nbsp;→&nbsp; Rust + Axum + Multi-DB</p>
+            <span class="badges">
+                <span class="badge sqlite">SQLite</span>
+                <span class="badge mysql">MySQL</span>
+                <span class="badge surreal">SurrealDB</span>
+            </span>
+        </header>
+
+        <section class="card form-card">
+            <h2>Add User</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="nameInput">Name</label>
+                    <input
+                        type="text"
+                        id="nameInput"
+                        placeholder="Enter name..."
+                        required
+                    />
+                </div>
+                <button type="submit" id="submitBtn">
+                    💾 Add User
+                </button>
+            </form>
+            <div id="formFeedback" class="feedback"></div>
+        </section>
+
+        <section class="card users-card">
+            <h2>👥 Users</h2>
+            <div class="db-selector">
+                <button class="db-btn active" data-db="sqlite">SQLite</button>
+                <button class="db-btn" data-db="mysql">MySQL</button>
+                <button class="db-btn" data-db="surreal">SurrealDB</button>
+                <button class="db-btn" data-db="all">📊 All</button>
+            </div>
+            <div id="userList">
+                <div class="loading">Loading users...</div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built with ❤️ using Rust · Axum · SQLite · MySQL · SurrealDB</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

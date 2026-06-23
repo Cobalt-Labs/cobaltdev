@@ -13,7 +13,7 @@ members = [
     # "cobalt_frontend/web/fullstack_app",
     "cobalt_frontend/web/fullstack_app/dioxus",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", 
-    "examples/test_code_rust", "cobalt_backend/multidb", 
+    "examples/test_code_rust", "cobalt_backend/multidb", "cobalt_frontend/web/rust_js", 
 ]
 
 # Unified workspace dependencies

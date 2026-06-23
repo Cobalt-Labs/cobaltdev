@@ -4,26 +4,25 @@ mod models;
 mod routes;
 
 use std::net::SocketAddr;
-use tracing_subscriber;
 use anyhow::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt()
         .with_target(false)
-        .with_thread_ids(true)
+        .with_thread_ids(false)
         .with_level(true)
         .init();
 
     dotenvy::dotenv().ok();
 
-    let port = std::env::var("SERVER_PORT")
-        .unwrap_or("8081".to_string())
+    let port: u16 = std::env::var("SERVER_PORT")
+        .unwrap_or_else(|_| "8081".to_string())
         .parse()
         .unwrap_or(8081);
 
     println!("🟣 Cobalt Multi-DB Backend");
-    println!("📦 Databases: SQLite + MySQL + SurrealDB");
+    println!("📦 Databases: SQLite + MySQL");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
     let db_manager = db::DatabaseManager::new().await?;
@@ -35,7 +34,7 @@ async fn main() -> Result<()> {
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     println!("📝 Endpoints:");
     println!("   POST   /api/users        - Create user in all DBs");
-    println!("   GET    /api/users        - Get users from specific DB");
+    println!("   GET    /api/users?db=    - Get users (sqlite | mysql)");
     println!("   GET    /api/users/all    - Get users from all DBs");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 

@@ -168,6 +168,14 @@ fn App() -> Element {
         _ => "#f5576c", // sqlite default
     };
 
+    // Pre-computed label used in rsx (if-exprs inside format! strings not supported)
+    let user_count_label = format!(
+        "· {} {}",
+        user_list.len(),
+        if user_list.len() == 1 { "user" } else { "users" }
+    );
+    let current_accent = row_accent(if current_db == "all" { "sqlite" } else { &current_db });
+
     rsx! {
         div {
             style: "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; \
@@ -307,8 +315,7 @@ fn App() -> Element {
                     }
                     span {
                         style: "color: #666688; font-size: 0.78rem;",
-                        "· {user_list.len()} user{s}",
-                        s: if user_list.len() == 1 { "" } else { "s" }
+                        "{user_count_label}"
                     }
                 }
 
@@ -331,7 +338,7 @@ fn App() -> Element {
                                  padding: 0.65rem 1rem; background: rgba(255,255,255,0.025); \
                                  border-radius: 10px; margin-bottom: 0.45rem; \
                                  border-left: 3px solid {}; transition: background 0.15s;",
-                                row_accent(if current_db == "all" { "sqlite" } else { &current_db })
+                                 current_accent
                             ),
                             // Left: avatar + name
                             div {
@@ -341,7 +348,7 @@ fn App() -> Element {
                                         "width: 2rem; height: 2rem; border-radius: 50%; \
                                          display: flex; align-items: center; justify-content: center; \
                                          font-size: 0.8rem; font-weight: 700; color: white; background: {};",
-                                        row_accent(if current_db == "all" { "sqlite" } else { &current_db })
+                                        current_accent
                                     ),
                                     // initials
                                     "{user.name.chars().next().unwrap_or('?').to_uppercase()}"

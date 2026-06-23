@@ -11,7 +11,6 @@ use crate::models::user::User;
 pub enum DatabaseType {
     Sqlite,
     MySql,
-    None, 
 }
 
 #[derive(Clone)]
@@ -19,30 +18,32 @@ pub struct DatabaseManager {
     pub sqlite: Option<SqliteDatabase>,
     pub mysql: Option<MySqlDatabase>,
 }
+
 impl DatabaseManager {
     pub async fn new() -> Result<Self> {
         let sqlite_url = std::env::var("DATABASE_URL_SQLITE")
             .unwrap_or_else(|_| "sqlite://./cobalt_multidb.sqlite?mode=rwc".to_string());
 
         let mysql_url = std::env::var("DATABASE_URL_MYSQL")
-            .unwrap_or_else(|_| "mysql://root:password@localhost:3306/cobalt_multidb".to_string());
+            .unwrap_or_else(|_| "mysql://root@localhost:3306/cobalt_multidb".to_string());
 
         let mut sqlite = None;
         let mut mysql = None;
 
         match SqliteDatabase::new(&sqlite_url).await {
             Ok(db) => {
-                println!("Sqlite Connected!");
+                println!("✅ SQLite connected");
                 sqlite = Some(db);
             }
-            Err(e) => eprintln!("Connected to sqlite failed: {e:?}"),
+            Err(e) => eprintln!("❌ SQLite connection failed: {e}"),
         }
+
         match MySqlDatabase::new(&mysql_url).await {
             Ok(db) => {
-                println!("MySql Connected!");
+                println!("✅ MySQL connected");
                 mysql = Some(db);
             }
-            Err(e) => eprintln!("Connected to mysql failed: {e:?}"),
+            Err(e) => eprintln!("❌ MySQL connection failed: {e}"),
         }
 
         Ok(Self { sqlite, mysql })
@@ -50,21 +51,17 @@ impl DatabaseManager {
 
     pub async fn create_user(&self, name: &str, db_type: DatabaseType) -> Result<Vec<User>> {
         let mut users = Vec::new();
-
         match db_type {
             DatabaseType::Sqlite => {
                 if let Some(db) = &self.sqlite {
-                    let user = db.create_user(name).await?;
-                    users.push(user);
+                    users.push(db.create_user(name).await?);
                 }
             }
             DatabaseType::MySql => {
                 if let Some(db) = &self.mysql {
-                    let user = db.create_user(name).await?;
-                    users.push(user);
+                    users.push(db.create_user(name).await?);
                 }
             }
-            DatabaseType::None => eprintln!("No Databases found/selected")
         }
         Ok(users)
     }
@@ -81,7 +78,6 @@ impl DatabaseManager {
                     return Ok(db.get_user().await?);
                 }
             }
-            DatabaseType::None => eprintln!("No Databases found/selected")
         }
         Ok(vec![])
     }

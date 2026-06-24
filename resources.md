@@ -32,8 +32,6 @@ Rust + Yew → Frontend (WASM)
 Rust + Tauri → Desktop Apps
 Rust + egui → Native",https://x.com/adahstwt/status/2053672160053567569
 
-2052789903553954041,onehappyfellow,"coming from python, rust isn't actually that hard",https://x.com/onehappyfellow/status/2052789903553954041
-
 2052421778870534257,AstraKernel,"🦀Embedded Rust Driver Development: 
 - Tutorial on how to Implement Embedded Graphics for Max7219 Rust Driver",https://x.com/AstraKernel/status/2052421778870534257
 
@@ -45,31 +43,11 @@ Rust types, typed transformations, composition, training loops, category theory 
 
 2050379296175427726,AstraKernel,"Writing a Rust Embedded Driver Is Easier Than I Thought",https://x.com/AstraKernel/status/2050379296175427726
 
-2050516185301594442,ItsRoboki,"Most cross platform Rust apps ship two codebases. They don't have to.
-Figma proved this works (in C++): one engine, shipped to multiple surfaces via WASM.
-Rust makes it cleaner - you can compile the same source to a native binary AND to WASM for browser, from one codebase.",https://x.com/ItsRoboki/status/2050516185301594442
-
-2049370033856319671,FrancescoCiull4,"Building web applications...in Rust?
-You should give it a try:",https://x.com/FrancescoCiull4/status/2049370033856319671
-
-2048261361801531702,judeVector,"With Rust, I can be a backend engineer this year, an infra engineer next year, a cloud engineer the year after, and an embedded engineer after that. 🦀",https://x.com/judeVector/status/2048261361801531702
-
 2046128422511079539,ayushagarwal027,"GPU programming in Rust just got a lot friendlier. 🦀
 Came across yourgpu : a high-level graphics API for Rust built on top of wgpu. Think of it as the ""ModernGL"" of the Rust ecosystem",https://x.com/ayushagarwal027/status/2046128422511079539
 
-2045943028251263033,praptichilling,"so, i've decided to finally complete the simplified rust book, and since i'm a bit busy, i'm opening it up for community contributions (as it should be)
-☕ 1 pr = 1 free coffee (yes, i'm serious)",https://x.com/praptichilling/status/2045943028251263033
-
 2045085262951465343,ConsciousRide,"90% of Rust interviews are just these 12 concepts repeated:
 (Note: Insights from a friend who has been shipping complex Rust projects in production for the last 5 years)",https://x.com/ConsciousRide/status/2045085262951465343
-
-2044763204669071554,emmaglorypraise,"I created a repository with 100 Rust project ideas.
-If you're learning Rust and need ideas to build with, this will help:",https://x.com/emmaglorypraise/status/2044763204669071554
-
-2044365114288062674,devXritesh,"Rust Roadmap for Backend Engineers, Who Want to Ship Fast:
-1. Master the Basics: Ownership, borrowing, lifetimes, mutability & Cargo
-2. Understand Rust's Real Power: Structs, Enums, Traits, Generics & Pattern Matching
-3. Error Handling Done Right: Result, ? operator",https://x.com/devXritesh/status/2044365114288062674
 
 2041459374871265764,ayushagarwal027,"The job board now comes with roadmaps. Because finding the job is only half the journey. 🦀
 6 Rust career tracks now live:

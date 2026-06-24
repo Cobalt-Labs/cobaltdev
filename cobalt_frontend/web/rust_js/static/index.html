@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust + Vanilla JS</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Rust + Vanilla JS</h1>
+            <p>Full-stack app with Rust, Axum, SQLite</p>
+        </header>
+
+        <section class="card">
+            <h2>➕ Add User</h2>
+            <form id="userForm">
+                <input type="text" id="nameInput" placeholder="Enter name..." required>
+                <button type="submit" id="submitBtn">💾 Add User</button>
+            </form>
+            <div id="feedback" class="feedback"></div>
+        </section>
+
+        <section class="card">
+            <h2>👥 Users</h2>
+            <button id="refreshBtn" class="btn-secondary">🔄 Refresh</button>
+            <div id="userList"><div class="loading">Loading...</div></div>
+        </section>
+
+        <footer>
+            <p>🦀 Rust + Axum + SQLite + Vanilla JS</p>
+        </footer>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@ target/
 **/target/
 debug/
 release/
+Cargo.lock
 
 # Flutter / Dart
 build/
@@ -59,6 +60,7 @@ wheels/
 
 # Environment files
 .env
+.env.local
 .env.*
 !.env.example
 !.env.*.example
@@ -77,6 +79,8 @@ wheels/
 # IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
 *.code-workspace
 
 # OS files

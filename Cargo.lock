@@ -9771,6 +9771,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust_js"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum 0.8.9",
+ "chrono",
+ "dotenvy",
+ "include_dir",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+ "tower-http 0.6.10",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "rust_lib_notepad"
 version = "0.1.0"
 dependencies = [

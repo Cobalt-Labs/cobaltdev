@@ -10,7 +10,6 @@ members = [
     "cobalt_ai/experiments/scratch_model",
     "cobalt_systems/userland/minigrep", 
     "cobalt_embedded",
-    # "cobalt_frontend/web/fullstack_app",
     "cobalt_frontend/web/fullstack_app/dioxus",
     "cobalt_frontend/web/rust_js/",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", 

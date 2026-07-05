@@ -13,7 +13,7 @@ pub fn train<B: AutodiffBackend>(device: B::Device)
 where
     B::Device: Clone,
 {
-    let mut dataset = TextDataset::new("data/input.txt");
+    let mut dataset = TextDataset::new("data/input.txt"); //dataset
     let mut valid_dataset = TextDataset::new("data/input.txt");
 
     let batch_size = 8; //dec 12

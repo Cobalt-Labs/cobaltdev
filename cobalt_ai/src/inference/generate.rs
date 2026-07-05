@@ -5,6 +5,7 @@ use burn::record::{CompactRecorder, Recorder};
 use burn::tensor::backend::Backend;
 use burn::tensor::{Int, Tensor, TensorData};
 use rand::distributions::{Distribution, WeightedIndex};
+// use ndarray_rand::rand::thread_rng;
 use rand::prelude::*;
 use std::io::Write;
 

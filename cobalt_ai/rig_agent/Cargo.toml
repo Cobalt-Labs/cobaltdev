@@ -1,36 +1,15 @@
 [package]
 name = "rig_agent"
 version = "0.1.0"
-edition = "2021" #2024
+edition = "2021"
 
 [dependencies]
 anyhow.workspace = true
-async-trait = "0.1.89"
-candle-core = "0.10.2"
-candle-transformers = "0.10.2"
-config = "0.15.23"
 dotenv = "0.15.0"
-futures = "0.3.32"
-governor = "0.10.4"
-moka = { version = "0.12.15", features = ["sync"] }
-# pdf-extract = "0.10.0"
-qdrant-client = "1.18.0"
-reqwest = { version = "0.13.3", features = ["json"] }
-rig = { version = "0.37.0", default-features = false, features = ["reqwest", "derive"] }
-rig-core = { version = "0.37.0", features = ["reqwest", "derive"] }
-# rig-core = { git = "https://github.com/0xPlaygrounds/rig", features = ["openai", "cohere"] }
-serde.workspace = true
-serde_json.workspace = true
-thiserror.workspace = true
+rig = { version = "0.39.0", default-features = false, features = ["reqwest", "derive"] }
+rig-core = { version = "0.39.0", features = ["reqwest", "derive"] }
 tokio = { workspace = true, features = ["full"] }
-toml = "1.1.2"
-tracing.workspace = true
-tracing-subscriber.workspace = true
-# tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [[bin]]
 name = "rig_cli"
 path = "src/main.rs"
-
-[dev-dependencies]
-tempfile = "3.0"

@@ -14,7 +14,7 @@
 
   *“Building fast, beautiful, and reliable systems with Flutter & Rust.”*
   
-  [**Portfolio**](https://cobaltdev.vercel.app) • [**GitHub**](https://github.com/ibrahim-3595) • [**Contact**](mailto:ibrahimhaji@example.com)
+  [**Portfolio**](https://cobaltdev.vercel.app) • [**GitHub**](https://github.com/ibrahim-3595) • [**Contact**](mailto:ibrahim.haji.3595@gmail.com)
 
 </div>
 

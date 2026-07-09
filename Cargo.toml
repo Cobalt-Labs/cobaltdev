@@ -14,7 +14,7 @@ members = [
     "cobalt_frontend/web/rust_js/",
     "cobalt_frontend/web/counter_app",
     "cobalt_frontend/app/encrypt_notepad/notepad/native", 
-    "examples/test_code_rust", "cobalt_backend/multidb", "cobalt_frontend/web/rust_js",
+    "examples/test_code_rust", "cobalt_backend/multidb", "cobalt_frontend/web/rust_js", "cobalt_backend/server/tcp", "cobalt_backend/server/udp",
 ]
 
 # Unified workspace dependencies

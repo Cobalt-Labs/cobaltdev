@@ -13,3 +13,746 @@ Features:
 1. Chat with local LLM (using Burn + Candle)
 2. File system RAG (search your own codebase)
 3. Live code editing with syntax highlighting
+
+treee
+Last login: Wed Jul  8 22:06:53 on ttys000
+
+cobaltdev on  main via 🦀 v1.98.0-nightly
+❯ ❯ tree -I 'target|build|.idea|examples|releases|ios|android|macos|linux|res'
+zsh: command not found: ❯
+
+cobaltdev on  main via 🦀 v1.98.0-nightly
+❯ tree -I 'target|build|.idea|examples|releases|ios|android|macos|linux|res'
+.
+├── banner.png
+├── Cargo.lock
+├── Cargo.toml
+├── cobalt_ai
+│   ├── apps
+│   │   ├── api_server
+│   │   ├── chat_desktop
+│   │   └── cli
+│   ├── Cargo.toml
+│   ├── check_crates.py
+│   ├── configs
+│   │   ├── agents.toml
+│   │   ├── defaults.toml
+│   │   ├── documents
+│   │   ├── prompts
+│   │   ├── providers.toml
+│   │   └── vector_store
+│   ├── crates
+│   │   ├── cobalt-agents
+│   │   ├── cobalt-embeddings
+│   │   ├── cobalt-inference
+│   │   ├── cobalt-model
+│   │   ├── cobalt-rag
+│   │   ├── cobalt-tools
+│   │   ├── cobalt-training
+│   │   └── cobalt-utils
+│   ├── data
+│   │   └── input.txt
+│   ├── datasets
+│   │   ├── processed
+│   │   ├── raw
+│   │   ├── synthetic
+│   │   └── tokenized
+│   ├── docs
+│   ├── experiments
+│   │   ├── linfa_test
+│   │   │   ├── Cargo.toml
+│   │   │   ├── dt.aux
+│   │   │   ├── dt.log
+│   │   │   ├── dt.pdf
+│   │   │   ├── dt.tex
+│   │   │   └── src
+│   │   │       └── main.rs
+│   │   ├── scratch_model
+│   │   │   ├── Cargo.toml
+│   │   │   └── src
+│   │   │       ├── lib.rs
+│   │   │       └── main.rs
+│   │   └── training_logs.json
+│   ├── models
+│   │   ├── checkpoints
+│   │   ├── cobalt_model_best.mpk
+│   │   ├── cobalt_model_final.mpk
+│   │   ├── cobalt_model.mpk
+│   │   ├── config.json
+│   │   ├── configs
+│   │   ├── exported
+│   │   └── pretrained
+│   ├── notebooks
+│   │   ├── cobalt_transformer_demo.ipynb
+│   │   ├── cobalt_utils.py
+│   │   ├── model_architecture.ipynb
+│   │   ├── README.md
+│   │   ├── requirements.txt
+│   │   └── training_metrics.ipynb
+│   ├── playground
+│   ├── prompts
+│   ├── python
+│   │   ├── Figure_1.png
+│   │   ├── main.py
+│   │   └── requirements.txt
+│   ├── README.md
+│   ├── rig_agent
+│   │   ├── Cargo.toml
+│   │   ├── configs
+│   │   ├── data
+│   │   │   ├── documents
+│   │   │   │   └── about_cobalt.txt
+│   │   │   ├── prompts
+│   │   │   └── vector_store
+│   │   ├── readme.md
+│   │   ├── scripts
+│   │   │   ├── run_examples.sh
+│   │   │   └── setup.sh
+│   │   └── src
+│   │       └── main.rs
+│   ├── scripts
+│   │   └── run_agent.sh
+│   ├── src
+│   │   ├── config.rs
+│   │   ├── data
+│   │   │   ├── loader.rs
+│   │   │   └── mod.rs
+│   │   ├── inference
+│   │   │   ├── generate.rs
+│   │   │   └── mod.rs
+│   │   ├── main.rs
+│   │   ├── model
+│   │   │   ├── mod.rs
+│   │   │   ├── trainer.rs
+│   │   │   └── transformer.rs
+│   │   └── utils
+│   │       └── mod.rs
+│   └── vector_store
+│       ├── indexes
+│       └── qdrant
+├── cobalt_backend
+│   ├── api
+│   │   └── taskflow-api
+│   │       ├── Cargo.toml
+│   │       ├── migrations
+│   │       ├── src
+│   │       │   ├── config.rs
+│   │       │   ├── handlers
+│   │       │   │   ├── health.rs
+│   │       │   │   ├── mod.rs
+│   │       │   │   ├── task.rs
+│   │       │   │   └── user.rs
+│   │       │   ├── main.rs
+│   │       │   ├── middleware
+│   │       │   │   ├── auth.rs
+│   │       │   │   └── mod.rs
+│   │       │   ├── models
+│   │       │   │   ├── mod.rs
+│   │       │   │   ├── task.rs
+│   │       │   │   └── user.rs
+│   │       │   ├── routes.rs
+│   │       │   ├── services
+│   │       │   │   ├── mod.rs
+│   │       │   │   ├── task_service.rs
+│   │       │   │   └── user_service.rs
+│   │       │   ├── state.rs
+│   │       │   └── utils
+│   │       │       ├── error.rs
+│   │       │       ├── mod.rs
+│   │       │       └── security.rs
+│   │       └── taskflow.db
+│   ├── cloud
+│   │   ├── Cargo.toml
+│   │   ├── cobalt_cloud.db
+│   │   ├── cobalt.db
+│   │   ├── cobalt.db-shm
+│   │   ├── cobalt.db-wal
+│   │   ├── migrations
+│   │   │   └── 001_initial.sql
+│   │   ├── src
+│   │   │   ├── cli.rs
+│   │   │   ├── config
+│   │   │   │   ├── config.rs
+│   │   │   │   └── mod.rs
+│   │   │   ├── email.rs
+│   │   │   ├── handlers
+│   │   │   │   ├── auth.rs
+│   │   │   │   ├── files.rs
+│   │   │   │   └── mod.rs
+│   │   │   ├── main.rs
+│   │   │   ├── middleware
+│   │   │   │   ├── auth.rs
+│   │   │   │   ├── mod.rs
+│   │   │   │   └── security.rs
+│   │   │   ├── models
+│   │   │   │   ├── mod.rs
+│   │   │   │   └── models.rs
+│   │   │   ├── routes.rs
+│   │   │   ├── services
+│   │   │   │   ├── database.rs
+│   │   │   │   ├── mod.rs
+│   │   │   │   └── storage.rs
+│   │   │   └── utils
+│   │   │       ├── error.rs
+│   │   │       ├── mod.rs
+│   │   │       └── security.rs
+│   │   └── storage
+│   ├── multidb
+│   │   ├── Cargo.toml
+│   │   ├── cobalt_multidb.sqlite
+│   │   ├── migrations
+│   │   │   ├── mysql
+│   │   │   ├── sqlite
+│   │   │   └── surrealdb
+│   │   └── src
+│   │       ├── db
+│   │       │   ├── mod.rs
+│   │       │   ├── mysql.rs
+│   │       │   └── sqlite.rs
+│   │       ├── handlers
+│   │       │   ├── mod.rs
+│   │       │   └── users.rs
+│   │       ├── main.rs
+│   │       ├── models
+│   │       │   ├── mod.rs
+│   │       │   └── user.rs
+│   │       └── routes.rs
+│   └── sync
+│       ├── Cargo.toml
+│       └── src
+│           ├── bin
+│           │   └── sync
+│           │       └── main.rs
+│           ├── config
+│           │   ├── config.rs
+│           │   └── mod.rs
+│           ├── lib.rs
+│           ├── main.rs
+│           ├── models
+│           │   ├── mod.rs
+│           │   └── models.rs
+│           ├── uploader
+│           │   └── mod.rs
+│           └── watcher
+│               └── mod.rs
+├── cobalt_cloud
+│   ├── AGENTS.md
+│   ├── assets
+│   │   ├── favicon.ico
+│   │   ├── header.svg
+│   │   ├── styling
+│   │   │   ├── blog.css
+│   │   │   ├── echo.css
+│   │   │   ├── main.css
+│   │   │   └── navbar.css
+│   │   └── tailwind.css
+│   ├── Cargo.toml
+│   ├── check_api.rs
+│   ├── clippy.toml
+│   ├── cobalt.db
+│   ├── Dioxus.toml
+│   ├── src
+│   │   ├── components
+│   │   │   ├── echo.rs
+│   │   │   ├── hero.rs
+│   │   │   ├── mod.rs
+│   │   │   ├── navbar.rs
+│   │   │   └── upload_dropzone.rs
+│   │   ├── hooks
+│   │   │   ├── mod.rs
+│   │   │   ├── use_auth.rs
+│   │   │   └── use_files.rs
+│   │   ├── main.rs
+│   │   ├── models.rs
+│   │   ├── pages
+│   │   │   ├── forgot_password.rs
+│   │   │   ├── home.rs
+│   │   │   ├── login.rs
+│   │   │   ├── mod.rs
+│   │   │   └── signup.rs
+│   │   ├── services
+│   │   │   ├── api.rs
+│   │   │   └── mod.rs
+│   │   └── views
+│   │       ├── blog.rs
+│   │       ├── home.rs
+│   │       ├── mod.rs
+│   │       └── navbar.rs
+│   └── tailwind.css
+├── cobalt_embedded
+│   ├── Cargo.toml
+│   └── src
+│       ├── config
+│       │   └── mod.rs
+│       ├── drivers
+│       │   ├── lock.rs
+│       │   └── mod.rs
+│       ├── hardware
+│       │   ├── ble.rs
+│       │   ├── gpio.rs
+│       │   ├── mod.rs
+│       │   └── uart.rs
+│       ├── lib.rs
+│       ├── main.rs
+│       ├── services
+│       │   ├── auth.rs
+│       │   ├── mod.rs
+│       │   └── state.rs
+│       └── utils
+│           ├── delay.rs
+│           └── mod.rs
+├── cobalt_frontend
+│   ├── app
+│   │   ├── Chat
+│   │   │   ├── app
+│   │   │   │   ├── build.gradle.kts
+│   │   │   │   ├── proguard-rules.pro
+│   │   │   │   └── src
+│   │   │   │       ├── androidTest
+│   │   │   │       │   └── java
+│   │   │   │       │       └── com
+│   │   │   │       │           └── example
+│   │   │   │       │               └── chat
+│   │   │   │       │                   └── ExampleInstrumentedTest.kt
+│   │   │   │       ├── main
+│   │   │   │       │   ├── AndroidManifest.xml
+│   │   │   │       │   └── java
+│   │   │   │       │       └── com
+│   │   │   │       │           └── example
+│   │   │   │       │               └── chat
+│   │   │   │       │                   ├── MainActivity.kt
+│   │   │   │       │                   └── ui
+│   │   │   │       │                       └── theme
+│   │   │   │       │                           ├── Color.kt
+│   │   │   │       │                           ├── Theme.kt
+│   │   │   │       │                           └── Type.kt
+│   │   │   │       └── test
+│   │   │   │           └── java
+│   │   │   │               └── com
+│   │   │   │                   └── example
+│   │   │   │                       └── chat
+│   │   │   │                           └── ExampleUnitTest.kt
+│   │   │   ├── build.gradle.kts
+│   │   │   ├── gradle
+│   │   │   │   ├── gradle-daemon-jvm.properties
+│   │   │   │   ├── libs.versions.toml
+│   │   │   │   └── wrapper
+│   │   │   │       ├── gradle-wrapper.jar
+│   │   │   │       └── gradle-wrapper.properties
+│   │   │   ├── gradle.properties
+│   │   │   ├── gradlew
+│   │   │   ├── gradlew.bat
+│   │   │   ├── local.properties
+│   │   │   └── settings.gradle.kts
+│   │   ├── encrypt_notepad
+│   │   │   └── notepad
+│   │   │       ├── analysis_options.yaml
+│   │   │       ├── assets
+│   │   │       │   └── icon.png
+│   │   │       ├── flutter_rust_bridge.yaml
+│   │   │       ├── flutter_ui.iml
+│   │   │       ├── integration_test
+│   │   │       │   └── simple_test.dart
+│   │   │       ├── lib
+│   │   │       │   ├── api_interface.dart
+│   │   │       │   ├── bridge_generated.dart
+│   │   │       │   │   ├── api.dart
+│   │   │       │   │   ├── frb_generated.dart
+│   │   │       │   │   ├── frb_generated.io.dart
+│   │   │       │   │   └── frb_generated.web.dart
+│   │   │       │   ├── main.dart
+│   │   │       │   ├── models
+│   │   │       │   │   └── note.dart
+│   │   │       │   ├── services
+│   │   │       │   │   └── encryption_service.dart
+│   │   │       │   ├── state
+│   │   │       │   │   └── notes_provider.dart
+│   │   │       │   ├── ui
+│   │   │       │   │   ├── screens
+│   │   │       │   │   │   ├── bloc
+│   │   │       │   │   │   │   ├── notepad_bloc.dart
+│   │   │       │   │   │   │   ├── notepad_event.dart
+│   │   │       │   │   │   │   └── notepad_state.dart
+│   │   │       │   │   │   ├── editor_screen.dart
+│   │   │       │   │   │   └── home_screen.dart
+│   │   │       │   │   └── widgets
+│   │   │       │   │       ├── dismissible_action.dart
+│   │   │       │   │       ├── encrypt_text_box.dart
+│   │   │       │   │       └── note_card.dart
+│   │   │       │   └── utils
+│   │   │       │       └── constants.dart
+│   │   │       ├── native
+│   │   │       │   ├── Cargo.toml
+│   │   │       │   └── src
+│   │   │       │       ├── api.rs
+│   │   │       │       ├── frb_generated.rs
+│   │   │       │       ├── lib.rs
+│   │   │       │       └── rust-toolchain.toml
+│   │   │       ├── notepad.iml
+│   │   │       ├── notes
+│   │   │       ├── pubspec.lock
+│   │   │       ├── pubspec.yaml
+│   │   │       ├── README.md
+│   │   │       ├── test
+│   │   │       │   └── widget_test.dart
+│   │   │       ├── test_driver
+│   │   │       │   └── integration_test.dart
+│   │   │       ├── web
+│   │   │       │   ├── favicon.png
+│   │   │       │   ├── icons
+│   │   │       │   │   ├── Icon-192.png
+│   │   │       │   │   ├── Icon-512.png
+│   │   │       │   │   ├── Icon-maskable-192.png
+│   │   │       │   │   └── Icon-maskable-512.png
+│   │   │       │   ├── index.html
+│   │   │       │   └── manifest.json
+│   │   │       └── windows
+│   │   │           ├── CMakeLists.txt
+│   │   │           ├── flutter
+│   │   │           │   ├── CMakeLists.txt
+│   │   │           │   ├── ephemeral
+│   │   │           │   ├── generated_plugin_registrant.cc
+│   │   │           │   ├── generated_plugin_registrant.h
+│   │   │           │   └── generated_plugins.cmake
+│   │   │           └── runner
+│   │   │               ├── CMakeLists.txt
+│   │   │               ├── flutter_window.cpp
+│   │   │               ├── flutter_window.h
+│   │   │               ├── main.cpp
+│   │   │               ├── resource.h
+│   │   │               ├── resources
+│   │   │               │   └── app_icon.ico
+│   │   │               ├── runner.exe.manifest
+│   │   │               ├── Runner.rc
+│   │   │               ├── utils.cpp
+│   │   │               ├── utils.h
+│   │   │               ├── win32_window.cpp
+│   │   │               └── win32_window.h
+│   │   ├── Messenger
+│   │   │   ├── Messenger
+│   │   │   │   ├── Assets.xcassets
+│   │   │   │   │   ├── AccentColor.colorset
+│   │   │   │   │   │   └── Contents.json
+│   │   │   │   │   ├── AppIcon.appiconset
+│   │   │   │   │   │   └── Contents.json
+│   │   │   │   │   └── Contents.json
+│   │   │   │   ├── ContentView.swift
+│   │   │   │   ├── Messenger.xcdatamodeld
+│   │   │   │   │   └── Messenger.xcdatamodel
+│   │   │   │   │       └── contents
+│   │   │   │   ├── MessengerApp.swift
+│   │   │   │   └── Persistence.swift
+│   │   │   ├── Messenger.xcodeproj
+│   │   │   │   ├── project.pbxproj
+│   │   │   │   ├── project.xcworkspace
+│   │   │   │   │   ├── contents.xcworkspacedata
+│   │   │   │   │   ├── xcshareddata
+│   │   │   │   │   │   └── swiftpm
+│   │   │   │   │   │       └── configuration
+│   │   │   │   │   └── xcuserdata
+│   │   │   │   │       └── ibrahimhaji.xcuserdatad
+│   │   │   │   │           └── UserInterfaceState.xcuserstate
+│   │   │   │   └── xcuserdata
+│   │   │   │       └── ibrahimhaji.xcuserdatad
+│   │   │   │           └── xcschemes
+│   │   │   │               └── xcschememanagement.plist
+│   │   │   ├── MessengerTests
+│   │   │   │   └── MessengerTests.swift
+│   │   │   └── MessengerUITests
+│   │   │       ├── MessengerUITests.swift
+│   │   │       └── MessengerUITestsLaunchTests.swift
+│   │   └── secure_journal
+│   │       ├── assets
+│   │       │   └── secureJ
+│   │       │       ├── secureJ1.png
+│   │       │       ├── SecureJ1GUI.png
+│   │       │       ├── secureJ2.png
+│   │       │       ├── SecureJ2GUI.png
+│   │       │       ├── secureJ3.png
+│   │       │       ├── SecureJ3GUI.png
+│   │       │       ├── secureJ4.png
+│   │       │       └── SecureJ4GUI.png
+│   │       ├── backend
+│   │       │   ├── Cargo.toml
+│   │       │   ├── data
+│   │       │   │   ├── journal.db
+│   │       │   │   └── schema.sql
+│   │       │   ├── journal_export_ibrahim_2025-11-25_12-09.md
+│   │       │   ├── src
+│   │       │   │   ├── auth
+│   │       │   │   │   ├── api
+│   │       │   │   │   │   ├── login_api.rs
+│   │       │   │   │   │   ├── mod.rs
+│   │       │   │   │   │   └── signup_api.rs
+│   │       │   │   │   ├── delete.rs
+│   │       │   │   │   ├── entries.rs
+│   │       │   │   │   ├── http
+│   │       │   │   │   │   ├── login_handler.rs
+│   │       │   │   │   │   ├── mod.rs
+│   │       │   │   │   │   ├── signup_handler.rs
+│   │       │   │   │   │   └── types.rs
+│   │       │   │   │   ├── login.rs
+│   │       │   │   │   ├── mod.rs
+│   │       │   │   │   ├── signup.rs
+│   │       │   │   │   └── validate.rs
+│   │       │   │   ├── common
+│   │       │   │   │   ├── errors.rs
+│   │       │   │   │   ├── mod.rs
+│   │       │   │   │   └── utils.rs
+│   │       │   │   ├── db.rs
+│   │       │   │   ├── helpers
+│   │       │   │   │   ├── export.rs
+│   │       │   │   │   ├── import.rs
+│   │       │   │   │   └── mod.rs
+│   │       │   │   ├── main.rs
+│   │       │   │   ├── models
+│   │       │   │   │   ├── mod.rs
+│   │       │   │   │   └── models.rs
+│   │       │   │   ├── router.rs
+│   │       │   │   └── tests
+│   │       │   └── users.json
+│   │       ├── build-scripts
+│   │       │   ├── build-all.sh
+│   │       │   ├── build-android.sh
+│   │       │   ├── build-deb.sh
+│   │       │   ├── build-linux.sh
+│   │       │   ├── build-native.sh
+│   │       │   ├── build-smart.sh
+│   │       │   ├── build-web.sh
+│   │       │   ├── build-windows.ps1
+│   │       │   └── package-releases.sh
+│   │       ├── Cargo.lock
+│   │       ├── Cargo.toml
+│   │       ├── dist-workspace.toml
+│   │       ├── frontend
+│   │       │   ├── AGENTS.md
+│   │       │   ├── assets
+│   │       │   ├── Cargo.toml
+│   │       │   ├── Dioxus.toml
+│   │       │   ├── package-lock.json
+│   │       │   ├── package.json
+│   │       │   ├── public
+│   │       │   │   ├── favicon.ico
+│   │       │   │   ├── header.svg
+│   │       │   │   ├── main.css
+│   │       │   │   └── tailwind.css
+│   │       │   ├── README.md
+│   │       │   ├── src
+│   │       │   │   ├── api.rs
+│   │       │   │   ├── components
+│   │       │   │   │   ├── mod.rs
+│   │       │   │   │   └── navbar.rs
+│   │       │   │   ├── main.rs
+│   │       │   │   ├── models.rs
+│   │       │   │   ├── pages
+│   │       │   │   │   ├── entries.rs
+│   │       │   │   │   ├── home.rs
+│   │       │   │   │   ├── login.rs
+│   │       │   │   │   ├── mod.rs
+│   │       │   │   │   ├── new_entry.rs
+│   │       │   │   │   └── signup.rs
+│   │       │   │   └── state.rs
+│   │       │   ├── tailwind.config.js
+│   │       │   └── tailwind.input.css
+│   │       ├── journal_export_ibrahim_2025-11-14_17-08.md
+│   │       ├── journal_export_ibrahim_2025-11-14_21-15.md
+│   │       ├── mydb
+│   │       │   ├── 000008.log
+│   │       │   ├── 000009.sst
+│   │       │   ├── CURRENT
+│   │       │   ├── IDENTITY
+│   │       │   ├── LOCK
+│   │       │   ├── LOG
+│   │       │   ├── MANIFEST-000005
+│   │       │   └── OPTIONS-000007
+│   │       ├── package-lock.json
+│   │       ├── package.json
+│   │       └── README.md
+│   └── web
+│       ├── cobaltweb
+│       │   ├── analysis_options.yaml
+│       │   ├── assets
+│       │   │   └── images
+│       │   │       └── cobalt_logo.png
+│       │   ├── cobaltweb-v1.0.0.apk
+│       │   ├── cobaltweb-web-v1.0.0.zip
+│       │   ├── lib
+│       │   │   ├── config
+│       │   │   │   └── secure_config.dart
+│       │   │   ├── main.dart
+│       │   │   ├── pages
+│       │   │   │   ├── about_page.dart
+│       │   │   │   ├── contact_page.dart
+│       │   │   │   ├── home_page.dart
+│       │   │   │   ├── portfolio_page.dart
+│       │   │   │   ├── product_page.dart
+│       │   │   │   ├── service_page.dart
+│       │   │   │   └── splash_screen.dart
+│       │   │   └── widgets
+│       │   │       ├── animated_section.dart
+│       │   │       ├── glass_card.dart
+│       │   │       └── navbar.dart
+│       │   ├── pubspec.lock
+│       │   ├── pubspec.yaml
+│       │   ├── README.md
+│       │   ├── scratch_portfolio
+│       │   │   ├── Hero.tsx
+│       │   │   ├── Home.tsx
+│       │   │   ├── Navbar.tsx
+│       │   │   └── Projects.tsx
+│       │   ├── test
+│       │   │   └── widget_test.dart
+│       │   ├── web
+│       │   │   ├── code.png
+│       │   │   ├── favicon.png
+│       │   │   ├── icons
+│       │   │   │   ├── Icon-192.png
+│       │   │   │   ├── Icon-512.png
+│       │   │   │   ├── Icon-maskable-192.png
+│       │   │   │   └── Icon-maskable-512.png
+│       │   │   ├── index.html
+│       │   │   └── manifest.json
+│       │   └── windows
+│       │       ├── CMakeLists.txt
+│       │       ├── flutter
+│       │       │   ├── CMakeLists.txt
+│       │       │   ├── ephemeral
+│       │       │   ├── generated_plugin_registrant.cc
+│       │       │   ├── generated_plugin_registrant.h
+│       │       │   └── generated_plugins.cmake
+│       │       └── runner
+│       │           ├── CMakeLists.txt
+│       │           ├── flutter_window.cpp
+│       │           ├── flutter_window.h
+│       │           ├── main.cpp
+│       │           ├── resource.h
+│       │           ├── resources
+│       │           │   └── app_icon.ico
+│       │           ├── runner.exe.manifest
+│       │           ├── Runner.rc
+│       │           ├── utils.cpp
+│       │           ├── utils.h
+│       │           ├── win32_window.cpp
+│       │           └── win32_window.h
+│       ├── counter_app
+│       │   ├── AGENTS.md
+│       │   ├── assets
+│       │   │   ├── favicon.ico
+│       │   │   ├── header.svg
+│       │   │   └── styling
+│       │   │       ├── blog.css
+│       │   │       ├── echo.css
+│       │   │       ├── main.css
+│       │   │       └── navbar.css
+│       │   ├── Cargo.toml
+│       │   ├── clippy.toml
+│       │   ├── Dioxus.toml
+│       │   ├── public
+│       │   ├── README.md
+│       │   └── src
+│       │       ├── frontend.rs
+│       │       ├── main.rs
+│       │       ├── models.rs
+│       │       └── server
+│       │           ├── db.rs
+│       │           ├── handlers.rs
+│       │           ├── mod.rs
+│       │           └── routes.rs
+│       ├── fullstack_app
+│       │   ├── dioxus
+│       │   │   ├── AGENTS.md
+│       │   │   ├── assets
+│       │   │   │   ├── favicon.ico
+│       │   │   │   ├── header.svg
+│       │   │   │   └── styling
+│       │   │   │       ├── blog.css
+│       │   │   │       ├── echo.css
+│       │   │   │       ├── main.css
+│       │   │   │       └── navbar.css
+│       │   │   ├── Cargo.toml
+│       │   │   ├── clippy.toml
+│       │   │   ├── Dioxus.toml
+│       │   │   ├── README.md
+│       │   │   └── src
+│       │   │       ├── app.rs
+│       │   │       ├── components
+│       │   │       │   ├── echo.rs
+│       │   │       │   ├── hero.rs
+│       │   │       │   └── mod.rs
+│       │   │       ├── main.rs
+│       │   │       └── views
+│       │   │           ├── blog.rs
+│       │   │           ├── home.rs
+│       │   │           ├── mod.rs
+│       │   │           └── navbar.rs
+│       │   └── vanilla
+│       │       └── public
+│       │           ├── app.js
+│       │           ├── index.html
+│       │           └── style.css
+│       └── rust_js
+│           ├── Cargo.toml
+│           ├── db
+│           │   └── rust_js.db
+│           ├── src
+│           │   └── main.rs
+│           └── static
+│               ├── app.js
+│               ├── index.html
+│               └── style.css
+├── cobalt_logo.png
+├── cobalt_systems
+│   ├── arch
+│   │   └── x86_64
+│   ├── bootloader
+│   ├── kernel
+│   │   ├── Cargo.toml
+│   │   └── src
+│   │       ├── gdt.rs
+│   │       ├── interrupts.rs
+│   │       ├── keyboard.rs
+│   │       ├── main.rs
+│   │       ├── shell.rs
+│   │       └── vga_buffer.rs
+│   ├── tools
+│   └── userland
+│       └── minigrep
+│           ├── Cargo.toml
+│           ├── ibrahim.txt
+│           ├── output.txt
+│           ├── project_rust.txt
+│           └── src
+│               ├── commands
+│               │   ├── dir.rs
+│               │   ├── file.rs
+│               │   ├── mod.rs
+│               │   └── system.rs
+│               ├── config.rs
+│               ├── editor
+│               │   └── mod.rs
+│               ├── error.rs
+│               ├── etc.txt
+│               ├── lib.rs
+│               ├── main.rs
+│               ├── repl
+│               │   ├── executor.rs
+│               │   ├── mod.rs
+│               │   ├── parser.rs
+│               │   └── prompt.rs
+│               ├── search.rs
+│               ├── temp.txt
+│               └── utils
+│                   ├── display.rs
+│                   └── fs.rs
+├── fix_dependencies.sh
+├── INCOMPLETE_FEATURES.md
+├── Print _ Udyam Registration Certificate.pdf
+├── README.md
+├── resources.md
+├── rust-toolchain.toml
+└── upcoming.txt
+
+250 directories, 478 files
+
+cobaltdev on  main via 🦀 v1.98.0-nightly
+❯

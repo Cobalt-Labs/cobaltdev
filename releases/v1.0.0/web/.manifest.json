@@ -1,0 +1,64 @@
+{
+  "cli_version": "0.7.3 (was built without git repository)",
+  "rust_version": "rustc 1.94.1 (e408947bf 2026-03-25)",
+  "assets": {
+    "assets": {
+      "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/header.svg": [
+        {
+          "absolute_source_path": "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/header.svg",
+          "bundled_path": "header-dxhdc67edab3b53a3ce.svg",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/styling/echo.css": [
+        {
+          "absolute_source_path": "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/styling/echo.css",
+          "bundled_path": "echo-dxha034cef8a320f584.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/tailwind.css": [
+        {
+          "absolute_source_path": "/Users/ibrahimhaji/code/cobaltdev/cobalt_cloud/assets/tailwind.css",
+          "bundled_path": "tailwind-dxha1f49dae3a3dd8a6.css",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ],
+      "/Users/ibrahimhaji/code/cobaltdev/target/dx/cobalt_cloud/release/web/public/wasm/cobalt_cloud.js": [
+        {
+          "absolute_source_path": "/Users/ibrahimhaji/code/cobaltdev/target/dx/cobalt_cloud/release/web/public/wasm/cobalt_cloud.js",
+          "bundled_path": "cobalt_cloud-dxh6ef0abd9c3551d5.js",
+          "options": {
+            "add_hash": true,
+            "variant": {
+              "Js": {
+                "minify": true,
+                "preload": true,
+                "static_head": false
+              }
+            }
+          }
+        }
+      ],
+      "/Users/ibrahimhaji/code/cobaltdev/target/dx/cobalt_cloud/release/web/public/wasm/cobalt_cloud_bg.wasm": [
+        {
+          "absolute_source_path": "/Users/ibrahimhaji/code/cobaltdev/target/dx/cobalt_cloud/release/web/public/wasm/cobalt_cloud_bg.wasm",
+          "bundled_path": "cobalt_cloud_bg-dxh22d62f74f519952e.wasm",
+          "options": {
+            "add_hash": true,
+            "variant": "Unknown"
+          }
+        }
+      ]
+    }
+  }
+}

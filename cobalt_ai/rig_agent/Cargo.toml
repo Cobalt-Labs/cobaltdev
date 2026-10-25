@@ -1,0 +1,15 @@
+[package]
+name = "rig_agent"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+dotenv = "0.15.0"
+rig = { version = "0.39.0", default-features = false, features = ["reqwest", "derive"] }
+rig-core = { version = "0.39.0", features = ["reqwest", "derive"] }
+tokio = { workspace = true, features = ["full"] }
+
+[[bin]]
+name = "rig_cli"
+path = "src/main.rs"

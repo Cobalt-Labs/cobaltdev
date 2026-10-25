@@ -1,0 +1,7 @@
+.env
+*.db
+*.db-journal
+/target
+cloud_storage/
+uploads/
+*.log

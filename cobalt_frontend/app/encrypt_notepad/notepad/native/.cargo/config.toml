@@ -1,0 +1,6 @@
+[target.armv7-linux-androideabi]
+linker = "/home/ibrahim/Android/Sdk/ndk/28.0.13004108/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang"
+ar = "/home/ibrahim/Android/Sdk/ndk/28.0.13004108/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar"
+rustflags = [
+  "-L", "/home/ibrahim/Android/Sdk/ndk/28.0.13004108/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi/21"
+]

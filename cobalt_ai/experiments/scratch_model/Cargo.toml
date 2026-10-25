@@ -1,0 +1,11 @@
+[package]
+name = "scratch_model"
+version = "0.1.0"
+edition = "2021" # Note: 2024 is very new, 2021 is safer for now
+
+[lib]
+name = "scratch_model"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.21", features = ["extension-module"] }

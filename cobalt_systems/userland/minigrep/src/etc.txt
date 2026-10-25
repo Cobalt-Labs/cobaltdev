@@ -1,0 +1,6 @@
+main 
+| - features 
+        | - f1
+        | - f2
+        | - f3
+| - bugfix

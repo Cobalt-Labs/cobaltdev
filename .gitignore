@@ -1,0 +1,111 @@
+# --- Languages & Frameworks ---
+
+# Rust
+target/
+**/target/
+debug/
+release/
+Cargo.lock
+
+# Flutter / Dart
+build/
+**/build/
+.dart_tool/
+**/.dart_tool/
+.packages
+.pub-cache/
+.pub/
+**/pubspec.lock
+
+# Node.js
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.pyc
+*.pyo
+
+# Databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
+!.env.*.example
+*.env
+!*.env.example
+*.key
+*.pem
+*.cert
+
+# Build artifacts
+/target
+**/target/
+**/*.rs.bk
+**/*.swp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+._*
+.Spotlight-V100
+.Trashes
+
+# Logs
+*.log
+logs/
+**/logs/
+
+# Model files (too large)
+models/*.mpk
+*.mpk
+
+# Test outputs
+*.aux
+*.pdf
+*.tex
+!Cargo.toml  # Don't ignore Cargo.toml
+
+# Secret detection
+**/secrets.yml
+**/secrets.yaml
+**/credentials.json

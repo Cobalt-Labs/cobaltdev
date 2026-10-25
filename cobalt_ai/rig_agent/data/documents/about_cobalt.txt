@@ -1,0 +1,1 @@
+Cobalt AI features state-of-the-art LLM capabilities using the Rig framework. The project allows developerPairings, tool orchestrations, and advanced RAG processing.

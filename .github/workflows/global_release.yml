@@ -1,0 +1,93 @@
+name: App Releases Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  # -------------------------------------------------------------
+  # 1. DIOXUS APPS (Cobalt Cloud & Secure Journal)
+  # -------------------------------------------------------------
+  dioxus-apps:
+    name: Build Dioxus Apps
+    strategy:
+      matrix:
+        app: [cobalt_cloud, cobalt_frontend/app/secure_journal/frontend]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - app: cobalt_cloud
+            short_name: cobalt-cloud
+            target_name: cobalt_cloud
+          - app: cobalt_frontend/app/secure_journal/frontend
+            short_name: secure-journal
+            target_name: frontend
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Install Dioxus CLI
+        run: cargo install dioxus-cli --locked
+      
+      # WEB BUILD (Only on Ubuntu)
+      - name: Build Web
+        if: matrix.os == 'ubuntu-latest'
+        run: cd ${{ matrix.app }} && dx build --release --platform web
+      - name: Zip Web
+        if: matrix.os == 'ubuntu-latest'
+        run: zip -r ${{ matrix.short_name }}-web.zip target/dx/${{ matrix.target_name }}/release/web/public
+      
+      # DESKTOP BUILD (Mac/Windows)
+      - name: Build Desktop
+        if: matrix.os != 'ubuntu-latest'
+        run: cd ${{ matrix.app }} && dx build --release --platform desktop
+      
+      - name: Zip Mac
+        if: matrix.os == 'macos-latest'
+        run: zip -r ${{ matrix.short_name }}-mac.zip target/dx/${{ matrix.target_name }}/release/macos
+      
+      - name: Zip Windows
+        if: matrix.os == 'windows-latest'
+        run: Compress-Archive -Path target/dx/${{ matrix.target_name }}/release/windows/* -DestinationPath ${{ matrix.short_name }}-windows.zip
+
+      - name: Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ matrix.short_name }}-web.zip
+            ${{ matrix.short_name }}-mac.zip
+            ${{ matrix.short_name }}-windows.zip
+
+  # -------------------------------------------------------------
+  # 2. FLUTTER APPS (Encrypt Notepad)
+  # -------------------------------------------------------------
+  flutter-apps:
+    name: Build Encrypt Notepad (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android, i686-linux-android
+      - name: Install Codegen
+        run: cargo install flutter_rust_bridge_codegen --version 2.0.0 --locked
+      - name: Install Dependencies
+        run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter pub get
+      - name: Run Codegen
+        run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter_rust_bridge_codegen generate
+      - name: Build APK
+        run: cd cobalt_frontend/app/encrypt_notepad/notepad && flutter build apk --release
+      - name: Copy APK
+        run: cp cobalt_frontend/app/encrypt_notepad/notepad/build/app/outputs/flutter-apk/app-release.apk encrypt-notepad-android.apk
+      - name: Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: encrypt-notepad-android.apk

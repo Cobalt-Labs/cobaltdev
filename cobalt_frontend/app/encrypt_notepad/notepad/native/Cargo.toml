@@ -1,0 +1,24 @@
+[package]
+name = "rust_lib_notepad"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rust_lib_notepad"
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.10.0"
+tokio = { version = "1", features = ["rt", "rt-multi-thread"] }
+anyhow = "1.0"
+sha2 = "0.10"    
+aes-gcm = "0.10"    
+rand = "0.8"       
+base64 = "0.21" 
+dirs = "5.0"
+
+[build-dependencies]
+flutter_rust_bridge_codegen = "2.0.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

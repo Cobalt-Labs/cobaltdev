@@ -1,0 +1,27 @@
+[package]
+name = "counter_app"
+version = "0.1.0"
+authors = ["Ibrahim <98814268+ibrahim-3595@users.noreply.github.com>"]
+edition = "2021"
+
+[dependencies]
+dioxus = { version = "0.7.1", features = ["router"] }
+dioxus-web = "0.7.9"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.13.4", features = ["json"] }
+web-sys = "0.3.103"
+
+# Server-only dependencies (not compiled for WASM)
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1.0", features = ["full"] }
+axum = "0.8"
+tower = "0.5.3"
+tower-http = { version = "0.7.0", features = ["cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+dotenvy = "0.15.7"
+
+[features]
+# Remove features - we use target detection instead

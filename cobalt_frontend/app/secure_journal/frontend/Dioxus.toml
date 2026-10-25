@@ -1,0 +1,13 @@
+[application]
+name = "secure_journal"
+default_platform = "web"
+
+[web]
+title = "Secure Journal"
+assets = ["assets"]
+
+[web.watcher]
+reload_html = true
+
+[web.resource.dev]
+style = ["/main.css", "/tailwind.css"]

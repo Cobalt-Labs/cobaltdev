@@ -1,0 +1,60 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2024"
+repository = "https://github.com/ibrahim-3595/Secure-Journal"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+
+# Password hashing (Argon2 only)
+argon2 = { version = "0.5", default-features = false, features = ["std", "password-hash"] }
+rand_core = "0.9.3" 
+
+# CLI UX
+dialoguer = "0.12.0"
+rpassword = "7.4.0"
+colored = "3.0.0"
+indicatif = "0.18.2"
+
+# Serialization & errors
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+
+# Time
+chrono = { version = "0.4", features = ["clock"] }
+
+# Database
+sqlx = { version = "0.8.2", features = ["sqlite", "runtime-tokio-native-tls", "macros"] }
+
+# Web server
+axum = { version = "0.8", features = ["json"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+
+# Optional but recommended
+dotenvy = "0.15"
+thiserror = "2.0.17"
+
+
+[package.metadata.deb]
+maintainer = "Your Name <your.email@example.com>"
+copyright = "2025, Your Name <your.email@example.com>"
+license-file = ["../LICENSE", "0"]
+extended-description = """\
+A secure, encrypted journal application with \
+password-protected entries and export capabilities."""
+depends = "$auto"
+section = "utils"
+priority = "optional"
+assets = [
+    ["target/release/backend", "usr/bin/secure-journal-backend", "755"],
+    ["README.md", "usr/share/doc/secure-journal/README", "644"],
+]
+
+# rusqlite = "0.37.0"
+# sqlite = "0.37.0"
+# rocksdb = "0.24.0"
+# rand = "0.9.2"
+# surreal = "0.4.1"
+# utc = "0.2.0"

@@ -1,0 +1,40 @@
+{
+  "model_name": "CobaltTransformer",
+  "version": "1.1.0",
+  "framework": "burn-rs",
+  "architecture": {
+    "n_heads": 4,
+    "n_layers": 3,
+    "d_model": 192,
+    "d_ff": 1024,
+    "max_seq_len": 64,
+    "vocab_size": null,
+    "_note": "vocab_size is dataset-dependent; resolved at train time from data/input.txt"
+  },
+  "training": {
+    "batch_size": 12,
+    "num_epochs": 14,
+    "iterations_per_epoch": 250,
+    "total_iterations": 3500,
+    "learning_rate": 0.00025,
+    "optimizer": "Adam",
+    "weight_decay": 1e-5,
+    "loss_function": "CrossEntropyLoss",
+    "attention_type": "MultiHeadAttention (causal)",
+    "normalization": "LayerNorm (pre-norm)",
+    "activation": "GELU"
+  },
+  "inference": {
+    "binary": "target/release/cobalt_ai",
+    "commands": {
+      "generate": "cargo run -- generate <prompt>",
+      "train":    "cargo run -- train"
+    },
+    "model_file": "models/cobalt_model.mpk",
+    "format": "MessagePack (Burn CompactRecorder)"
+  },
+  "hardware": {
+    "backend": "WGPU (WebGPU)",
+    "precision": "f32"
+  }
+}

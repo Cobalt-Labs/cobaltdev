@@ -17,26 +17,18 @@ name = "cobalt_sync"
 path = "src/lib.rs"
 
 [dependencies]
-# Core
+# Workspace dependencies
 tokio = { workspace = true }
-anyhow = "1.0"
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
 
 # File watching
 notify = { version = "8.0", features = ["serde"] }
 
-# Serialization
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-
-# Time & IDs
-chrono = { version = "0.4", features = ["serde"] }
-uuid = { version = "1.0", features = ["v4", "serde"] }
-
-# Object Storage (very flexible)
+# Object Storage
 opendal = { version = "0.51", features = ["services-s3", "services-fs"] }
-
-# Config
-clap = { version = "4.5", features = ["derive", "env"] }
-toml = "0.8"

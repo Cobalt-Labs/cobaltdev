@@ -18,7 +18,7 @@ impl Config {
         dotenv().ok();
 
         let storage_base_path = env::var("STORAGE_BASE_PATH").unwrap_or_else(|_| {
-            let home = env::var("HOME").unwrap_or_else(|_| "/Users/ibrahimhaji".to_string());
+            let home = env::var("HOME").unwrap_or_else(|_| "/Users/ibrah".to_string());
             format!("{}/cloud_storage", home)
         });
 

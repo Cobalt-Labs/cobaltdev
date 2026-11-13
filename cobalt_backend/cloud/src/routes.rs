@@ -1,7 +1,7 @@
 use axum::{
     extract::DefaultBodyLimit,
     middleware,
-    routing::{get, post, options},
+    routing::{get, post},
     Router,
     response::Response, 
     http::HeaderValue, 
